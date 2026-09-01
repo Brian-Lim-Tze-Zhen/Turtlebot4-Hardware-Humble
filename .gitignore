@@ -1,0 +1,11 @@
+build/
+install/
+log/
+**/build/
+**/install/
+**/log/
+__pycache__/
+*.pyc
+*.pt
+humble_client/workspace/turtlebot4_desktop/
+humble_client/workspace/src/nonpersistent_voxel_layer/

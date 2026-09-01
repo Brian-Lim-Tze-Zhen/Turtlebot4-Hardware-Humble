@@ -1,0 +1,42 @@
+services:
+  thesis_social_nav_real:
+    build: .
+    image: thesis-social-nav-humble-real
+    container_name: thesis_social_nav_real
+    network_mode: host
+    privileged: true
+    shm_size: "4gb"
+
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+      - XDG_RUNTIME_DIR=/tmp/runtime-root
+
+      # ROS — direct connection to robot (no zenoh), matches robot's Create3 domain
+      - ROS_DOMAIN_ID=1
+      - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+      - CYCLONEDDS_URI=/etc/turtlebot4/cyclonedds_pc.xml
+
+      # OpenGL / Intel GPU
+      - LIBGL_ALWAYS_SOFTWARE=0
+      - MESA_LOADER_DRIVER_OVERRIDE=iris
+      - LIBGL_DRIVERS_PATH=/usr/lib/x86_64-linux-gnu/dri
+
+      # Shared libs
+      - LD_LIBRARY_PATH=/opt/ros/humble/lib
+
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /dev/dri:/dev/dri
+      - ./workspace:/root/thesis_social_navigation_ws
+      
+
+    devices:
+      - /dev/dri:/dev/dri
+
+    group_add:
+      - "44"
+      - "992"
+
+    stdin_open: true
+    tty: true

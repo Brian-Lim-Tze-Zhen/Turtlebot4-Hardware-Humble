@@ -1,0 +1,44 @@
+Monday task list — perception/fusion pipeline
+
+1. lidar_person_detector.py (real) — port two-tier sparse-cluster gate
+
+Add min_points_full, sparse_cluster_max_width params + effective_max_width logic (diff given above)
+Lower min_points_per_cluster 3→2
+Add 0-candidate diagnostic log block
+
+2. Fix confirmed-latch bug (both sim + real lidar_person_detector.py)
+
+Track 11 (furniture) confirmed once, publishes forever — latch never re-evaluates
+Decide: re-check static_move_threshold periodically, or add a max-idle-time unlatch, or re-verify motion every N seconds
+Not yet designed — needs a decision before coding
+
+3. Re-verify churn theory after #1 and #2
+
+ros2 topic echo /lidar_person_clusters while person walks
+Confirm: single stable id tracking person, no more furniture-id 11 spam
+
+4. human_kf_predictor_lidar.py — confirm bbox fix is live
+
+Verify both out.data commas applied (person_callback + coast_callback)
+Restart node, ros2 topic echo /predicted_person_positions — confirm 11 fields, field[10] = real bbox or "none" correctly
+
+5. identity_fusion_node_lidar.py (real) — fix robot_pose() TF fragility
+
+Add timeout=Duration(seconds=0.05) to the lookup_transform call
+Import Duration if missing
+
+6. Real hardware — check /oakd/rgb/preview/camera_info
+
+ros2 topic echo /oakd/rgb/preview/camera_info --once
+Confirm topic exists, publishes, and width/height match preview crop (~250px), not full sensor res
+This decides the bearing-method direction (parked, don't act yet — just gather data)
+
+7. Condition F costmap layering (standing, from earlier session)
+
+Global/local costmap still share one /predicted_person_cloud topic — no ellipse-geometry split yet
+predicted_person_cloud_node.py publishes with frame_id="map" — raytrace clearing origin bug (sweeps from map origin, not robot) — still unverified/unfixed
+
+8. Backlog reminder (not urgent, don't start Monday)
+
+lateral_side carry-forward fix in predicted_person_cloud_node.py
+Ground-truth ownership / dual-publisher corruption in analyse_avoidance.py
