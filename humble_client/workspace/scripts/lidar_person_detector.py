@@ -59,13 +59,13 @@ class LidarPersonDetector(Node):
         # Re-tune per-room if this starts rejecting real legs too often
         # (loosen) or still lets furniture through (tighten further).
         self.declare_parameter("min_cluster_width", 0.05)
-        self.declare_parameter("max_cluster_width", 0.35)
-        self.declare_parameter("min_points_per_cluster", 3)
+        self.declare_parameter("max_cluster_width", 0.40)
+        self.declare_parameter("min_points_per_cluster", 4)
 
         # Track association: max distance (m) to match a new cluster
         # to an existing track between scans
-        self.declare_parameter("track_match_dist", 0.5)
-        self.declare_parameter("track_timeout", 1.5)
+        self.declare_parameter("track_match_dist", 0.7)
+        self.declare_parameter("track_timeout", 3.0)
 
         # THESIS ADDITION (velocity-predicted matching). Caps the
         # per-scan velocity estimate used to predict a track's expected

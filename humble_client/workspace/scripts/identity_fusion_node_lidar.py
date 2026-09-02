@@ -143,7 +143,7 @@ from tf2_ros import Buffer, TransformListener
 # track the same person. PROVISIONAL like the old distance gate was -
 # log lines below ("pair-bearing") let this be tuned from the observed
 # distribution instead of guessed.
-ANGLE_GATE_DEG = 12.0
+ANGLE_GATE_DEG = 20.0
 
 # OAK-D Pro RGB horizontal FOV. Approximate for the un-cropped sensor;
 # the preview stream is a center crop so this is close but not exact -
@@ -230,6 +230,27 @@ class IdentityFusionNode(Node):
         self.stable_of_lidar = {}
         # lidar_id -> (x, y, last_seen)
         self.lidar_tracks = {}
+
+        # THESIS FIX (bearing-only matching flapping): nearest_lidar()
+        # re-picks the single best-bearing lidar cluster from scratch
+        # every camera_callback, with zero range disambiguation. When
+        # two people stand at similar bearings from the robot - exactly
+        # the "close pair" scenario this pipeline targets - small noise
+        # in either bearing estimate can flip which lidar cluster wins
+        # the argmin from one cycle to the next, silently reassigning an
+        # already-known camera track's STABLE ID to a DIFFERENT PHYSICAL
+        # PERSON's position. Measured effect: /predicted_person_positions
+        # showing the same track_id's position jump ~1-2m between
+        # consecutive samples, apparent speed 1-2 m/s for two stationary
+        # people, permanently failing social_group_detector's
+        # CONV_MAX_SPEED gate.
+        #
+        # Fix: once a camera track is bound to a lidar track, stay bound
+        # to that SAME lidar_id next cycle as long as it's still within
+        # the angle gate, instead of re-searching argmin every time. Only
+        # fall back to a fresh search if the sticky candidate has left
+        # the gate or its lidar track vanished (genuine loss, not noise).
+        self.lidar_of_camera = {}
 
         self.next_stable_id = 0
         self.reid_count = 0
@@ -323,6 +344,30 @@ class IdentityFusionNode(Node):
         # image-right (+u) = robot's right = negative yaw
         return -normalized * (self.hfov_rad / 2.0)
 
+    def sticky_lidar(self, cam_id, cam_bearing_rel):
+        """If cam_id was bound to a lidar track last cycle and that track
+        is still within the angle gate, keep using it - avoids the
+        argmin flip-flop when two lidar tracks have close bearings.
+        Returns (lidar_id, ang_diff) or (None, None) if no sticky match
+        applies (never bound before, or genuinely out of gate now)."""
+        prev_lid = self.lidar_of_camera.get(cam_id)
+        if prev_lid is None or prev_lid not in self.lidar_tracks:
+            return None, None
+
+        pose = self.robot_pose()
+        if pose is None:
+            return None, None
+        rx, ry, ryaw = pose
+
+        lx, ly, _ = self.lidar_tracks[prev_lid]
+        bearing_to_track = math.atan2(ly - ry, lx - rx)
+        track_bearing_rel = self.wrap_angle(bearing_to_track - ryaw)
+        diff = abs(self.wrap_angle(track_bearing_rel - cam_bearing_rel))
+
+        if diff < self.angle_gate_rad:
+            return prev_lid, diff
+        return None, None
+
     def nearest_lidar(self, cam_bearing_rel):
         """Nearest cached lidar track within ANGLE_GATE -> (lidar_id, ang_diff).
 
@@ -383,14 +428,23 @@ class IdentityFusionNode(Node):
 
         now = self.now()
         cam_bearing = self.pixel_center_to_bearing(x1, x2)
-        lid, diff = self.nearest_lidar(cam_bearing)
 
+        lid, diff = self.sticky_lidar(cam_id, cam_bearing)
         if lid is not None:
-            # Logged so ANGLE_GATE_DEG can be calibrated from the
-            # observed distribution rather than left at its guess.
             self.get_logger().info(
                 f"pair-bearing cam:{cam_id} <-> lidar:{lid} = "
-                f"{math.degrees(diff):.1f} deg")
+                f"{math.degrees(diff):.1f} deg (sticky)")
+        else:
+            lid, diff = self.nearest_lidar(cam_bearing)
+            if lid is not None:
+                # Logged so ANGLE_GATE_DEG can be calibrated from the
+                # observed distribution rather than left at its guess.
+                self.get_logger().info(
+                    f"pair-bearing cam:{cam_id} <-> lidar:{lid} = "
+                    f"{math.degrees(diff):.1f} deg")
+
+        if lid is not None:
+            self.lidar_of_camera[cam_id] = lid
 
         known = self.stable_of_camera.get(cam_id)
 
@@ -508,6 +562,11 @@ class IdentityFusionNode(Node):
         for cam_id in [c for c, (_, t) in self.stable_of_camera.items()
                        if now - t > CAMERA_TRACK_TIMEOUT]:
             del self.stable_of_camera[cam_id]
+            self.lidar_of_camera.pop(cam_id, None)
+
+        for cam_id in [c for c in self.lidar_of_camera
+                       if c not in self.stable_of_camera]:
+            del self.lidar_of_camera[cam_id]
 
         for lid in [l for l, v in self.lidar_tracks.items()
                     if now - v[2] > LIDAR_TRACK_TIMEOUT]:
