@@ -18,8 +18,22 @@ from cv_bridge import CvBridge
 from ultralytics import YOLO
 
 
+
 class YoloByteTrackPositionNode(Node):
+    @staticmethod
+    def _iou(box_a, box_b):
+        xa1, ya1 = max(box_a[0], box_b[0]), max(box_a[1], box_b[1])
+        xa2, ya2 = min(box_a[2], box_b[2]), min(box_a[3], box_b[3])
+        inter_w, inter_h = max(0.0, xa2 - xa1), max(0.0, ya2 - ya1)
+        inter = inter_w * inter_h
+        area_a = (box_a[2] - box_a[0]) * (box_a[3] - box_a[1])
+        area_b = (box_b[2] - box_b[0]) * (box_b[3] - box_b[1])
+        union = area_a + area_b - inter
+        return inter / union if union > 0 else 0.0
+        
     def __init__(self):
+
+        
         super().__init__("yolo_bytetrack_position_node")
 
         self.bridge = CvBridge()
@@ -35,7 +49,7 @@ class YoloByteTrackPositionNode(Node):
         # COCO keypoint indices: 13=L knee,14=R knee,15=L ankle,16=R ankle
         self.leg_kpt_idx = [13, 14, 15, 16]
         self.leg_kpt_min_conf = 0.3
-        self.min_publish_conf = 0.70
+        self.min_publish_conf = 0.80
 
         self.frame_count = 0
         self.process_every_n_frames = 2
@@ -111,11 +125,31 @@ class YoloByteTrackPositionNode(Node):
                 cv2.waitKey(1)
             return
 
+        # THESIS FIX (duplicate/split detections): occasionally YOLO
+        # produces two overlapping boxes for the same person's legs in
+        # one frame, each getting its own ByteTrack id - this looks
+        # like two people to everything downstream. Drop lower-confidence
+        # boxes that overlap a higher-confidence one above threshold.
+        DEDUP_IOU_THRESHOLD = 0.45
+        boxes_xyxy = result.boxes.xyxy.cpu().numpy()
+        confs = result.boxes.conf.cpu().numpy()
+        order = sorted(range(len(boxes_xyxy)), key=lambda i: -confs[i])
+        keep = []
+        for i in order:
+            if any(self._iou(boxes_xyxy[i], boxes_xyxy[j]) > DEDUP_IOU_THRESHOLD for j in keep):
+                continue
+            keep.append(i)
+        keep_set = set(keep)
+
         for box_i, box in enumerate(result.boxes):
+            if box_i not in keep_set:
+                continue
+
             xyxy = box.xyxy[0].cpu().numpy()
             x1, y1, x2, y2 = xyxy.astype(int)
 
             conf = float(box.conf[0].cpu().numpy())
+
             track_id = -1 if box.id is None else int(box.id[0].cpu().numpy())
 
             # Only publish/draw high-confidence detections. Kept the

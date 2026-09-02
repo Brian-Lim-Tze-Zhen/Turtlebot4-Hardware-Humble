@@ -312,7 +312,7 @@ class HumanKFPredictor(Node):
         self.declare_parameter("input_topic", "/person_positions_fused")
         self.declare_parameter("output_topic", "/predicted_person_positions")
         self.declare_parameter("prediction_horizon", 1.0)
-        self.declare_parameter("coast_timeout", 0.6)
+        self.declare_parameter("coast_timeout", 1.5)
         self.declare_parameter("rot_gate_threshold", 0.8)  # rad/s
 
         # =====================================

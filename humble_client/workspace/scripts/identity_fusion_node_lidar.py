@@ -394,6 +394,16 @@ class IdentityFusionNode(Node):
             if cam_id == exclude_cam_id:
                 continue
             if sid == stable_id and (now - last) < CAMERA_ACTIVE_WINDOW:
+                # THESIS FIX: don't block re-ID just because the OLD
+                # camera track was updated recently - if its own lidar
+                # anchor has already vanished, it's very likely the
+                # same physical person handed off to a new ByteTrack
+                # id, not a second person genuinely still being seen.
+                # Only treat this as a real conflict if the old track
+                # still has a live lidar anchor backing it up.
+                old_lidar = self.lidar_of_camera.get(cam_id)
+                if old_lidar is None or old_lidar not in self.lidar_tracks:
+                    continue
                 return True
         return False
 
