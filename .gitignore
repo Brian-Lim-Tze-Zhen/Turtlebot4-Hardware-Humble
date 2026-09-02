@@ -10,3 +10,5 @@ __pycache__/
 humble_client/workspace/turtlebot4_desktop/
 humble_client/workspace/src/nonpersistent_voxel_layer/
 *.log
+*.jpg
+*.jpeg
