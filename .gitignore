@@ -12,3 +12,4 @@ humble_client/workspace/src/nonpersistent_voxel_layer/
 *.log
 *.jpg
 *.jpeg
+debug_crops/
