@@ -112,10 +112,17 @@ class PersonMarkerPublisher(Node):
             return
         source = parts[11]
 
-        if source == "camera_confirmed":
-            r, g, b = 0.1, 0.9, 0.1
-        else:  # lidar_only
-            r, g, b = 1.0, 0.6, 0.0
+        # THESIS MODIFICATION: colour by stable id, not by source.
+        # Two overlapping identities rendered in one colour were
+        # indistinguishable in RViz (10 Sep: a wall artefact and the
+        # real person both drew the same colour). Source is still
+        # readable in the text label. Golden-ratio hue hash keeps
+        # adjacent ids far apart in colour; value is dimmed for
+        # lidar_only so the source distinction survives at a glance.
+        import colorsys
+        hue = (stable_id * 0.61803398875) % 1.0
+        val = 1.0 if source == "camera_confirmed" else 0.65
+        r, g, b = colorsys.hsv_to_rgb(hue, 0.85, val)
 
         sphere = Marker()
         sphere.header.frame_id = self.frame_id
@@ -144,7 +151,7 @@ class PersonMarkerPublisher(Node):
         label.pose.position.z = 0.6
         label.pose.orientation.w = 1.0
         label.scale.z = 0.25
-        label.color.r, label.color.g, label.color.b, label.color.a = 1.0, 1.0, 1.0, 1.0
+        label.color.r, label.color.g, label.color.b, label.color.a = r, g, b, 1.0
         label.text = f"id:{stable_id} ({source})"
         label.lifetime = self.lifetime()
 

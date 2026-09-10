@@ -62,6 +62,14 @@ class HumanTrackKF:
         # measured against real occlusion trials yet - tune once you have
         # logged camera_confirmed vs lidar_only sequences to compare.
         self.lidar_only_noise_scale = 3.0
+        # THESIS FIX (static-object false lock): a track that's been
+        # lidar_only AND near-stationary for too long is very likely
+        # anchored on a static object (furniture, wall), not a real person
+        # who just stopped moving out of camera view. Cap how long that
+        # combination is tolerated before the track is dropped outright.
+        self.lidar_only_stall_timeout = 5.0   # s
+        self.lidar_only_stall_speed = 0.05    # m/s; below this counts as "stalled"
+        self.lidar_only_stall_since = None
 
         # Measurement matrix: only position x, y is measured
         self.H = np.array([
@@ -297,7 +305,6 @@ class HumanTrackKF:
 class HumanKFPredictor(Node):
     def __init__(self):
         super().__init__("human_kf_predictor")
-
         # =====================================
         # User configurable parameters
         # =====================================
@@ -474,6 +481,29 @@ class HumanKFPredictor(Node):
         track.last_conf = conf
         track.update(base_x, base_y, now, freeze_velocity=freeze_velocity,
                      is_lidar_only=is_lidar_only)
+        # THESIS FIX (static-object false lock): drop a track that's
+        # been lidar_only and essentially motionless for too long -
+        # a real person who left camera view either keeps moving or
+        # eventually leaves lidar range too; one that just sits still
+        # indefinitely on lidar_only is much more likely anchored on
+        # a static object than a person who happens to be standing
+        # perfectly still just out of camera view.
+        speed = math.hypot(
+            track.vx_filt if track.vx_filt is not None else 0.0,
+            track.vy_filt if track.vy_filt is not None else 0.0,
+        )
+        if is_lidar_only and speed < track.lidar_only_stall_speed:
+            if track.lidar_only_stall_since is None:
+                track.lidar_only_stall_since = now
+            elif now - track.lidar_only_stall_since > track.lidar_only_stall_timeout:
+                self.get_logger().info(
+                    f"Dropped id:{track_id} - lidar_only + stationary for "
+                    f"{now - track.lidar_only_stall_since:.1f}s (likely static object)"
+                )
+                del self.tracks[track_id]
+                return
+        else:
+            track.lidar_only_stall_since = None
 
         x, y, vx, vy, pred_x, pred_y, vx_raw, vy_raw = track.predict_future(self.prediction_horizon)
 

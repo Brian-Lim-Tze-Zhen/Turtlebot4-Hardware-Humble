@@ -8,7 +8,8 @@ from rclpy.time import Time
 from sensor_msgs.msg import LaserScan
 from std_msgs.msg import String
 from nav_msgs.msg import OccupancyGrid
-from rclpy.qos import QoSProfile, QoSDurabilityPolicy, QoSReliabilityPolicy
+from rclpy.qos import (QoSProfile, QoSDurabilityPolicy, QoSReliabilityPolicy,
+                       HistoryPolicy)
 from tf2_ros import Buffer, TransformListener
 from tf2_geometry_msgs import do_transform_point
 from geometry_msgs.msg import PointStamped
@@ -45,7 +46,7 @@ class LidarPersonDetector(Node):
 
         # Gap-based clustering: new cluster starts when consecutive
         # points are farther apart than this (meters)
-        self.declare_parameter("cluster_gap", 0.15)
+        self.declare_parameter("cluster_gap", 0.25)
 
         # Leg-pair size heuristic (cluster width in meters)
         # THESIS TUNE: widened defaults (0.05-0.60m, min_points=3) let
@@ -59,7 +60,7 @@ class LidarPersonDetector(Node):
         # Re-tune per-room if this starts rejecting real legs too often
         # (loosen) or still lets furniture through (tighten further).
         self.declare_parameter("min_cluster_width", 0.05)
-        self.declare_parameter("max_cluster_width", 0.40)
+        self.declare_parameter("max_cluster_width", 0.45)
         self.declare_parameter("min_points_per_cluster", 4)
 
         # Track association: max distance (m) to match a new cluster
@@ -81,7 +82,7 @@ class LidarPersonDetector(Node):
         # (meters) within static_check_window seconds to be published as
         # a person. Filters out furniture/walls/corners that pass the
         # leg-width heuristic but never move.
-        self.declare_parameter("static_move_threshold", 0.08)
+        self.declare_parameter("static_move_threshold", 0.1)
         # THESIS TUNE: lowered 1.0s -> 0.5s -> 0.3s across two rounds
         # of measurement. Each halving of the window bought ~0.6-0.8m
         # of earlier detection at 1.2 m/s (measured: 1.0s window
@@ -93,6 +94,25 @@ class LidarPersonDetector(Node):
         # genuine detect. Not pushed to 0.25s despite also testing
         # clean, to keep margin rather than sit exactly on the edge.
         self.declare_parameter("static_check_window", 0.3)
+
+        # THESIS ADDITION (jitter earns permanent person status).
+        # MEASURED on hallway_7m_07, per published lidar track:
+        #     id 16 (the person): span 7.26 m, maxstep 0.691 m
+        #     id  1 (static)    : span 1.02 m, maxstep 0.636 m
+        #     id  0 (static)    : span 2.06 m, maxstep 0.676 m
+        #     id  5 (static)    : span 0.21 m, maxstep 0.174 m
+        # Per-scan step does NOT separate them - a centroid hopping
+        # between a wall corner, a door frame and passing legs jumps
+        # as far as a walking person does. static_move_threshold
+        # (0.1 m within static_check_window) is therefore cleared by
+        # jitter, and the "confirmed" latch below then makes that
+        # permanent: the cluster at (-1.30, 9.75) held person status
+        # for 21 s and reached identity_fusion as a lidar_only
+        # phantom for 9 s.
+        # Cumulative displacement from BIRTH does separate them.
+        # Require it in addition to the existing recent-motion test.
+        # Set <=0 to disable and restore the previous behaviour.
+        self.declare_parameter("confirm_min_span", 1.5)
 
         # Two separate leg clusters within this distance (meters) of each
         # other are merged into one person track — otherwise each leg gets
@@ -109,10 +129,56 @@ class LidarPersonDetector(Node):
         # Cells at/above this are treated as static obstacles.
         self.declare_parameter("static_occupancy_threshold", 50)
         # Inflate occupied cells by this many grid cells before testing a
-        # candidate against them - map resolution/localization noise can
-        # place a real chair-leg point just outside its exact occupied
-        # cell otherwise.
-        self.declare_parameter("static_inflation_cells", 2)
+        # candidate against them.
+        #
+        # THESIS FIX (stationary person vetoed by static-map subtraction).
+        # Was 2 (= a +/-0.10 m box at 0.05 m/cell), added so localization
+        # noise couldn't put a chair-leg point just outside its occupied
+        # cell. MEASURED CONSEQUENCE: a person standing 0.05-0.10 m from
+        # mapped furniture has that furniture inside the box, so their
+        # cluster is dropped on EVERY scan - before clustering, tracking,
+        # or the "confirmed" latch ever sees it. Nothing downstream can
+        # recover it and nothing logs an error; the node just goes quiet.
+        #
+        # Confirmed on bag headon_t01 (person standing beside a bench,
+        # t+20..34): vetoed on 110/110 scans at k=2, 33/110 at k=1, 0/110
+        # at k=0. Offline replay of the whole pipeline on the same bag:
+        #
+        #   k=2 (was): 25/189 camera detections matched a lidar cluster,
+        #              median bearing residual 18.9 deg
+        #   k=0 (now): 188/189 matched, median residual 1.2 deg
+        #
+        # The clutter cost the inflation was buying is small now that the
+        # width filter is tightened (0.05-0.45 m, min_points=4): k=0 still
+        # rejects 42% of candidates vs no map filter at all (1901 vs 3270
+        # published over the run), for the same 1.2 deg residual. So keep
+        # the filter, just stop inflating it.
+        #
+        # Raise this ONLY if furniture starts leaking through, and re-check
+        # against a standing-person trial before trusting the new value -
+        # the failure this caused is silent.
+        self.declare_parameter("static_inflation_cells", 0)
+
+        # THESIS FIX (furniture dominating the candidate list).
+        # static_inflation_cells went 2 -> 0 because k=2 deleted a person
+        # standing 0.05-0.10 m from mapped furniture on 110/110 scans of
+        # headon_t01. That fixed the deletion but removed the only
+        # suppression of wall fragments, so the candidate list became
+        # mostly furniture. Measured on fov_live: stable id 2 sat at
+        # (-1.20, 0.07) for 8 s - 45 occupied map cells within 0.3 m -
+        # camera_confirmed throughout, at -13.5 deg and 3.35 m, i.e.
+        # inside every angular gate and inside RANGE_RATIO_GATE.
+        #
+        # Ray consistency separates the two cases that a cell lookup
+        # cannot: cast from the sensor toward the candidate and find the
+        # map's own first occupied cell along that ray. A candidate at
+        # roughly that range IS the mapped obstacle. A candidate closer
+        # than it by more than the margin is something in FRONT of the
+        # obstacle - a person. Set use_ray_consistency false to restore
+        # the previous cell-lookup behaviour.
+        self.declare_parameter("use_ray_consistency", True)
+        self.declare_parameter("ray_clear_margin", 0.25)
+        self.declare_parameter("ray_max_range", 8.0)
 
         self.scan_topic = self.get_parameter("scan_topic").value
         self.output_topic = self.get_parameter("output_topic").value
@@ -126,6 +192,7 @@ class LidarPersonDetector(Node):
         self.track_timeout = self.get_parameter("track_timeout").value
         self.static_move_threshold = self.get_parameter("static_move_threshold").value
         self.static_check_window = self.get_parameter("static_check_window").value
+        self.confirm_min_span = self.get_parameter("confirm_min_span").value
         self.leg_pair_merge_dist = self.get_parameter("leg_pair_merge_dist").value
         self.map_topic = self.get_parameter("map_topic").value
         self.static_occupancy_threshold = self.get_parameter("static_occupancy_threshold").value
@@ -157,6 +224,12 @@ class LidarPersonDetector(Node):
         self._last_heartbeat_time = None
         self._heartbeat_every = 10.0   # s; "still alive, still idle" ping
 
+        # Scan-rate guard - see scan_callback. 0.123 s measured on this
+        # RPLIDAR (1080 pts/rev); a scan arriving inside half of that is
+        # a duplicate, not new data.
+        self._last_scan_time = None
+        self._scan_period = 0.123
+
         # THESIS FIX (log noise from short-lived clutter): "New person
         # id(s) publishing" used to fire the instant ANY candidate first
         # started publishing - including furniture/wall-fragment noise
@@ -185,8 +258,21 @@ class LidarPersonDetector(Node):
         # =====================================
         # ROS interfaces
         # =====================================
+        # THESIS FIX (queue backlog -> impossible track velocities). The
+        # default depth-10 RELIABLE queue lets scans back up over WiFi and
+        # then be processed in bursts: measured 5% of consecutive publishes
+        # of the same track id under 20 ms apart, min 2.6 ms, against a
+        # 123 ms scan period. dt collapses while track_match_dist still
+        # allows a 0.7 m jump, giving apparent speeds up to 87.8 m/s
+        # (0.28 m in 3.2 ms). Same fix the camera node already applies:
+        # drop late scans instead of queueing them.
+        scan_qos = QoSProfile(
+            depth=1,
+            reliability=QoSReliabilityPolicy.BEST_EFFORT,
+            history=HistoryPolicy.KEEP_LAST,
+        )
         self.sub = self.create_subscription(
-            LaserScan, self.scan_topic, self.scan_callback, 10
+            LaserScan, self.scan_topic, self.scan_callback, scan_qos
         )
         self.pub = self.create_publisher(String, self.output_topic, 10)
 
@@ -246,8 +332,56 @@ class LidarPersonDetector(Node):
                         return True
         return False
 
+    def map_range_along_ray(self, sx, sy, tx, ty):
+        """Range from (sx, sy) to the first occupied map cell on the ray
+        toward (tx, ty), or None if the ray reaches ray_max_range without
+        hitting anything. See use_ray_consistency."""
+        if self.map_grid is None:
+            return None
+        width, height, res, origin_x, origin_y = self.map_data
+        dx, dy = tx - sx, ty - sy
+        n = math.hypot(dx, dy)
+        if n < 1e-6:
+            return None
+        dx, dy = dx / n, dy / n
+        max_r = self.get_parameter("ray_max_range").value
+        step = res * 0.5
+        r = res
+        while r <= max_r:
+            c = int((sx + dx * r - origin_x) / res)
+            rw = int((sy + dy * r - origin_y) / res)
+            if not (0 <= rw < height and 0 <= c < width):
+                return None
+            if self.map_grid[rw * width + c] >= self.static_occupancy_threshold:
+                return r
+            r += step
+        return None
+
+    def is_static_by_ray(self, sx, sy, x, y):
+        """True if this candidate IS the mapped obstacle rather than
+        something standing in front of it. See use_ray_consistency."""
+        cand_r = math.hypot(x - sx, y - sy)
+        map_r = self.map_range_along_ray(sx, sy, x, y)
+        if map_r is None:
+            return False        # open floor along this ray - keep it
+        margin = self.get_parameter("ray_clear_margin").value
+        return cand_r >= map_r - margin
+
     def scan_callback(self, msg: LaserScan):
         now = self.get_clock().now()
+
+        # THESIS FIX (duplicate scans): measured 2 scan pairs whose own
+        # header stamps are 1.3 ms apart, against a 123 ms scan period -
+        # the driver occasionally emits a near-duplicate. Processing it
+        # advances every track by up to a full association radius over
+        # ~0 elapsed time, which reads downstream as an impossible
+        # velocity. A scan closer than half a period to the last one
+        # carries no new information; skip it.
+        now_check = now.nanoseconds * 1e-9
+        if (self._last_scan_time is not None
+                and now_check - self._last_scan_time < 0.5 * self._scan_period):
+            return
+        self._last_scan_time = now_check
 
         # ---- 1. Convert ranges to (x, y) points in the scan frame ----
         points = []
@@ -386,13 +520,38 @@ class LidarPersonDetector(Node):
         # clustering/tracking. No-op (nothing dropped) until a map is
         # received.
         before = len(transformed)
-        transformed = [
-            (x, y) for (x, y) in transformed if not self.is_static_obstacle(x, y)
-        ]
-        if len(transformed) != before:
+        if self.get_parameter("use_ray_consistency").value:
+            spt = PointStamped()
+            spt.header = msg.header
+            spt.header.frame_id = source_frame
+            spt.point.x = 0.0
+            spt.point.y = 0.0
+            spt.point.z = 0.0
+            sm = do_transform_point(spt, tf)
+            sx, sy = sm.point.x, sm.point.y
+            # THESIS FIX (real robot, rotation dropout, 9 Sep): the
+            # filter used to DELETE static-flagged candidates before
+            # matching. While the robot rotates (~1 rad/s) map-frame
+            # positions swing, the person's cluster lands on a wall
+            # cell, and the confirmed track lost every scan until the
+            # turn settled (>0.6 s) - fusion coasted a frozen point and
+            # the cloud sat behind the person. The filter's job is to
+            # stop NEW tracks spawning on furniture; it must not remove
+            # a cluster that matches an already-confirmed moving track.
+            # So: flag, keep for matching, exclude only from spawning.
+            static_idx = {
+                i for i, (x, y) in enumerate(transformed)
+                if self.is_static_by_ray(sx, sy, x, y)
+            }
+        else:
+            static_idx = {
+                i for i, (x, y) in enumerate(transformed)
+                if self.is_static_obstacle(x, y)
+            }
+        if static_idx:
             self.get_logger().info(
-                f"DEBUG: static-map dropped {before - len(transformed)} "
-                f"candidate(s) on known obstacles",
+                f"DEBUG: static-map flagged {len(static_idx)} "
+                f"candidate(s) on known obstacles (no spawn)",
                 throttle_duration_sec=1.0,
             )
 
@@ -423,8 +582,20 @@ class LidarPersonDetector(Node):
         # target then always has a nearby prediction to match against,
         # while genuine jitter (no consistent velocity) gets no such
         # help and is rejected the same as before.
+        _pairs = []
+        _pred_dt = {}
         for track_id, t in list(self.tracks.items()):
             dt_pred = now_s - t["last_seen"]
+
+            # THESIS FIX (burst processing): now_s is callback-entry time,
+            # so two scans delivered back-to-back give dt_pred of a few ms
+            # while the association radius stays a full 0.7 m - a physically
+            # impossible jump the velocity cap does not prevent, because it
+            # clamps the velocity ESTIMATE after the fact, not the match
+            # distance. Floor dt at half a scan period and additionally
+            # bound the gate by max_track_speed * dt, so the radius is
+            # always what physics allows in the elapsed time.
+            dt_pred = max(dt_pred, 0.05)
             pred_x = t["x"] + t.get("vx", 0.0) * dt_pred
             pred_y = t["y"] + t.get("vy", 0.0) * dt_pred
 
@@ -453,15 +624,51 @@ class LidarPersonDetector(Node):
             else:
                 gate = self.track_match_dist
 
-            best_i, best_d = None, gate
+            # THESIS FIX (real robot, id churn, 9 Sep): the previous
+            #   gate = min(gate, max_track_speed * dt_pred)
+            # capped the match radius at 0.25 m for a 0.1 s scan gap. But
+            # lidar centroids hop up to ~0.7 m in a single scan when the
+            # clustering regroups legs, and robot ego-motion + TF latency
+            # adds more. Every rejection spawned a fresh id - 13 ids for
+            # one person in one walk, PERSON LOST/DETECTED toggling every
+            # 100-600 ms. Speed-only gates cannot work here (same finding
+            # as fusion's identity gate): use a fixed jitter allowance
+            # plus what the speed cap permits over the elapsed time.
+            # MEASURED 9 Sep by bag replay: the widened form gave 7
+            # empty-hall phantoms and held the person 3.8 s; this one
+            # gives 5 and holds 6.2 s. Four other widths were worse.
+            gate = min(gate, self.max_track_speed * dt_pred)
+
+            # Pass 1: score every (track, candidate) pair inside this
+            # track's gate. Pass 2 consumes them one-to-one best-first,
+            # so no track steals another's cluster and gets pushed onto
+            # a distant one. MEASURED: teleports 18->3, 19->2, 1->0.
             for i in unmatched:
+                if i in static_idx and t.get("static_streak", 0) >= 3:
+                    continue
                 d = math.hypot(
                     transformed[i][0] - pred_x, transformed[i][1] - pred_y
                 )
-                if d < best_d:
-                    best_i, best_d = i, d
-            if best_i is not None:
+                if d < gate:
+                    _pairs.append((d, track_id, i))
+            _pred_dt[track_id] = dt_pred
+
+        # Pass 2: one-to-one assignment, best pair in the frame first.
+        _pairs.sort()
+        _matched = {}
+        _taken = set()
+        for _d, _tid, _i in _pairs:
+            if _tid in _matched or _i in _taken:
+                continue
+            _matched[_tid] = _i
+            _taken.add(_i)
+
+        for track_id, best_i in _matched.items():
+            t = self.tracks[track_id]
+            dt_pred = _pred_dt[track_id]
+            if True:
                 x, y = transformed[best_i]
+                on_static = best_i in static_idx
 
                 # Velocity estimate for the NEXT prediction: finite
                 # difference against the position just before this
@@ -525,6 +732,9 @@ class LidarPersonDetector(Node):
                     "origin_t": origin_t, "history": history,
                     "vx": vx, "vy": vy,
                     "vel_established": dt_pred > 1e-3,
+                    # Wall-rider guard: consecutive matches onto
+                    # static-map clusters. See patch docstring.
+                    "static_streak": (t.get("static_streak", 0) + 1) if on_static else 0,
                     # THESIS FIX (stationary person dropped as furniture):
                     # static_move_threshold below re-checks displacement
                     # EVERY scan to reject furniture/walls, but a real
@@ -538,21 +748,41 @@ class LidarPersonDetector(Node):
                     # again - furniture never earns "confirmed" in the
                     # first place, so it stays filtered forever, but a
                     # person who stops moving keeps publishing.
+                    "birth_x": t.get("birth_x", x),
+                    "birth_y": t.get("birth_y", y),
+                    "span": (t.get("span", 0.0) if on_static else
+                             max(t.get("span", 0.0),
+                                 math.hypot(x - t.get("birth_x", x),
+                                            y - t.get("birth_y", y)))),
+                    # Confirmed requires BOTH recent motion (the
+                    # original test, which a stopped person keeps once
+                    # latched) and cumulative travel from birth (the
+                    # new test, which jitter cannot fake). See
+                    # confirm_min_span above for the measurements.
                     "confirmed": t.get("confirmed", False) or (
-                        math.hypot(x - origin_x, y - origin_y)
-                        >= self.static_move_threshold),
+                        not on_static
+                        and math.hypot(x - origin_x, y - origin_y)
+                        >= self.static_move_threshold
+                        and (self.confirm_min_span <= 0
+                             or max(t.get("span", 0.0),
+                                    math.hypot(x - t.get("birth_x", x),
+                                               y - t.get("birth_y", y)))
+                             >= self.confirm_min_span)),
                 }
                 unmatched.remove(best_i)
                 used_ids.add(track_id)
 
         # New tracks for unmatched clusters
         for i in unmatched:
+            if i in static_idx:
+                continue  # on a known obstacle - never spawn a track here
             x, y = transformed[i]
             self.tracks[self.next_id] = {
                 "x": x, "y": y, "last_seen": now_s,
                 "origin_x": x, "origin_y": y, "origin_t": now_s,
                 "history": [(now_s, x, y)],
                 "vx": 0.0, "vy": 0.0,
+                "birth_x": x, "birth_y": y, "span": 0.0,
                 "confirmed": False,
             }
             used_ids.add(self.next_id)
@@ -567,17 +797,34 @@ class LidarPersonDetector(Node):
         # id,conf,base_x,base_y   (conf fixed at 1.0 — no classification confidence from LiDAR alone)
         published = 0
         published_ids = set()
-        for track_id in used_ids:
-            t = self.tracks.get(track_id)
-            if t is None:
+        # THESIS FIX (real robot, publish flicker, 9 Sep): a CONFIRMED
+        # track that missed a single scan (cluster dropped by the
+        # static-map/ray filter while the robot moves, or split by
+        # clustering) vanished from the output for that cycle, and
+        # fusion/KF treated the id as dead. Keep publishing a confirmed
+        # track for up to publish_grace_s after its last match, at its
+        # velocity-predicted position so the mark keeps moving rather
+        # than freezing. Unconfirmed tracks are unaffected.
+        publish_grace_s = 1.0
+        for track_id, t in list(self.tracks.items()):
+            matched = track_id in used_ids
+            age = now_s - t["last_seen"]
+            if not matched and not (t.get("confirmed", False)
+                                    and age <= publish_grace_s):
                 continue
 
             moved = math.hypot(t["x"] - t["origin_x"], t["y"] - t["origin_y"])
             if not t.get("confirmed", False) and moved < self.static_move_threshold:
                 continue  # never yet proven to move — likely furniture/wall
 
+            if matched:
+                px, py = t["x"], t["y"]
+            else:
+                px = t["x"] + t.get("vx", 0.0) * age
+                py = t["y"] + t.get("vy", 0.0) * age
+
             out = String()
-            out.data = f"{track_id},1.00,{t['x']:.3f},{t['y']:.3f}"
+            out.data = f"{track_id},1.00,{px:.3f},{py:.3f}"
             self.pub.publish(out)
             published += 1
             published_ids.add(track_id)

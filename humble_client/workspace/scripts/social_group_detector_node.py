@@ -105,7 +105,7 @@ COSTMAP_OCCUPIED_THRESHOLD = 50  # occupancy value (0-100) considered
                                   # group shouldn't be assumed free
 
 
-GROUP_BREAKUP_DIST_HOLD = 2.5   # s; pair must exceed CONV_MAX_DIST for
+GROUP_BREAKUP_DIST_HOLD = 1.0  # s; pair must exceed CONV_MAX_DIST for
                                   # this long (not just one noisy sample)
                                   # before the cached group is cleared
 

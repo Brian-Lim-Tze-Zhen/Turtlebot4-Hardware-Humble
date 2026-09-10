@@ -49,7 +49,19 @@ class YoloByteTrackPositionNode(Node):
         # COCO keypoint indices: 13=L knee,14=R knee,15=L ankle,16=R ankle
         self.leg_kpt_idx = [13, 14, 15, 16]
         self.leg_kpt_min_conf = 0.3
-        self.min_publish_conf = 0.80
+        # THESIS TUNE 0.75 -> 0.45. Measured on hallway_7m_06: the
+        # camera published detections for 5.5 s of a 50.7 s run and
+        # fused output covered 3.8 s as a direct result, while lidar
+        # tracked the person throughout. ~757 inferences produced 66
+        # published detections (~9% pass rate). The mount is pitched
+        # at the floor, so a person is cropped to knees-and-boots and
+        # scores far below 0.75 - the gate was tuned for whole-body
+        # boxes this camera does not produce. Uncorroborated camera
+        # detections are already handled downstream by
+        # CAMERA_ONLY_GRACE_PERIOD and the bearing blacklist in
+        # identity_fusion_node_lidar.py, both verified working.
+        # Root fix remains mounting geometry: tilt the camera up.
+        self.min_publish_conf = 0.45
 
         self.frame_count = 0
         self.process_every_n_frames = 2

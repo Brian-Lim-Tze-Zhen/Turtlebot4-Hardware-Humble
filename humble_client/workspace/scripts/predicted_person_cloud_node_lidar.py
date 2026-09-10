@@ -60,7 +60,7 @@ ELLIPSE_EXIT_SPEED = 0.03    # m/s; must drop below this to fall back to disk
 # Ellipse half-width ACROSS the heading. Kept at parity with the person
 # disk radius below: a lane narrower than the person it represents left
 # the predicted region half the width of the body it stood for.
-ELLIPSE_B = 0.8               # m (shrunk from 1.20 - was wider than long, causing round/omnidirectional footprint)
+ELLIPSE_B = 0.6          # m (shrunk from 1.20 - was wider than long, causing round/omnidirectional footprint)
 
 # Ellipse half-length ALONG the heading, as a function of walking speed.
 # At the 1.2 m/s test speed this gives a = 0.60 + 0.60 = 1.20 m, so the
@@ -92,7 +92,7 @@ LATERAL_BIAS = 0.20 # m
 # Below LATERAL_SIDE_DEADBAND perpendicular distance from the person's
 # heading line, the side estimate is dominated by noise (robot near
 # the centreline / near-head-on approach), so the last committed side
-# is held rather than recomputed — recomputing every cycle here is
+# is held rather than recomputed - recomputing every cycle here is
 # exactly the kind of frame-to-frame flip that produces hesitation.
 LATERAL_SIDE_DEADBAND = 0.15      # m
 
@@ -126,7 +126,7 @@ ENABLE_DYNAMIC_PASS_SIDE = False
 # used when the ellipse is suppressed. Same radius, different sampling:
 # the current-position disk is denser because it is what the local
 # planner collides against.
-PERSON_DISK_RADIUS = 0.55    # m
+PERSON_DISK_RADIUS = 0.6   # m (0.5 -> 0.7 tested 10 Sep: 0.7 gave correct marks at 202 pts but robot stopped, corridor too narrow for lane+inflation; 0.6 under test to bracket the limit)
 PERSON_DISK_SPACING = 0.10         # m
 FALLBACK_DISK_SPACING = 0.15       # m
 ELLIPSE_SPACING = 0.15             # m
@@ -136,7 +136,7 @@ ELLIPSE_SPACING = 0.15             # m
 # must not be widened.
 ROBOT_KEEPOUT_RADIUS = 0.20       # m
 
-TRACK_TIMEOUT = 0.30               # s before a silent track is dropped
+TRACK_TIMEOUT = 1.00               # s before a silent track is dropped
 PUBLISH_RATE_HZ = 10.0             # cloud rate, decoupled from detection
 HEADING_SMOOTH_ALPHA = 0.40        # EMA on the heading sin/cos
 HEADING_MIN_DISPLACEMENT = 0.15    # m; below this, hold the last heading
@@ -370,7 +370,8 @@ class PredictedPersonCloudNode(Node):
         # rather than raise PUBLISH_RATE_HZ.
         # ==========================================================
         self._periodic_clear_period_s = 3.0
-        self.create_timer(self._periodic_clear_period_s, self._periodic_safety_clear)
+        # THESIS FIX (real robot): periodic full clear disabled - it wiped walls + lidar marks mid-encounter (lethal 830 -> 380 in local costmap). NonPersistentVoxelLayer rebuilds from the latest cloud each cycle, so trail marks cannot persist there.
+        # self.create_timer(self._periodic_clear_period_s, self._periodic_safety_clear)
 
         self.get_logger().info("Predicted person cloud node started")
         self.get_logger().info("Subscribing: /predicted_person_positions")
@@ -869,9 +870,22 @@ class PredictedPersonCloudNode(Node):
                 if t.get("rotation_gated", False)
             ]
             gated_str = f" [ROT GATED: {','.join(gated)}]" if gated else ""
+            # THESIS DEBUG (position-follow verification): log each
+            # active track's own "current" (x, y) - the exact value
+            # _track_points() builds the cloud from - alongside the
+            # existing summary line. Lets a claim like "the cloud isn't
+            # following the person" be checked directly against this
+            # node's own input, cycle for cycle, instead of only
+            # against human_kf_predictor's log (which only proves the
+            # UPSTREAM position is right, not that this node used it
+            # correctly). No behavior change - log line only.
+            positions_str = ",".join(
+                f"{tid}:({t['current'][0]:.2f},{t['current'][1]:.2f})"
+                for tid, t in self.active_tracks.items()
+            )
             self.get_logger().info(
                 f"Published cloud for {len(self.active_tracks)} track(s) "
-                f"[{ids}] points={len(points)}{gated_str}")
+                f"[{ids}] points={len(points)}{gated_str} pos=[{positions_str}]")
 
     def _deduplicated_tracks(self):
         """Collapse tracks that sit on top of each other into one.
