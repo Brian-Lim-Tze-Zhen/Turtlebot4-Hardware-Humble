@@ -26,6 +26,9 @@ RUN apt update && apt install -y \
     python3-colcon-common-extensions \
     python3-rosdep \
     mesa-utils \
+    libgl1-mesa-dri \
+    libglx-mesa0 \
+    mesa-va-drivers \
     && rm -rf /var/lib/apt/lists/*
 
 
