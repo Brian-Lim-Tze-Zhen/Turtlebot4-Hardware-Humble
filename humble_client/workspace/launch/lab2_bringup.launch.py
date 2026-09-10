@@ -1,5 +1,6 @@
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
+from launch.actions import (IncludeLaunchDescription, DeclareLaunchArgument,
+                            ExecuteProcess, TimerAction)
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.substitutions import FindPackageShare
@@ -18,6 +19,19 @@ def generate_launch_description():
     params_file_arg = DeclareLaunchArgument(
         'params_file',
         default_value='/root/thesis_social_navigation_ws/config/nav2_params.yaml'
+    )
+
+    # THESIS ADDITION: /turtlebot4/odom is BEST_EFFORT, but
+    # bt_navigator and controller_server both declare
+    # odom_topic: odom_reliable. That topic is produced by this relay
+    # and by nothing else - when the relay is not running the topic
+    # does not exist, both nodes subscribe to nothing, and MPPI runs
+    # with no odometry at all. This was the state for an unknown number
+    # of trials (found 8 Sep 2026). Nav2 subscribes once at startup, so
+    # the relay must be up BEFORE nav2 - hence the TimerAction below.
+    odom_relay = ExecuteProcess(
+        cmd=['python3', '/root/thesis_social_navigation_ws/odom_qos_relay.py'],
+        output='screen',
     )
 
     localization = IncludeLaunchDescription(
@@ -65,7 +79,10 @@ def generate_launch_description():
         map_arg,
         namespace_arg,
         params_file_arg,
+        odom_relay,
         localization,
-        nav2,
+        # Delay so /turtlebot4/odom_reliable exists before
+        # controller_server and bt_navigator subscribe to it.
+        TimerAction(period=3.0, actions=[nav2]),
         view_robot,
     ])

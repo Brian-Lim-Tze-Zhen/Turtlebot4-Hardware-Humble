@@ -13,3 +13,19 @@ humble_client/workspace/src/nonpersistent_voxel_layer/
 *.jpg
 *.jpeg
 debug_crops/
+# Backups and patchers
+*.bak_*
+humble_client/workspace/scripts/patch_*.py
+
+# Data, Bags, and Logs
+*.zip
+humble_client/workspace/bags/
+humble_client/workspace/logs/
+humble_client/workspace/analysis/
+humble_client/workspace/test
+humble_client/Task/files/
+humble_client/files/
+
+# Notebooks
+.ipynb_checkpoints/
+*.ipynb
