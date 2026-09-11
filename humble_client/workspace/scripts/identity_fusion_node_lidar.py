@@ -186,8 +186,9 @@ ANGLE_GATE_DEG = 12.0
 
 # THESIS FIX (out-of-FOV bindings). ANGLE_GATE_DEG bounds how far a lidar
 # candidate may sit FROM THE CAMERA DETECTION, but nothing bounded where
-# it sits in ABSOLUTE bearing. Measured intrinsics give a true HFOV of
-# 63.68 deg, i.e. +/-31.84 deg; a detection near the frame edge could
+# it sits in ABSOLUTE bearing. Calibrated intrinsics (fx 287.31, 11 Sep)
+# give a true HFOV of 47.0 deg, i.e. +/-23.5 deg (gate = 27 deg incl.
+# margin); a detection near the frame edge could
 # therefore bind to a cluster the camera physically cannot see.
 # On walk_full, stable id 0 sat at -42.7 deg with 5 camera_confirmed
 # messages - 10.9 deg outside the FOV - and never moved, so neither
@@ -196,13 +197,13 @@ ANGLE_GATE_DEG = 12.0
 # Applied to both match paths and to the coast, so no path can accept or
 # hold a candidate outside the camera's view. Exposed as the ROS
 # parameter fov_gate_deg for offline tuning; <= 0 disables the gate.
-FOV_GATE_DEG = 35.0
+FOV_GATE_DEG = 27.0
 
-# OAK-D Pro RGB horizontal FOV. Approximate for the un-cropped sensor;
-# the preview stream is a center crop so this is close but not exact -
-# fine for a coarse re-ID gate, not for anything needing sub-degree
-# accuracy.
-CAMERA_HFOV_DEG = 69.0
+# Calibrated OAK-D preview intrinsics / mounting (250x250 crop)
+CAMERA_FX = 287.31
+CAMERA_CX = 124.95
+CAMERA_YAW_OFFSET_DEG = 2.25   # scan bearing test 11 Sep: mean residual +1.5 deg
+CAMERA_X_OFFSET = 0.165        # m, forward of base_link
 
 # Preview stream width in pixels (matches oakd_pro.yaml i_preview_size).
 CAMERA_PREVIEW_WIDTH = 250
@@ -351,10 +352,11 @@ MOVING_CORROBORATION_TIMEOUT = 15.0    # s; replaces CAMERA_CORROBORATION_TIMEOU
 #
 # Set to 0 to disable the gate entirely and fall back to bearing-only.
 PERSON_HEIGHT_M = 1.75
-# Measured from /turtlebot4/oakd/rgb/preview/camera_info: fx=201.308,
-# fy=201.222, cx=124.95 on a 250x250 preview -> true HFOV 63.7 deg, not
-# the 69.0 deg assumed elsewhere in this file.
-CAMERA_FY = 201.2216
+# CALIBRATED 11 Sep 2026: fx=fy=287.31, cx=124.95 on the 250x250 preview
+# -> HFOV 47.0 deg. Supersedes camera_info (fx=201.3, HFOV 63.7 deg).
+# Validated against raw /scan leg bearings, 1.4-3.2 m, +/-14 deg:
+# residual -0.1 +/- 0.9 deg (max 1.5 deg) with yaw offset 2.25 deg.
+CAMERA_FY = 287.31
 # THESIS ADDITION: a bbox whose top edge is within this many pixels
 # of y=0 is treated as clipped, so its height - and any range derived
 # from it - is unusable. Set <0 to disable the check.
@@ -575,16 +577,22 @@ class IdentityFusionNode(Node):
         # alone and isolate the range term.
         self.declare_parameter("range_cost_weight", RANGE_COST_WEIGHT)
         self.declare_parameter("range_ratio_gate", RANGE_RATIO_GATE)
-        self.declare_parameter("camera_hfov_deg", CAMERA_HFOV_DEG)
         self.declare_parameter("camera_preview_width", CAMERA_PREVIEW_WIDTH)
+        self.declare_parameter("camera_fx", CAMERA_FX)
+        self.declare_parameter("camera_cx", CAMERA_CX)
+        self.declare_parameter("camera_yaw_offset_deg", CAMERA_YAW_OFFSET_DEG)
+        self.declare_parameter("camera_x_offset", CAMERA_X_OFFSET)
 
         self.camera_topic = self.get_parameter("camera_topic").value
         self.lidar_topic = self.get_parameter("lidar_topic").value
         self.output_topic = self.get_parameter("output_topic").value
         self.angle_gate_rad = math.radians(
             float(self.get_parameter("angle_gate_deg").value))
-        self.hfov_rad = math.radians(
-            float(self.get_parameter("camera_hfov_deg").value))
+        self.fx = float(self.get_parameter("camera_fx").value)
+        self.cx = float(self.get_parameter("camera_cx").value)
+        self.cam_yaw = math.radians(
+            float(self.get_parameter("camera_yaw_offset_deg").value))
+        self.cam_x = float(self.get_parameter("camera_x_offset").value)
         self.preview_width = float(
             self.get_parameter("camera_preview_width").value)
 
@@ -894,10 +902,15 @@ class IdentityFusionNode(Node):
         robot's left, matching the standard CCW-positive yaw convention.
         """
         u = (x1 + x2) / 2.0
-        normalized = (u - self.preview_width / 2.0) / (self.preview_width / 2.0)
-        # image-right (+u) = robot's right = negative yaw
-        return -normalized * (self.hfov_rad / 2.0)
-
+        return -math.atan((u - self.cx) / self.fx) + self.cam_yaw
+    
+    def track_bearing_from_camera(self, lx, ly, pose):
+        rx, ry, ryaw = pose
+        dx, dy = lx - rx, ly - ry
+        bx = math.cos(ryaw) * dx + math.sin(ryaw) * dy - self.cam_x
+        by = -math.sin(ryaw) * dx + math.cos(ryaw) * dy
+        return math.atan2(by, bx)
+    
     def sticky_lidar(self, cam_id, cam_bearing_rel, bbox_range=None):
         """If cam_id was bound to a lidar track last cycle and that track
         is still within the angle gate, keep using it - avoids the
@@ -921,8 +934,7 @@ class IdentityFusionNode(Node):
         rx, ry, ryaw = pose
 
         lx, ly, _ = self.lidar_tracks[prev_lid]
-        bearing_to_track = math.atan2(ly - ry, lx - rx)
-        track_bearing_rel = self.wrap_angle(bearing_to_track - ryaw)
+        track_bearing_rel = self.track_bearing_from_camera(lx, ly, pose)
         diff = abs(self.wrap_angle(track_bearing_rel - cam_bearing_rel))
 
         if diff < self.angle_gate_rad:
@@ -952,7 +964,7 @@ class IdentityFusionNode(Node):
         gate = self.get_parameter("fov_gate_deg").value
         if gate is None or gate <= 0:
             return True
-        rel = self.wrap_angle(math.atan2(ly - ry, lx - rx) - ryaw)
+        rel = self.track_bearing_from_camera(lx, ly, (rx, ry, ryaw))
         return abs(math.degrees(rel)) <= gate
 
     def range_plausible(self, lx, ly, rx, ry, bbox_range):
@@ -1003,8 +1015,7 @@ class IdentityFusionNode(Node):
         for lid, (lx, ly, _stamp) in self.lidar_tracks.items():
             if _now - _stamp > _max_age:
                 continue
-            bearing_to_track = math.atan2(ly - ry, lx - rx)
-            track_bearing_rel = self.wrap_angle(bearing_to_track - ryaw)
+            track_bearing_rel = self.track_bearing_from_camera(lx, ly, pose)
             diff = abs(self.wrap_angle(track_bearing_rel - cam_bearing_rel))
             if diff >= self.angle_gate_rad:
                 continue
@@ -1161,7 +1172,7 @@ class IdentityFusionNode(Node):
         # THESIS FIX: rough range from bbox height, used only as a ratio
         # gate on lidar candidates (see RANGE_RATIO_GATE). fy is taken
         # from the measured intrinsics; the preview is square so
-        # fy ~= fx ~= 201.2 for a 250x250 frame.
+        # fy ~= fx ~= 287.31 for a 250x250 frame (calibrated 11 Sep).
         bbox_h = y2 - y1
         # THESIS FIX (clipped bbox poisons the range estimate). The
         # camera is mounted low and pitched at the floor, so the
