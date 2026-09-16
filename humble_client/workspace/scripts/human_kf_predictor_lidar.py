@@ -8,6 +8,17 @@ from rclpy.node import Node
 from rclpy.qos import QoSProfile, ReliabilityPolicy, HistoryPolicy
 from std_msgs.msg import String
 from nav_msgs.msg import Odometry
+from collections import deque
+
+# THESIS FIX (15 Sep, stationary-person stretch): with the robot moving,
+# a standing person's measured position jitters by a few cm per frame.
+# The KF turns that into a small but non-zero velocity, and
+# predict_future() multiplies it by the horizon, so the predicted cloud
+# stretches although nobody moves. A speed threshold cannot separate this
+# (per-frame jitter speed is high); NET displacement over a window can:
+# jitter averages out, walking accumulates.
+STILL_WINDOW_S = 1.0     # s; displacement measured over at least this long
+STILL_MAX_DISP_M = 0.30  # m; net displacement below this = standing still
 
 
 class HumanTrackKF:
@@ -142,6 +153,17 @@ class HumanTrackKF:
                             # once you decide on an intended decay speed.
         self.vx_filt = None
         self.vy_filt = None
+        self.pos_hist = deque()   # (t, x, y) of measurements
+        self.is_still = False
+
+    def update_still(self, t, mx, my):
+        self.pos_hist.append((t, mx, my))
+        while len(self.pos_hist) > 2 and t - self.pos_hist[1][0] >= STILL_WINDOW_S:
+            self.pos_hist.popleft()
+        t0, x0, y0 = self.pos_hist[0]
+        if t - t0 < STILL_WINDOW_S:
+            return   # not enough history yet; keep previous decision
+        self.is_still = math.hypot(mx - x0, my - y0) < STILL_MAX_DISP_M
 
     def update(self, meas_x, meas_y, timestamp, freeze_velocity=False,
                is_lidar_only=False):
@@ -158,6 +180,8 @@ class HumanTrackKF:
             self.P[2, 2] = 5.0
             self.P[3, 3] = 5.0
             self.update_count = 0
+            self.pos_hist.clear()
+            self.is_still = False
 
         # Safety clamp for simulation pauses / timing jumps
         dt = dt_raw if 0.0 < dt_raw <= 1.0 else 0.1
@@ -223,6 +247,7 @@ class HumanTrackKF:
         # noise.
         # ==========================================================
         self.update_count += 1
+        self.update_still(timestamp, meas_x, meas_y)
 
         if not freeze_velocity:
             vx_raw = float(self.x[2, 0])
@@ -287,6 +312,9 @@ class HumanTrackKF:
         else:
             vx_pred = self.vx_filt if self.vx_filt is not None else vx
             vy_pred = self.vy_filt if self.vy_filt is not None else vy
+
+        if self.is_still:
+            vx_pred, vy_pred = 0.0, 0.0
 
         # Hard cap at realistic human walking speed (~2 m/s) as a safety net.
         max_speed = 2.0

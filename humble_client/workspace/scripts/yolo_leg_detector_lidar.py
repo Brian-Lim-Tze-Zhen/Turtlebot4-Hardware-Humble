@@ -31,6 +31,13 @@ class YoloByteTrackPositionNode(Node):
         union = area_a + area_b - inter
         return inter / union if union > 0 else 0.0
         
+    @staticmethod
+    def _contained(inner, outer):
+        ix = max(0.0, min(inner[2], outer[2]) - max(inner[0], outer[0]))
+        iy = max(0.0, min(inner[3], outer[3]) - max(inner[1], outer[1]))
+        area = (inner[2] - inner[0]) * (inner[3] - inner[1])
+        return ix * iy / area if area > 0 else 0.0
+
     def __init__(self):
 
         
@@ -148,7 +155,12 @@ class YoloByteTrackPositionNode(Node):
         order = sorted(range(len(boxes_xyxy)), key=lambda i: -confs[i])
         keep = []
         for i in order:
-            if any(self._iou(boxes_xyxy[i], boxes_xyxy[j]) > DEDUP_IOU_THRESHOLD for j in keep):
+            # THESIS FIX (16 Sep, proto_K3): a box partly hiding the legs split one
+            # person into id:22 (98,0,147,76) fully inside id:20 (92,0,157,153).
+            # IoU was 0.37 < 0.45, so it survived and the same-frame rule created
+            # a new stable id. Also drop a box that is >= 85% inside a kept one.
+            if any(self._iou(boxes_xyxy[i], boxes_xyxy[j]) > DEDUP_IOU_THRESHOLD
+                   or self._contained(boxes_xyxy[i], boxes_xyxy[j]) >= 0.85 for j in keep):
                 continue
             keep.append(i)
         keep_set = set(keep)
@@ -168,7 +180,20 @@ class YoloByteTrackPositionNode(Node):
             # model's own conf=0.15 threshold above so ByteTrack still
             # sees lower-confidence boxes for track continuity; this is
             # a separate, stricter gate on what actually gets used.
+            # THESIS INSTRUMENTATION (reject logging). Detections between
+            # the model's conf=0.15 and min_publish_conf are produced and
+            # tracked but never published. Log them before dropping so the
+            # 0.15-0.45 population can be counted offline from a bag
+            # replay. Purely diagnostic - no behaviour change.
             if conf < self.min_publish_conf:
+                _k = 0
+                if result.keypoints is not None:
+                    _kc = result.keypoints.conf[box_i].cpu().numpy()
+                    _k = sum(1 for _i in self.leg_kpt_idx
+                             if _kc[_i] >= self.leg_kpt_min_conf)
+                self.get_logger().info(
+                    f"REJECT conf id:{track_id} conf:{conf:.2f} "
+                    f"bbox=({x1},{y1},{x2},{y2}) h={y2-y1}px leg_kpts={_k}")
                 continue
 
             # THESIS FIX (unassigned-track sentinel leak) - perception v2
@@ -179,6 +204,9 @@ class YoloByteTrackPositionNode(Node):
             # position jumps between real people. Discard recall to
             # protect identity consistency.
             if track_id < 0:
+                self.get_logger().info(
+                    f"REJECT track id:-1 conf:{conf:.2f} "
+                    f"bbox=({x1},{y1},{x2},{y2}) h={y2-y1}px")
                 continue
 
             # Leg keypoints in pixel space -- LIDAR fusion node matches
@@ -195,6 +223,12 @@ class YoloByteTrackPositionNode(Node):
 
             # Fields: track_id, conf, x1, y1, x2, y2, then leg keypoints
             # as "px:py" pairs separated by ';' (variable count, 0-4).
+            # THESIS FIX (16 Sep, ray timing): field [7] = image header
+            # stamp (s). camera_ray_person_node pairs the detection with
+            # the scan closest to THIS time instead of the newest scan;
+            # otherwise a moving robot casts the ray from the wrong pose.
+            # Appended last so older consumers (parts[0..6]) are unaffected.
+            img_stamp = msg.header.stamp.sec + msg.header.stamp.nanosec * 1e-9
             out = String()
             out.data = (
                 f"{track_id},"
@@ -204,13 +238,15 @@ class YoloByteTrackPositionNode(Node):
                 f"{x2},"
                 f"{y2},"
                 + ";".join(f"{px:.1f}:{py:.1f}" for px, py in leg_pts)
+                + f",{img_stamp:.3f}"
             )
             self.pub.publish(out)
 
             self.get_logger().info(
                 f"id:{track_id} conf:{conf:.2f} "
                 f"bbox=({x1},{y1},{x2},{y2}) h={y2-y1}px "
-                f"leg_kpts={len(leg_pts)}"
+                f"leg_kpts={len(leg_pts)} "
+                f"age={(self.get_clock().now().nanoseconds * 1e-9 - img_stamp) * 1000.0:.0f}ms"
             )
 
             if self.show_debug_image:
