@@ -814,8 +814,18 @@ class LidarPersonDetector(Node):
                 continue
 
             moved = math.hypot(t["x"] - t["origin_x"], t["y"] - t["origin_y"])
-            if not t.get("confirmed", False) and moved < self.static_move_threshold:
-                continue  # never yet proven to move — likely furniture/wall
+            # THESIS CHANGE (static person detected from first sight):
+            # previously an unconfirmed track was dropped here, so a
+            # person already standing when first seen never reached
+            # fusion at all. Publish it instead with conf 0.00 meaning
+            # "candidate, not vouched for by LiDAR motion". Fusion may
+            # bind a conf 0.00 cluster ONLY on a camera bearing match;
+            # it is never eligible for lidar-only allocation or orphan
+            # reattach, so wall fragments (never camera-matched) stay
+            # exactly as ineligible as when they were filtered here.
+            lidar_confirmed = (t.get("confirmed", False)
+                               or moved >= self.static_move_threshold)
+            conf = 1.00 if lidar_confirmed else 0.00
 
             if matched:
                 px, py = t["x"], t["y"]
@@ -824,10 +834,11 @@ class LidarPersonDetector(Node):
                 py = t["y"] + t.get("vy", 0.0) * age
 
             out = String()
-            out.data = f"{track_id},1.00,{px:.3f},{py:.3f}"
+            out.data = f"{track_id},{conf:.2f},{px:.3f},{py:.3f}"
             self.pub.publish(out)
-            published += 1
-            published_ids.add(track_id)
+            if lidar_confirmed:
+                published += 1
+                published_ids.add(track_id)
 
         # ---- state-change logging ----
         is_publishing = published > 0

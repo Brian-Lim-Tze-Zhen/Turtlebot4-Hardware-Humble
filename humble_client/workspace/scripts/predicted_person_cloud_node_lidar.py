@@ -60,7 +60,7 @@ ELLIPSE_EXIT_SPEED = 0.03    # m/s; must drop below this to fall back to disk
 # Ellipse half-width ACROSS the heading. Kept at parity with the person
 # disk radius below: a lane narrower than the person it represents left
 # the predicted region half the width of the body it stood for.
-ELLIPSE_B = 0.6          # m (shrunk from 1.20 - was wider than long, causing round/omnidirectional footprint)
+ELLIPSE_B = 0.4         # m (shrunk from 1.20 - was wider than long, causing round/omnidirectional footprint)
 
 # Ellipse half-length ALONG the heading, as a function of walking speed.
 # At the 1.2 m/s test speed this gives a = 0.60 + 0.60 = 1.20 m, so the
@@ -126,7 +126,7 @@ ENABLE_DYNAMIC_PASS_SIDE = False
 # used when the ellipse is suppressed. Same radius, different sampling:
 # the current-position disk is denser because it is what the local
 # planner collides against.
-PERSON_DISK_RADIUS = 0.6   # m (0.5 -> 0.7 tested 10 Sep: 0.7 gave correct marks at 202 pts but robot stopped, corridor too narrow for lane+inflation; 0.6 under test to bracket the limit)
+PERSON_DISK_RADIUS = 0.4   # m (0.5 -> 0.7 tested 10 Sep: 0.7 gave correct marks at 202 pts but robot stopped, corridor too narrow for lane+inflation; 0.6 under test to bracket the limit)
 PERSON_DISK_SPACING = 0.10         # m
 FALLBACK_DISK_SPACING = 0.15       # m
 ELLIPSE_SPACING = 0.15             # m

@@ -142,3 +142,13 @@ ros2 bag record -o /root/thesis_social_navigation_ws/bags/berth06_$(date +%Y%m%d
 
 python3 /root/thesis_social_navigation_ws/scripts/stop_diag.py --ros-args -r /tf:=/turtlebot4/tf -r /tf_static:=/turtlebot4/tf_static
 
+Occupancy:
+
+ros2 launch /root/thesis_social_navigation_ws/launch/lab2_bringup.launch.py map:=/root/thesis_social_navigation_ws/map/map_name.yaml namespace:=/turtlebot4 params_file:=/root/thesis_social_navigation_ws/config/social_nav2_occupancy.yaml 2>&1 | tee /root/thesis_social_navigation_ws/social_occupancy.log
+
+
+Headon record 3 configs
+Start position: ros2 topic pub --once /turtlebot4/goal_pose geometry_msgs/PoseStamped "{header: {frame_id: 'map'}, pose: {position: {x: -9.144237916334216, y: 15.333447075223367, z: 0.0}, orientation: {x: 0.0, y: 0.0, z: 0.9345992252254677, w: 0.355702527694077}}}"
+
+Goal Position: ros2 topic pub --once /turtlebot4/goal_pose geometry_msgs/PoseStamped "{header: {frame_id: 'map'}, pose: {position: {x: -9.144237916334216, y: 15.333447075223367, z: 0.0}, orientation: {x: 0.0, y: 0.0, z: -0.3320365108167037, w: 0.943266534699853}}}"
+

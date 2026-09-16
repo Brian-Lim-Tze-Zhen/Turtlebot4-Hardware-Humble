@@ -186,9 +186,8 @@ ANGLE_GATE_DEG = 12.0
 
 # THESIS FIX (out-of-FOV bindings). ANGLE_GATE_DEG bounds how far a lidar
 # candidate may sit FROM THE CAMERA DETECTION, but nothing bounded where
-# it sits in ABSOLUTE bearing. Calibrated intrinsics (fx 287.31, 11 Sep)
-# give a true HFOV of 47.0 deg, i.e. +/-23.5 deg (gate = 27 deg incl.
-# margin); a detection near the frame edge could
+# it sits in ABSOLUTE bearing. Measured intrinsics give a true HFOV of
+# 63.68 deg, i.e. +/-31.84 deg; a detection near the frame edge could
 # therefore bind to a cluster the camera physically cannot see.
 # On walk_full, stable id 0 sat at -42.7 deg with 5 camera_confirmed
 # messages - 10.9 deg outside the FOV - and never moved, so neither
@@ -197,13 +196,13 @@ ANGLE_GATE_DEG = 12.0
 # Applied to both match paths and to the coast, so no path can accept or
 # hold a candidate outside the camera's view. Exposed as the ROS
 # parameter fov_gate_deg for offline tuning; <= 0 disables the gate.
-FOV_GATE_DEG = 27.0
+FOV_GATE_DEG = 35.0
 
-# Calibrated OAK-D preview intrinsics / mounting (250x250 crop)
-CAMERA_FX = 287.31
-CAMERA_CX = 124.95
-CAMERA_YAW_OFFSET_DEG = 2.25   # scan bearing test 11 Sep: mean residual +1.5 deg
-CAMERA_X_OFFSET = 0.165        # m, forward of base_link
+# OAK-D Pro RGB horizontal FOV. Approximate for the un-cropped sensor;
+# the preview stream is a center crop so this is close but not exact -
+# fine for a coarse re-ID gate, not for anything needing sub-degree
+# accuracy.
+CAMERA_HFOV_DEG = 69.0
 
 # Preview stream width in pixels (matches oakd_pro.yaml i_preview_size).
 CAMERA_PREVIEW_WIDTH = 250
@@ -329,6 +328,28 @@ MOVING_MIN_DISP_M = 0.5                # m; >= this over the window = moving (cl
 MOVING_GRACE_S = 3.0                   # s; track counts as moving for this long after last qualifying displacement
 MOVING_CORROBORATION_TIMEOUT = 15.0    # s; replaces CAMERA_CORROBORATION_TIMEOUT for moving tracks
 
+# THESIS FIX (near-field camera blindness). The camera cannot frame a
+# person at close range - measured on debug_inputs_20260914_161006, a
+# person walking in loses camera confidence as the bbox fills the frame
+# and exits the edge (conf 0.87 -> 0.45 while bbox width grows to
+# 121 px on a 250 px frame), and detections stop entirely. The same
+# signature ended the 14 Sep condition-C run. This is geometry, not a
+# detection failure, so the FOV gate on the coast path is rejecting a
+# binding for a reason that cannot be satisfied at this range.
+#
+# Within NEAR_FIELD_M, skip the FOV gate on the coast. Justified by
+# scan data: across all four camera-loss windows in that bag, 80 of 80
+# scans carried a return between 0.3 and 2.5 m ahead - the LiDAR sees
+# the person continuously while the camera cannot.
+#
+# NOT a licence to trust the coast blindly. Every other guard still
+# applies - MAX_COAST_SPEED against the last camera-confirmed position,
+# the per-step jump check, LIDAR_POSITION_MAX_AGE, and the
+# corroboration timeout. Those are what stop a wall being adopted; the
+# FOV gate was never the thing doing that work, and at close range it
+# only removes the person.
+NEAR_FIELD_M = 1.5   # m; measured close-range camera-loss band
+
 # THESIS FIX (static cluster wins the bearing argmin). Bearing alone
 # cannot separate a person from a wall feature behind them: both sit
 # within a few degrees, so nearest_lidar()'s argmin picks whichever is
@@ -352,11 +373,10 @@ MOVING_CORROBORATION_TIMEOUT = 15.0    # s; replaces CAMERA_CORROBORATION_TIMEOU
 #
 # Set to 0 to disable the gate entirely and fall back to bearing-only.
 PERSON_HEIGHT_M = 1.75
-# CALIBRATED 11 Sep 2026: fx=fy=287.31, cx=124.95 on the 250x250 preview
-# -> HFOV 47.0 deg. Supersedes camera_info (fx=201.3, HFOV 63.7 deg).
-# Validated against raw /scan leg bearings, 1.4-3.2 m, +/-14 deg:
-# residual -0.1 +/- 0.9 deg (max 1.5 deg) with yaw offset 2.25 deg.
-CAMERA_FY = 287.31
+# Measured from /turtlebot4/oakd/rgb/preview/camera_info: fx=201.308,
+# fy=201.222, cx=124.95 on a 250x250 preview -> true HFOV 63.7 deg, not
+# the 69.0 deg assumed elsewhere in this file.
+CAMERA_FY = 201.2216
 # THESIS ADDITION: a bbox whose top edge is within this many pixels
 # of y=0 is treated as clipped, so its height - and any range derived
 # from it - is unusable. Set <0 to disable the check.
@@ -577,22 +597,16 @@ class IdentityFusionNode(Node):
         # alone and isolate the range term.
         self.declare_parameter("range_cost_weight", RANGE_COST_WEIGHT)
         self.declare_parameter("range_ratio_gate", RANGE_RATIO_GATE)
+        self.declare_parameter("camera_hfov_deg", CAMERA_HFOV_DEG)
         self.declare_parameter("camera_preview_width", CAMERA_PREVIEW_WIDTH)
-        self.declare_parameter("camera_fx", CAMERA_FX)
-        self.declare_parameter("camera_cx", CAMERA_CX)
-        self.declare_parameter("camera_yaw_offset_deg", CAMERA_YAW_OFFSET_DEG)
-        self.declare_parameter("camera_x_offset", CAMERA_X_OFFSET)
 
         self.camera_topic = self.get_parameter("camera_topic").value
         self.lidar_topic = self.get_parameter("lidar_topic").value
         self.output_topic = self.get_parameter("output_topic").value
         self.angle_gate_rad = math.radians(
             float(self.get_parameter("angle_gate_deg").value))
-        self.fx = float(self.get_parameter("camera_fx").value)
-        self.cx = float(self.get_parameter("camera_cx").value)
-        self.cam_yaw = math.radians(
-            float(self.get_parameter("camera_yaw_offset_deg").value))
-        self.cam_x = float(self.get_parameter("camera_x_offset").value)
+        self.hfov_rad = math.radians(
+            float(self.get_parameter("camera_hfov_deg").value))
         self.preview_width = float(
             self.get_parameter("camera_preview_width").value)
 
@@ -616,6 +630,9 @@ class IdentityFusionNode(Node):
         # Running max displacement of each lidar id from where it was
         # first seen - the re-ID guard, see REID_MIN_SPAN_M.
         self.lidar_span = {}
+        # THESIS CHANGE (static person): lidar_id -> conf from the
+        # detector. 0.00 = candidate, camera-bindable only.
+        self.lidar_conf = {}
 
         # THESIS FIX (bearing-only matching flapping): nearest_lidar()
         # re-picks the single best-bearing lidar cluster from scratch
@@ -733,6 +750,15 @@ class IdentityFusionNode(Node):
             lid = int(float(parts[0]))
             x = float(parts[2])
             y = float(parts[3])
+            # THESIS CHANGE (static person): the detector now publishes
+            # unconfirmed candidates at conf 0.00 instead of dropping
+            # them, so a person standing from first sight reaches this
+            # node. conf 0.00 means "LiDAR motion has NOT vouched for
+            # this" - it may only be bound by a camera bearing match
+            # (camera_callback), never by the lidar-only allocation or
+            # lidar re-ID paths below. A wall fragment therefore stays
+            # exactly as ineligible as when the detector filtered it.
+            lconf = float(parts[1])
         except ValueError:
             return
         now = self.now()
@@ -750,6 +776,7 @@ class IdentityFusionNode(Node):
             first_seen = (now, x, y)
         self.lidar_first_seen[lid] = first_seen
         self.lidar_tracks[lid] = (x, y, now)
+        self.lidar_conf[lid] = lconf
 
         # THESIS ADDITION (lidar-primary re-ID across detector
         # fragmentation).
@@ -783,6 +810,7 @@ class IdentityFusionNode(Node):
         self.lidar_span[lid] = span
 
         if (REID_ON_LIDAR_MOTION
+                and lconf >= 1.0
                 and lid not in self.stable_of_lidar
                 and self.orphaned_identities):
             if span >= REID_MIN_SPAN_M:
@@ -801,7 +829,8 @@ class IdentityFusionNode(Node):
             h.append((x, y, now))
             while h and now - h[0][2] > LIDAR_ONLY_WINDOW_S * 3:
                 h.pop(0)
-            if lid not in self.stable_of_lidar and span >= LIDAR_ONLY_MIN_SPAN_M:
+            if (lid not in self.stable_of_lidar and lconf >= 1.0
+                    and span >= LIDAR_ONLY_MIN_SPAN_M):
                 old = [p for p in h if now - p[2] >= LIDAR_ONLY_WINDOW_S]
                 pose = self.robot_pose()
                 yaw_ok = True
@@ -902,15 +931,10 @@ class IdentityFusionNode(Node):
         robot's left, matching the standard CCW-positive yaw convention.
         """
         u = (x1 + x2) / 2.0
-        return -math.atan((u - self.cx) / self.fx) + self.cam_yaw
-    
-    def track_bearing_from_camera(self, lx, ly, pose):
-        rx, ry, ryaw = pose
-        dx, dy = lx - rx, ly - ry
-        bx = math.cos(ryaw) * dx + math.sin(ryaw) * dy - self.cam_x
-        by = -math.sin(ryaw) * dx + math.cos(ryaw) * dy
-        return math.atan2(by, bx)
-    
+        normalized = (u - self.preview_width / 2.0) / (self.preview_width / 2.0)
+        # image-right (+u) = robot's right = negative yaw
+        return -normalized * (self.hfov_rad / 2.0)
+
     def sticky_lidar(self, cam_id, cam_bearing_rel, bbox_range=None):
         """If cam_id was bound to a lidar track last cycle and that track
         is still within the angle gate, keep using it - avoids the
@@ -934,7 +958,8 @@ class IdentityFusionNode(Node):
         rx, ry, ryaw = pose
 
         lx, ly, _ = self.lidar_tracks[prev_lid]
-        track_bearing_rel = self.track_bearing_from_camera(lx, ly, pose)
+        bearing_to_track = math.atan2(ly - ry, lx - rx)
+        track_bearing_rel = self.wrap_angle(bearing_to_track - ryaw)
         diff = abs(self.wrap_angle(track_bearing_rel - cam_bearing_rel))
 
         if diff < self.angle_gate_rad:
@@ -964,7 +989,7 @@ class IdentityFusionNode(Node):
         gate = self.get_parameter("fov_gate_deg").value
         if gate is None or gate <= 0:
             return True
-        rel = self.track_bearing_from_camera(lx, ly, (rx, ry, ryaw))
+        rel = self.wrap_angle(math.atan2(ly - ry, lx - rx) - ryaw)
         return abs(math.degrees(rel)) <= gate
 
     def range_plausible(self, lx, ly, rx, ry, bbox_range):
@@ -1015,7 +1040,8 @@ class IdentityFusionNode(Node):
         for lid, (lx, ly, _stamp) in self.lidar_tracks.items():
             if _now - _stamp > _max_age:
                 continue
-            track_bearing_rel = self.track_bearing_from_camera(lx, ly, pose)
+            bearing_to_track = math.atan2(ly - ry, lx - rx)
+            track_bearing_rel = self.wrap_angle(bearing_to_track - ryaw)
             diff = abs(self.wrap_angle(track_bearing_rel - cam_bearing_rel))
             if diff >= self.angle_gate_rad:
                 continue
@@ -1172,7 +1198,7 @@ class IdentityFusionNode(Node):
         # THESIS FIX: rough range from bbox height, used only as a ratio
         # gate on lidar candidates (see RANGE_RATIO_GATE). fy is taken
         # from the measured intrinsics; the preview is square so
-        # fy ~= fx ~= 287.31 for a 250x250 frame (calibrated 11 Sep).
+        # fy ~= fx ~= 201.2 for a 250x250 frame.
         bbox_h = y2 - y1
         # THESIS FIX (clipped bbox poisons the range estimate). The
         # camera is mounted low and pitched at the floor, so the
@@ -1329,7 +1355,48 @@ class IdentityFusionNode(Node):
                             f"- likely a fragment, not a person")
                         anchor_lid = None
 
-                stable_id = self.allocate()
+                # THESIS FIX (ByteTrack id switch -> duplicate identity,
+                # 10 Sep). An unanchored camera track was allocated a new
+                # stable id even when a LIVE identity sat at the same
+                # bearing. Measured on berth06_124555: ByteTrack switched
+                # cam 24 -> 26 for one person, fusion made stable 3 and
+                # stable 4, both drew a lane, and together they filled the
+                # corridor. The id-based re-ID only fires when lid is not
+                # None, so an unanchored track fell through it.
+                # Compare against BOTH kinds of live identity: camera-only
+                # ones (bearing cached in camera_only_since) and
+                # lidar-bound ones (bearing derived from the bound lidar
+                # track). Bearing-only, so two people at one bearing and
+                # different ranges WILL alias - fine for single-person
+                # trials, stated as a limitation.
+                adopted = None
+                if anchor_lid is None:
+                    best = self.angle_gate_rad
+                    cands = {}
+                    for osid, (_ot, obear) in self.camera_only_since.items():
+                        cands[osid] = obear
+                    _p = self.robot_pose()
+                    if _p is not None:
+                        _rx, _ry, _ryaw = _p
+                        for _lid, (_sid, _bt) in self.stable_of_lidar.items():
+                            if _lid not in self.lidar_tracks:
+                                continue
+                            _lx, _ly, _st = self.lidar_tracks[_lid]
+                            cands[_sid] = self.wrap_angle(
+                                math.atan2(_ly - _ry, _lx - _rx) - _ryaw)
+                    for osid, obear in cands.items():
+                        if self.stable_id_in_use(osid, cam_id, now):
+                            continue
+                        d = abs(self.wrap_angle(obear - cam_bearing))
+                        if d < best:
+                            best, adopted = d, osid
+                    if adopted is not None:
+                        self.get_logger().info(
+                            f"Camera-only dedup: camera track {cam_id} adopts "
+                            f"live stable {adopted} "
+                            f"({math.degrees(best):.1f} deg apart) instead of "
+                            f"allocating a new id")
+                stable_id = adopted if adopted is not None else self.allocate()
                 self.get_logger().info(
                     f"New identity: camera track {cam_id} -> stable "
                     f"{stable_id}"
@@ -1431,6 +1498,11 @@ class IdentityFusionNode(Node):
             "0.0", "0", "0",
             f"{int(x1)}", f"{int(y1)}", f"{int(x2)}", f"{int(y2)}",
             "camera_confirmed",
+            # THESIS ADDITION (field 12): the raw ByteTrack camera id that
+            # drove this message, so RViz can be cross-referenced with the
+            # YOLO debug window. Appended after field 11 so every existing
+            # index-based parser is unaffected.
+            str(cam_id),
         ]
 
         out = String()
@@ -1556,7 +1628,9 @@ class IdentityFusionNode(Node):
             pose = self.robot_pose()
             if pose is not None:
                 prx, pry, pryaw = pose
-                if not self.fov_ok(lx, ly, prx, pry, pryaw):
+                _rng_to_robot = math.hypot(lx - prx, ly - pry)
+                if (not self.fov_ok(lx, ly, prx, pry, pryaw)
+                        and _rng_to_robot > NEAR_FIELD_M):
                     if self._is_moving(stable_id, now):
                         self.get_logger().info(
                             f"coast outside FOV allowed id:{stable_id} "
@@ -1575,6 +1649,7 @@ class IdentityFusionNode(Node):
             fields = [
                 str(stable_id), "0.00", f"{lx:.3f}", f"{ly:.3f}",
                 "0.0", "0", "0", "0", "0", "0", "0", "lidar_only",
+                "-1",   # no camera detection this cycle - see field 12
             ]
 
             out = String()
@@ -1647,6 +1722,7 @@ class IdentityFusionNode(Node):
             del self.lidar_tracks[lid]
             self.lidar_first_seen.pop(lid, None)
             self.lidar_span.pop(lid, None)
+            self.lidar_conf.pop(lid, None)
             self.lidar_hist.pop(lid, None)
 
         # THESIS FIX (phantom identities): a binding whose camera

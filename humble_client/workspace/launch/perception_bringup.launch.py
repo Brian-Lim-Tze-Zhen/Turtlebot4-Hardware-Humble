@@ -72,6 +72,20 @@ def generate_launch_description():
             name="human_kf_predictor_lidar",
             output="screen",
         ),
+        # --- DISABLED for head-on A/B/C runs (14 Sep 2026): social occupancy grid ---
+        #        ExecuteProcess(
+        #             cmd=[
+        #                 "python3", f"{WS}/pytest/test.py",
+        #                 "--ros-args",
+        #                 "-p", ["use_sim_time:=", simtime],
+        #                 "-r", "/tf:=/turtlebot4/tf",
+        #                 "-r", "/tf_static:=/turtlebot4/tf_static",
+        #                 "-r", "/map:=/turtlebot4/map",
+        #             ],
+        #             name="social_occupancy_grid_node",
+        #             output="screen",
+        #         ),
+        # --- end disabled ---
         ExecuteProcess(
             cmd=[
                 "python3", f"{WS}/scripts/predicted_person_cloud_node_lidar.py",
@@ -79,9 +93,7 @@ def generate_launch_description():
                 "-p", ["use_sim_time:=", simtime],
                 "-r", "/tf:=/turtlebot4/tf",
                 "-r", "/tf_static:=/turtlebot4/tf_static",
-                "-r", "/local_costmap/clear_entirely_local_costmap:=/turtlebot4/local_costmap/clear_entirely_local_costmap",
-                "-r", "/global_costmap/clear_entirely_global_costmap:=/turtlebot4/global_costmap/clear_entirely_global_costmap",
-                "-r", "/local_costmap/clear_around_pose_local_costmap:=/turtlebot4/local_costmap/clear_around_pose_local_costmap",
+                "-r", "/map:=/turtlebot4/map",
             ],
             name="predicted_person_cloud_node_lidar",
             output="screen",

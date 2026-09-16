@@ -152,7 +152,10 @@ class PersonMarkerPublisher(Node):
         label.pose.orientation.w = 1.0
         label.scale.z = 0.25
         label.color.r, label.color.g, label.color.b, label.color.a = r, g, b, 1.0
-        label.text = f"id:{stable_id} ({source})"
+        cam_txt = ""
+        if len(parts) >= 13 and parts[12].strip() not in ("", "-1"):
+            cam_txt = f" cam:{parts[12].strip()}"
+        label.text = f"id:{stable_id}{cam_txt} ({source})"
         label.lifetime = self.lifetime()
 
         arr = MarkerArray()

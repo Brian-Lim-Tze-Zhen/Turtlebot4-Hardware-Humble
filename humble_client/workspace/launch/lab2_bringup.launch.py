@@ -45,9 +45,11 @@ def generate_launch_description():
         launch_arguments={
             'map': LaunchConfiguration('map'),
             'namespace': LaunchConfiguration('namespace'),
+            'params': '/root/thesis_social_navigation_ws/config/localization.yaml',
+            'use_sim_time': 'false',
         }.items()
     )
-
+    
     nav2 = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             PathJoinSubstitution([
