@@ -575,6 +575,18 @@ class HumanKFPredictor(Node):
                 continue
 
             x, y, vx, vy, pred_x, pred_y, vx_raw, vy_raw = track.predict_future(self.prediction_horizon)
+            # THESIS FIX (16 Sep, proto_L2 head-on): the KF state is not
+            # propagated while coasting, so every coast message repeated the
+            # last MEASURED position. Measured: last update 875.10 at
+            # (-9.01, 14.51) with velocity (0.89, -0.53) ~1.0 m/s; the cloud
+            # then sat at exactly (-9.01, 14.51) for 18 cycles (~1.9 s) in the
+            # corridor centre while the person walked past, and the detour
+            # squeezed the robot to ~0.1 m from the left wall. Advance the
+            # coasted position along the predicted velocity by the track age.
+            x += vx * age
+            y += vy * age
+            pred_x = x + vx * self.prediction_horizon
+            pred_y = y + vy * self.prediction_horizon
             out = String()
             out.data = (
                 f"{track_id},"
