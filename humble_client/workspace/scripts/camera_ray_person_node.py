@@ -136,7 +136,7 @@ EDGE_MARGIN_PX = 15
 # release rule above accepts the nearer range; a chair does not change
 # the box. (b): a new cam id inherits the range track of a track seen
 # within INHERIT_S at a bearing within INHERIT_DEG.
-INHERIT_S = 1.0
+INHERIT_S = 0.3             # proto_L2: 0.87 s gap inherited a stale 3.11 m while person was at 6.5 m
 INHERIT_DEG = 8.0
 
 # THESIS FIX (16 Sep, proto_K2): a wrong FIRST lock never recovered. cam 5
