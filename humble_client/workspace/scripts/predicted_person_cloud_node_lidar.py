@@ -66,7 +66,7 @@ ELLIPSE_B = 0.4         # m (shrunk from 1.20 - was wider than long, causing rou
 # At the 1.2 m/s test speed this gives a = 0.60 + 0.60 = 1.20 m, so the
 # marked lane runs ~2.4 m end to end.
 ELLIPSE_A_BASE = 0.6           # m (raised so forward axis dominates at low speed too)
-ELLIPSE_A_SLOPE = 0.50             # m per (m/s)
+ELLIPSE_A_SLOPE = 0.75             # m per (m/s)
 ELLIPSE_A_MAX = 3.00               # m
 
 # Perpendicular offset of the lane, breaking head-on left/right symmetry
