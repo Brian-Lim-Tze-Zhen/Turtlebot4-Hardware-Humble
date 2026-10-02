@@ -185,6 +185,31 @@ LOCK_MAX_WAIT_S = 3.0
 # dropped: only the edge condition is used.
 OCCLUSION_MAX_MISSES = 3       # refusals before falling back to min-range
 
+# THESIS FIX (2 Oct, motion release). The width-based release above does not
+# fire when the lock itself is wrong or stale, and a locked-out person is
+# then invisible for the whole approach:
+#   headon_F_wz07_b1200:     locked 2.85 m, refused 7.5 -> 4.29 m (96 frames)
+#   headon_F_wz07_infl035_kfq: locked 7.3-7.9 m, refused 7.06 -> 0.65 m; the
+#     predictor saw a "standing" person at 7 m and the robot BUMPED the real
+#     one (hazard bump_right at 6.26 s).
+# Loosening RELEASE_TOL_M was tried and rejected the same day: 0.25*r_hat
+# changed nothing, 0.45*r_hat still did not release and re-opened proto_G
+# (2.44 -> 5.43 m, the door).
+# What separates the cases is MOTION: the refused return of a walking person
+# moves in the map frame; a door, chair or wall does not. Release when the
+# nearest refused return has moved MOVE_MIN_DISP_M in the map over at least
+# MOVE_MIN_FRAMES consecutive refusals, each step physically possible, and
+# mostly ALONG the line of sight (a ray sweeping sideways across a static
+# surface also "moves", but across the line of sight).
+MOVE_MIN_FRAMES = 5
+MOVE_MIN_S = 0.4
+MOVE_MIN_DISP_M = 0.5
+MOVE_STEP_BASE_M = 0.25      # per-frame jump allowed (leg-to-leg hop) ...
+MOVE_STEP_SPEED = 2.5        # ... plus this many m/s
+MOVE_MAX_GAP_S = 0.5         # longer gap between refusals restarts the history
+MOVE_RADIAL_FRAC = 0.85      # share of the displacement along the line of sight (0.7 let an oblique sweep along a flat surface through; real releases in replay were ~1.0)
+MOVE_WINDOW_S = 1.5          # only this much history is judged
+
 # Occlusion fix B (static-map filter)
 STATIC_OCCUPIED_THRESHOLD = 50
 STATIC_INFLATION_CELLS = 2
@@ -262,6 +287,7 @@ class CameraRayPersonNode(Node):
         self.rhat_prev = {}      # cam_id -> (implied range, t)
         self.rhat_broken = {}    # cam_id -> True after a discontinuity
         self.lock_wait = {}      # cam_id -> (t_first, [recent widths])
+        self.refused_hist = {}   # cam_id -> [(t, r, map_x, map_y)] of refused nearest returns
         # cam_id -> (range_m, t) for the occlusion guard
         self.last_range = {}
 
@@ -444,7 +470,8 @@ class CameraRayPersonNode(Node):
             a += msg.angle_increment
         return out
 
-    def select_return(self, cam_id, cands, now, x1=0.0, x2=0.0, bearing=None):
+    def select_return(self, cam_id, cands, now, x1=0.0, x2=0.0, bearing=None,
+                      origin=None):
         width = x2 - x1
         edge = x1 <= EDGE_MARGIN_PX or x2 >= IMAGE_WIDTH_PX - EDGE_MARGIN_PX
         closest = min(cands, key=lambda c: c[0])
@@ -488,6 +515,7 @@ class CameraRayPersonNode(Node):
             if edge and now - t0 < LOCK_MAX_WAIT_S:
                 return None
             self.lock_wait.pop(cam_id, None)
+            self.refused_hist.pop(cam_id, None)
             self.range_track[cam_id] = (closest[0], now, 0)
             self.rhat_broken[cam_id] = False
             if edge:
@@ -499,6 +527,24 @@ class CameraRayPersonNode(Node):
         last_r, last_t, misses = st
         gate = min(RANGE_TRACK_GATE_MAX_M,
                    RANGE_TRACK_GATE_M + MAX_RANGE_SPEED * (now - last_t))
+        # Motion release (see MOVE_* above). Checked on the NEAREST return
+        # whenever it lies outside the gate, even while a farther return is
+        # being accepted: in the replays of pf9b and slope12_143312 the
+        # tracker kept accepting a static return at ~6-7 m BEHIND the
+        # approaching person, so nothing was "refused" until the person hid
+        # it and the release only came at 2.24 m / 1.62 m.
+        if abs(closest[0] - last_r) > gate:
+            if self.motion_release(cam_id, closest, now, origin):
+                self.range_track[cam_id] = (closest[0], now, 0)
+                self.rhat_broken[cam_id] = False
+                if edge:
+                    self.range_width.pop(cam_id, None)
+                else:
+                    self.range_width[cam_id] = width
+                self.release_count[cam_id] = 0
+                return closest
+        else:
+            self.refused_hist.pop(cam_id, None)
         near = min(cands, key=lambda c: abs(c[0] - last_r))
         if abs(near[0] - last_r) <= gate:
             self.range_track[cam_id] = (near[0], now, 0)
@@ -524,6 +570,7 @@ class CameraRayPersonNode(Node):
                     self.get_logger().info(
                         f"cam:{cam_id} release {last_r:.2f} -> {match[0]:.2f} m "
                         f"(bbox implies {r_hat:.2f} m)")
+                    self.refused_hist.pop(cam_id, None)
                     self.range_track[cam_id] = (match[0], now, 0)
                     self.range_width[cam_id] = width
                     self.release_count[cam_id] = 0
@@ -542,6 +589,51 @@ class CameraRayPersonNode(Node):
             f"{last_r:.2f} m, miss {misses})",
             throttle_duration_sec=0.5)
         return None
+
+    def motion_release(self, cam_id, closest, now, origin):
+        """True when the nearest refused return has been moving like a
+        walking person (see MOVE_* above). Keeps a per-id history of
+        nearest returns that fell outside the gate; any implausible step
+        restarts it."""
+        r, _, mx, my = closest
+        hist = self.refused_hist.get(cam_id, [])
+        if hist:
+            pt, _, px, py = hist[-1]
+            dt = now - pt
+            step = math.hypot(mx - px, my - py)
+            if dt <= 0.0 or dt > MOVE_MAX_GAP_S or \
+                    step > MOVE_STEP_BASE_M + MOVE_STEP_SPEED * dt:
+                hist = []
+        hist.append((now, r, mx, my))
+        while len(hist) > 1 and now - hist[0][0] > MOVE_WINDOW_S:
+            hist.pop(0)
+        self.refused_hist[cam_id] = hist
+        if len(hist) < MOVE_MIN_FRAMES or origin is None:
+            return False
+        t0, r0, x0, y0 = hist[0]
+        if now - t0 < MOVE_MIN_S:
+            return False
+        dx, dy = mx - x0, my - y0
+        disp = math.hypot(dx, dy)
+        if disp < MOVE_MIN_DISP_M:
+            return False
+        # Along the line of sight: how much nearer/farther the return got,
+        # measured from where the LiDAR is NOW for both ends, so the robot's
+        # own driving does not count as motion. (A dot product with the
+        # final line of sight let a long sideways sweep through: by the end
+        # the line of sight had turned toward the sweep direction.)
+        radial = abs(math.hypot(mx - origin[0], my - origin[1])
+                     - math.hypot(x0 - origin[0], y0 - origin[1]))
+        if radial < MOVE_RADIAL_FRAC * disp:
+            return False
+        last = self.range_track.get(cam_id)
+        self.get_logger().info(
+            f"cam:{cam_id} motion-release "
+            f"{'?' if last is None else f'{last[0]:.2f}'} -> {r:.2f} m "
+            f"(refused return moved {disp:.2f} m in {now - t0:.2f} s, "
+            f"{len(hist)} frames, range {r0:.2f} -> {r:.2f} m)")
+        self.refused_hist.pop(cam_id, None)
+        return True
 
     @staticmethod
     def tf_yaw(tf):
@@ -673,7 +765,8 @@ class CameraRayPersonNode(Node):
                 throttle_duration_sec=2.0)
             return
 
-        pick = self.select_return(cam_id, cands, now, x1, x2, bearing)
+        origin = (tf.transform.translation.x, tf.transform.translation.y)
+        pick = self.select_return(cam_id, cands, now, x1, x2, bearing, origin)
         if pick is None:
             return
         rng, hit_bearing, mx, my = pick
