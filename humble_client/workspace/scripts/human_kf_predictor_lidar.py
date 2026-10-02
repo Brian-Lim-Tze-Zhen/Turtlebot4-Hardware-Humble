@@ -57,8 +57,16 @@ class HumanTrackKF:
         # ~38% on the noisier track, combined with the velocity EMA
         # smoothing below.
         # ==========================================================
-        q_pos = 0.05
-        q_vel = 0.05
+        # 2 Oct 2026: q_pos 0.05 -> 0.02, q_vel 0.05 -> 0.15. At 0.05/0.05 the
+        # filter took innovations as position jumps and the velocity lagged a
+        # walking start: median 0.9 s to reach 0.8 m/s over 11 tracks in 8
+        # bags (published 0.53 m/s when measured was 1.51, bag
+        # headon_F_wz07_infl035_ts170). Offline replay of the same tracks at
+        # 0.02/0.15: median 0.2 s, >60 deg heading flips 6 -> 9, mean
+        # predicted-point jump 0.16 -> 0.19 m. 0.01/0.3 gained only 0.1 s
+        # more for 15 flips. Not yet verified live.
+        q_pos = 0.02
+        q_vel = 0.15
         self.Q = np.diag([q_pos, q_pos, q_vel, q_vel])
 
         # Measurement noise

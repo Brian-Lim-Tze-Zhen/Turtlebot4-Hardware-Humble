@@ -60,12 +60,19 @@ ELLIPSE_EXIT_SPEED = 0.03    # m/s; must drop below this to fall back to disk
 # Ellipse half-width ACROSS the heading. Kept at parity with the person
 # disk radius below: a lane narrower than the person it represents left
 # the predicted region half the width of the body it stood for.
+# 0.55 tried 2 Oct (bag headon_F_wz07_infl035_b055): path moved ~0.3 m further
+# out but the robot could not follow in time - pass stayed ~0.3-0.4 m from
+# robot centre, and 4 planner failures in the first leg. Reverted to 0.4.
 ELLIPSE_B = 0.4         # m (shrunk from 1.20 - was wider than long, causing round/omnidirectional footprint)
 
 # Ellipse half-length ALONG the heading, as a function of walking speed.
 # At the 1.2 m/s test speed this gives a = 0.60 + 0.60 = 1.20 m, so the
 # marked lane runs ~2.4 m end to end.
 ELLIPSE_A_BASE = 0.6           # m (raised so forward axis dominates at low speed too)
+# 1.2 tried 2 Oct (bag headon_F_wz07_infl035_slope12_20261002_143752): path
+# bent earlier (person at 6.8 m vs ~5 m) but the robot did not turn earlier,
+# the ~4.2 m lane swept over it (vx dipped to 0.04) and the pass stayed
+# ~0.4 m from robot centre. Reverted to 0.75.
 ELLIPSE_A_SLOPE = 0.75             # m per (m/s)
 ELLIPSE_A_MAX = 3.00               # m
 
@@ -126,7 +133,7 @@ ENABLE_DYNAMIC_PASS_SIDE = False
 # used when the ellipse is suppressed. Same radius, different sampling:
 # the current-position disk is denser because it is what the local
 # planner collides against.
-PERSON_DISK_RADIUS = 0.4   # m (0.5 -> 0.7 tested 10 Sep: 0.7 gave correct marks at 202 pts but robot stopped, corridor too narrow for lane+inflation; 0.6 under test to bracket the limit)
+PERSON_DISK_RADIUS = 0.4   # m (0.55 tried 2 Oct and reverted, see ELLIPSE_B; earlier: 0.5 -> 0.7 tested 10 Sep: 0.7 gave correct marks at 202 pts but robot stopped, corridor too narrow for lane+inflation; 0.6 under test to bracket the limit)
 PERSON_DISK_SPACING = 0.10         # m
 FALLBACK_DISK_SPACING = 0.15       # m
 ELLIPSE_SPACING = 0.15             # m
