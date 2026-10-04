@@ -6,7 +6,10 @@ When a NavigateToPose goal ends ABORTED:
   BLOCKED (person or unmapped object ahead)
       -> beep, stay still, wait RETRY_WAIT_S, resend the same goal
   WALL TRAP (nothing unmapped ahead, no recent person)
-      -> no beep, BackUp 0.30 m once per goal, resend the same goal
+      -> no beep, reverse 0.30 m once per goal on cmd_vel with a rear LiDAR
+         check, resend the same goal. (Nav2 BackUp is not used: its costmap
+         collision check fails at step 0 when the footprint already touches
+         the wall - live 17 Sep: 'Collision Ahead - Exiting DriveOnHeading'.)
   retries used up
       -> give-up beep, stop
 
@@ -34,13 +37,14 @@ from rclpy.action import ActionClient
 from rclpy.qos import QoSProfile, ReliabilityPolicy, DurabilityPolicy, HistoryPolicy
 from rclpy.duration import Duration
 
-from geometry_msgs.msg import PoseStamped
+from geometry_msgs.msg import PoseStamped, Twist
+from nav_msgs.msg import Odometry
 from nav_msgs.msg import Path
 from std_msgs.msg import String
 from sensor_msgs.msg import LaserScan
 from nav_msgs.msg import OccupancyGrid
 from action_msgs.msg import GoalStatusArray, GoalStatus
-from nav2_msgs.action import NavigateToPose, BackUp
+from nav2_msgs.action import NavigateToPose
 from irobot_create_msgs.msg import AudioNoteVector, AudioNote
 from builtin_interfaces.msg import Duration as DurationMsg
 import tf2_ros
@@ -48,22 +52,37 @@ import tf2_ros
 NS = "/turtlebot4"
 PLAN_TOPIC = f"{NS}/plan"
 NAV_ACTION = f"{NS}/navigate_to_pose"
-BACKUP_ACTION = f"{NS}/backup"
+CMD_VEL_TOPIC = f"{NS}/cmd_vel"
+ODOM_TOPIC = f"{NS}/odom"
 AUDIO_TOPIC = f"{NS}/cmd_audio"
 SCAN_TOPIC = f"{NS}/scan"
 MAP_TOPIC = f"{NS}/map"
 PERSON_TOPIC = "/person_positions_fused"
 
 MAX_RETRIES = 3
-RETRY_WAIT_S = 5.0
+RETRY_WAIT_S = 3.0
 PERSON_BLOCK_M = 1.5
 PERSON_MEMORY_S = 5.0
 LIDAR_BLOCK_M = 1.0
 LIDAR_MEMORY_S = 2.0
 FRONT_HALF_DEG = 30.0
 MAP_MARGIN_CELLS = 3          # same as headon_metrics.py
-BACKUP_DIST_M = 0.30
-BACKUP_SPEED = 0.05           # same as the stock BT BackUp
+BACKUP_DIST_M = 0.50
+BACKUP_SPEED = 0.20          # m/s, same as the stock BT BackUp
+BACKUP_TIMEOUT_S = 10.0
+REAR_HALF_DEG = 30.0
+REAR_STOP_RANGE_M = 0.40      # LiDAR range; ~0.25 m gap behind the robot body (lidar -0.04 m, radius 0.189 m)
+
+# THESIS FIX (25 Sep, WALL TRAP too easy). WALL TRAP used to be the
+# fallback for ANY abort without a person or unmapped point - so a
+# planner failure in open space (goal in inflation, localisation jump,
+# MPPI "Optimizer fail") also reversed the robot. Now WALL TRAP needs
+# positive evidence: a LiDAR return within WALL_TRAP_M of the LiDAR in
+# the front +/-WALL_FRONT_HALF_DEG sector in the last LIDAR_MEMORY_S.
+# 0.45 m from the LiDAR is ~0.26 m in front of the bumper (radius 0.189 m).
+# No evidence either way -> UNCLEAR: no beep, no reverse, plain retry.
+WALL_TRAP_M = 0.45
+WALL_FRONT_HALF_DEG = 60.0
 
 MAP_FRAME = "map"
 BASE_FRAME = "base_link"
@@ -95,7 +114,13 @@ class BeepRetryNode(Node):
         self.audio_pub = self.create_publisher(AudioNoteVector, AUDIO_TOPIC, 10)
 
         self.nav_client = ActionClient(self, NavigateToPose, NAV_ACTION)
-        self.backup_client = ActionClient(self, BackUp, BACKUP_ACTION)
+        self.cmd_pub = self.create_publisher(Twist, CMD_VEL_TOPIC, 10)
+        self.create_subscription(Odometry, ODOM_TOPIC, self.on_odom, sensor)
+        self.odom_xy = None
+        self.rear_min = None          # nearest LiDAR return in the rear sector (latest scan)
+        self.reverse_timer = None
+        self.reverse_start_xy = None
+        self.reverse_start_t = 0.0
 
         self.goal = None              # goal pose = end of latest plan (PoseStamped)
         self.current_id = None        # goal id currently being tracked
@@ -109,6 +134,8 @@ class BeepRetryNode(Node):
 
         self.last_person_block = 0.0
         self.last_lidar_block = 0.0
+        self.last_wall_near = 0.0
+        self.front_min = None         # nearest return in the front +/-WALL_FRONT_HALF_DEG (latest scan)
         self.grid = None
         self.mount_yaw = None
 
@@ -116,7 +143,8 @@ class BeepRetryNode(Node):
             f"beep_retry_node: retries {MAX_RETRIES}, wait {RETRY_WAIT_S:.0f} s, "
             f"person {PERSON_BLOCK_M} m / {PERSON_MEMORY_S:.0f} s, "
             f"lidar unmapped {LIDAR_BLOCK_M} m +/-{FRONT_HALF_DEG:.0f} deg / {LIDAR_MEMORY_S:.0f} s, "
-            f"backup {BACKUP_DIST_M} m once per goal")
+            f"backup {BACKUP_DIST_M} m once per goal, "
+            f"wall trap needs return <= {WALL_TRAP_M} m +/-{WALL_FRONT_HALF_DEG:.0f} deg")
 
     # ------------------------------------------------------------ inputs
     def on_plan(self, msg):
@@ -184,6 +212,21 @@ class BeepRetryNode(Node):
             return
         lx, ly = tr.transform.translation.x, tr.transform.translation.y
         lyaw = yaw_of(tr.transform.rotation)
+        rear = None
+        front = None
+        a = msg.angle_min
+        for r in msg.ranges:
+            if 0.15 < r < 10.0 and not math.isinf(r) and not math.isnan(r):
+                b = (math.degrees(a + self.mount_yaw) + 180.0) % 360.0 - 180.0
+                if abs(b) >= 180.0 - REAR_HALF_DEG and (rear is None or r < rear):
+                    rear = r
+                if abs(b) <= WALL_FRONT_HALF_DEG and (front is None or r < front):
+                    front = r
+            a += msg.angle_increment
+        self.rear_min = rear
+        self.front_min = front
+        if front is not None and front <= WALL_TRAP_M:
+            self.last_wall_near = time.monotonic()
         a = msg.angle_min
         for r in msg.ranges:
             if 0.15 < r <= LIDAR_BLOCK_M and not math.isinf(r) and not math.isnan(r):
@@ -218,6 +261,12 @@ class BeepRetryNode(Node):
                 self.backed_up = False
                 self.busy = False
                 self.cancel_timer()
+                if self.reverse_timer is not None:
+                    self.reverse_timer.cancel()
+                    self.destroy_timer(self.reverse_timer)
+                    self.reverse_timer = None
+                    self.cmd_pub.publish(Twist())
+                    self.get_logger().info("reverse cancelled by new goal")
                 self.get_logger().info("new user goal - retry counter reset")
             return
         if self.goal is None:
@@ -238,6 +287,8 @@ class BeepRetryNode(Node):
         person = now - self.last_person_block <= PERSON_MEMORY_S
         lidar = now - self.last_lidar_block <= LIDAR_MEMORY_S
         blocked = person or lidar
+        wall = now - self.last_wall_near <= LIDAR_MEMORY_S
+        fm = "none" if self.front_min is None else f"{self.front_min:.2f} m"
 
         if self.retries >= MAX_RETRIES:
             self.get_logger().warn(f"goal ABORTED - {MAX_RETRIES} retries used, giving up")
@@ -251,9 +302,15 @@ class BeepRetryNode(Node):
                 f"goal ABORTED - BLOCKED ({why}) -> beep, wait {RETRY_WAIT_S:.0f} s, retry {self.retries}/{MAX_RETRIES}")
             self.beep_blocked()
             self.schedule_retry(RETRY_WAIT_S)
+        elif not wall:
+            self.get_logger().info(
+                f"goal ABORTED - UNCLEAR (no person, nothing within {WALL_TRAP_M} m ahead, "
+                f"front min {fm}) -> no reverse, retry in {RETRY_WAIT_S:.0f} s, "
+                f"retry {self.retries}/{MAX_RETRIES}")
+            self.schedule_retry(RETRY_WAIT_S)
         elif not self.backed_up:
             self.get_logger().info(
-                f"goal ABORTED - WALL TRAP -> backup {BACKUP_DIST_M} m, retry {self.retries}/{MAX_RETRIES}")
+                f"goal ABORTED - WALL TRAP (front min {fm}) -> backup {BACKUP_DIST_M} m, retry {self.retries}/{MAX_RETRIES}")
             self.backed_up = True
             self.do_backup()
         else:
@@ -300,29 +357,47 @@ class BeepRetryNode(Node):
         self.own_ids.add(gid)
         self.current_id = gid
 
+    def on_odom(self, msg):
+        p = msg.pose.pose.position
+        self.odom_xy = (p.x, p.y)
+
     def do_backup(self):
         self.busy = True
-        if not self.backup_client.wait_for_server(timeout_sec=2.0):
-            self.get_logger().error(f"{BACKUP_ACTION} not available - retrying without backup")
+        if self.odom_xy is None or self.rear_min is None:
+            self.get_logger().warn("no odom or scan yet - retrying without reverse")
             self.schedule_retry(RETRY_WAIT_S)
             return
-        g = BackUp.Goal()
-        g.target.x = BACKUP_DIST_M
-        g.speed = BACKUP_SPEED
-        g.time_allowance = DurationMsg(sec=15, nanosec=0)
-        fut = self.backup_client.send_goal_async(g)
-        fut.add_done_callback(self.on_backup_accepted)
-
-    def on_backup_accepted(self, fut):
-        handle = fut.result()
-        if handle is None or not handle.accepted:
-            self.get_logger().warn("backup rejected - retrying without backup")
+        if self.rear_min < REAR_STOP_RANGE_M:
+            self.get_logger().warn(
+                f"reverse skipped: obstacle behind at {self.rear_min:.2f} m - retrying without reverse")
             self.schedule_retry(RETRY_WAIT_S)
             return
-        handle.get_result_async().add_done_callback(self.on_backup_done)
+        self.reverse_start_xy = self.odom_xy
+        self.reverse_start_t = time.monotonic()
+        self.reverse_timer = self.create_timer(0.05, self.reverse_step)
+        self.get_logger().info(
+            f"reversing {BACKUP_DIST_M} m at {BACKUP_SPEED} m/s (rear clear {self.rear_min:.2f} m)")
 
-    def on_backup_done(self, fut):
-        self.get_logger().info(f"backup finished (status {fut.result().status}) - retrying")
+    def reverse_step(self):
+        moved = math.hypot(self.odom_xy[0] - self.reverse_start_xy[0],
+                           self.odom_xy[1] - self.reverse_start_xy[1])
+        reason = None
+        if moved >= BACKUP_DIST_M:
+            reason = f"done, {moved:.2f} m"
+        elif self.rear_min is not None and self.rear_min < REAR_STOP_RANGE_M:
+            reason = f"obstacle behind at {self.rear_min:.2f} m after {moved:.2f} m"
+        elif time.monotonic() - self.reverse_start_t > BACKUP_TIMEOUT_S:
+            reason = f"timeout after {moved:.2f} m"
+        if reason is None:
+            t = Twist()
+            t.linear.x = -BACKUP_SPEED
+            self.cmd_pub.publish(t)
+            return
+        self.cmd_pub.publish(Twist())
+        self.reverse_timer.cancel()
+        self.destroy_timer(self.reverse_timer)
+        self.reverse_timer = None
+        self.get_logger().info(f"reverse stopped: {reason} - retrying in 1 s")
         self.schedule_retry(1.0)
 
     # ------------------------------------------------------------ audio
