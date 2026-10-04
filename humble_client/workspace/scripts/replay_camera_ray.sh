@@ -23,14 +23,14 @@ headon_F_wz07_pf9b_20261002_141533
 headon_F_wz07_infl035_slope12_20261002_143312
 headon_F_wz07_infl035_kfq_20261002_145103
 headon_F_wz07_infl035_slope12_20261002_143752
-proto_C_headon
+R08_parked_people_headon
 proto_G_lateral
-proto_G2_lateral
+R13_parked_person_lateral_repeat
 proto_K_occlusion
 proto_K2_occlusion
 proto_K3_occlusion
 proto_L_nav_walkpast
-proto_L2_nav_walkpast
+R06_driving_walkpast
 "
 for B in $BAGS; do
   BAGDIR=$(dirname "$(find bags/$B -name metadata.yaml | head -1)")

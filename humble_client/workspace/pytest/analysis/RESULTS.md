@@ -35,8 +35,8 @@ Two metrics:
 
 | bag | duration | camera detections |
 |---|---|---|
-| `debug_inputs_20260914_161006` | 101.7 s | 1108 |
-| `debug_inputs_20260914_160801` | 69.2 s | 738 |
+| `R11_parked_person_standing_walking_near` | 101.7 s | 1108 |
+| `R12_parked_person_standing_walking_far` | 69.2 s | 738 |
 
 161006 was used to choose the parameter; **160801 was held out** and
 used only to check it. The result held on the held-out bag with a
@@ -89,8 +89,8 @@ margin without that exposure.
 
 ```
 cd ~/thesis_social_navigation_ws
-python3 pytest/analysis/rules.py bags/debug_inputs_20260914_161006/rosbag/*.db3
-python3 pytest/analysis/rules.py bags/debug_inputs_20260914_160801/rosbag/*.db3
+python3 pytest/analysis/rules.py bags/R11_parked_person_standing_walking_near/rosbag/*.db3
+python3 pytest/analysis/rules.py bags/R12_parked_person_standing_walking_far/rosbag/*.db3
 ```
 
 ---
@@ -123,8 +123,8 @@ published position.
 
 | bag | stationary time | segments | camera-ray coverage |
 |---|---|---|---|
-| `debug_inputs_20260914_160801` | 36.7 s | 1 | **100.0%** |
-| `debug_inputs_20260914_161006` | 77.4 s | 8 | **95.0%** |
+| `R12_parked_person_standing_walking_far` | 36.7 s | 1 | **100.0%** |
+| `R11_parked_person_standing_walking_near` | 77.4 s | 8 | **95.0%** |
 | combined | 114.1 s | 9 | ~96.6% |
 
 In 161006, five of the eight segments were at 100%; the two weakest
@@ -213,8 +213,8 @@ Quote the threshold with any number from this script.
 
 ```
 cd ~/thesis_social_navigation_ws
-python3 pytest/analysis/gaps.py bags/debug_inputs_20260914_160801/rosbag/*.db3
-python3 pytest/analysis/gaps.py bags/debug_inputs_20260914_161006/rosbag/*.db3
+python3 pytest/analysis/gaps.py bags/R12_parked_person_standing_walking_far/rosbag/*.db3
+python3 pytest/analysis/gaps.py bags/R11_parked_person_standing_walking_near/rosbag/*.db3
 ```
 
 ---
@@ -227,7 +227,7 @@ tracked the person throughout, and publication stopped because
 confidence fell below `min_publish_conf = 0.45` as the person filled
 and exited the frame at close range.
 
-**Evidence.** The 5.33 s gap at t=77.2 s in `debug_inputs_20260914_161006`:
+**Evidence.** The 5.33 s gap at t=77.2 s in `R11_parked_person_standing_walking_near`:
 
 - `/turtlebot4/oakd/rgb/preview/image_raw/compressed` delivered 151
   frames during the gap at 28.3 Hz - full rate, uninterrupted. Same for
@@ -302,7 +302,7 @@ day's findings reduce to one limitation rather than two.
 
 ```
 # per-gap frame counts during YOLO silences
-python3 pytest/analysis/gaps.py bags/debug_inputs_20260914_161006/rosbag/*.db3
+python3 pytest/analysis/gaps.py bags/R11_parked_person_standing_walking_near/rosbag/*.db3
 # then inspect the matching perception log around the gap timestamps
 grep "yolo_bytetrack" logs/debug_inputs_20260914_160954.log | less
 ```
@@ -312,7 +312,7 @@ grep "yolo_bytetrack" logs/debug_inputs_20260914_160954.log | less
 ## Result 5 - How much is lost below the publish threshold
 
 **Claim.** Lowering `min_publish_conf` would recover very little.
-Across a full replay of `debug_inputs_20260914_161006`, only 24
+Across a full replay of `R11_parked_person_standing_walking_near`, only 24
 detections fell in the 0.15-0.45 band against 1066 published - a
 ceiling of about 2.2% more detections. It does not close the
 close-range gaps.
@@ -377,7 +377,7 @@ threshold choice.
 
 ```
 # terminal 1
-ros2 bag play ~/thesis_social_navigation_ws/bags/debug_inputs_20260914_161006/rosbag --clock
+ros2 bag play ~/thesis_social_navigation_ws/bags/R11_parked_person_standing_walking_near/rosbag --clock
 # terminal 2  (node must carry the REJECT logging patch)
 python3 ~/thesis_social_navigation_ws/scripts/yolo_leg_detector_lidar.py \
   --ros-args -p use_sim_time:=true \
@@ -420,7 +420,7 @@ guard designs to the same measurement stream:
 Metrics: % of measurements rejected, residual >0.3 m jumps among
 accepted readings, and the longest consecutive reject streak.
 
-**Results, `debug_inputs_20260914_161006` (1108 measurements):**
+**Results, `R11_parked_person_standing_walking_near` (1108 measurements):**
 
 | guard | rejected | >0.3 m | max streak |
 |---|---|---|---|
@@ -430,7 +430,7 @@ accepted readings, and the longest consecutive reject streak.
 | median3 | 0.5% | 1.00% | 2 |
 | hysteres | 0.3% | 1.09% | 1 |
 
-**Results, `debug_inputs_20260914_160801` (738 measurements):** every
+**Results, `R12_parked_person_standing_walking_far` (738 measurements):** every
 design scores 0.0% rejected, 0.00% jumps, 0 streak. There is no
 instability at +/-6 deg on this bag for a guard to act on.
 
@@ -461,8 +461,8 @@ recorded.
 
 ```
 cd ~/thesis_social_navigation_ws
-python3 pytest/analysis/guard.py bags/debug_inputs_20260914_161006/rosbag/*.db3
-python3 pytest/analysis/guard.py bags/debug_inputs_20260914_160801/rosbag/*.db3
+python3 pytest/analysis/guard.py bags/R11_parked_person_standing_walking_near/rosbag/*.db3
+python3 pytest/analysis/guard.py bags/R12_parked_person_standing_walking_far/rosbag/*.db3
 ```
 
 ---
@@ -510,8 +510,8 @@ wrong by measurement. Re-deriving them wastes time.
 
 | bag | duration | notes |
 |---|---|---|
-| `debug_inputs_20260914_161006` | 101.7 s | tuning set for Result 1; stationary + walking segments |
-| `debug_inputs_20260914_160801` | 69.2 s | held-out set for Result 1 |
+| `R11_parked_person_standing_walking_near` | 101.7 s | tuning set for Result 1; stationary + walking segments |
+| `R12_parked_person_standing_walking_far` | 69.2 s | held-out set for Result 1 |
 | `berth06_20260910_130839` | 92.4 s | 10 Sep reference, healthy pipeline rates (detector 12.7 Hz, fused 7.0 Hz, cloud 10.0 Hz) |
 
 **Both debug bags were recorded WITHOUT `lidar_person_detector`
@@ -531,8 +531,8 @@ resolves `base_link`).
 
 ```
 cd ~/thesis_social_navigation_ws
-python3 pytest/analysis/coverage.py bags/debug_inputs_20260914_160801/rosbag/*.db3
-python3 pytest/analysis/coverage.py bags/debug_inputs_20260914_161006/rosbag/*.db3
+python3 pytest/analysis/coverage.py bags/R12_parked_person_standing_walking_far/rosbag/*.db3
+python3 pytest/analysis/coverage.py bags/R11_parked_person_standing_walking_near/rosbag/*.db3
 ```
 
 Segment detection thresholds are `STATIONARY_WIN_S` (3.0 s) and

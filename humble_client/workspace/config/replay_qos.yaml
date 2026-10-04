@@ -1,0 +1,10 @@
+/turtlebot4/map:
+  history: keep_last
+  depth: 1
+  reliability: reliable
+  durability: transient_local
+/turtlebot4/tf_static:
+  history: keep_last
+  depth: 10
+  reliability: reliable
+  durability: transient_local

@@ -26,6 +26,10 @@ class CalibratedCompressedProjection(Node):
         # Calibrated Extrinsic Yaw Bias
         self.yaw_deg = 0.75
         self.yaw_rad = math.radians(self.yaw_deg)
+        # Expected target range (m) - pick the cluster nearest this,
+        # not the nearest to the robot, so clutter between robot and
+        # target cannot capture the overlay.
+        self.expect_r = 3.0
 
         self.u_proj = None
         self.v_proj = None
@@ -84,8 +88,14 @@ class CalibratedCompressedProjection(Node):
             if 0.02 <= width <= 0.15:
                 candidates.append((c, float(np.mean(ranges[c]))))
 
+        self.get_logger().info(
+            f"valid={len(valid_indices)} clusters={len(clusters)} cands={len(candidates)} "
+            f"widths={[round(math.hypot(x_base[c[-1]]-x_base[c[0]], y_base[c[-1]]-y_base[c[0]]), 3) for c in clusters][:6]} "
+            f"ranges={[round(float(np.mean(ranges[c])), 2) for c in clusters][:6]}",
+            throttle_duration_sec=1.0)
+
         if candidates:
-            best, _ = min(candidates, key=lambda item: item[1])
+            best, _ = min(candidates, key=lambda item: abs(item[1] - self.expect_r))
             x_t = float(np.mean(x_base[best]))
             y_t = float(np.mean(y_base[best]))
 
@@ -126,7 +136,7 @@ class CalibratedCompressedProjection(Node):
             cv2.line(frame, (self.u_proj, 0), (self.u_proj, h), (0, 0, 255), 2)
             cv2.circle(frame, (self.u_proj, self.v_proj), 5, (0, 0, 255), -1)
 
-            cv2.putText(frame, f'{self.target_dist:.2f}m @ {self.target_deg:+.1f} deg (u={self.u_proj})',
+            cv2.putText(frame, f'{self.target_dist:.2f}m @ {self.target_deg:+.1f} deg (u={self.u_proj}) exp={self.expect_r:.1f}m',
                         (5, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.40, (0, 0, 255), 1)
 
         cv2.imshow('Calibrated Compressed Projection', frame)
