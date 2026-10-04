@@ -214,7 +214,11 @@ DUPLICATE_TRACK_RADIUS = 0.45      # m
 # camera-lidar offsets seen (0.04-0.11 m) and well under person spacing.
 # ---------------------------------------------------------------------
 GROUP_MEMBER_TOPIC = "/social_groups"
-GROUP_MEMBER_RADIUS = 0.50         # m; track within this of a member = that member
+GROUP_MEMBER_RADIUS = 0.70         # m; track within this of a member = that member
+                                   # (was 0.50: member_xy is now the detector's LIDAR
+                                   # anchor while tracks here are camray, ~0.35 m off
+                                   # at rest and jumpier while driving - 0.50 let a
+                                   # member slip through and get double-marked)
 GROUP_MEMBER_TIMEOUT = 2.0         # s; stop suppressing if group detection dies
 
 class PredictedPersonCloudNode(Node):
@@ -509,7 +513,15 @@ class PredictedPersonCloudNode(Node):
         # "whoever covers that person's body owns them", which is the
         # group layer for a queue and this node for a conversation.
         # ==========================================================
-        if parts[1].strip() != "queue":
+        # THESIS CHANGE (ablation F, ported from sim + side_by_side):
+        # conversation and side_by_side members are now deferred too.
+        # social_zone_costmap_node paints each member's body itself
+        # (0.25 m lethal core + 0.8 m halo at cost 80) for BOTH pair
+        # types (fused zone), so marking them here as well double-marks
+        # the bodies - and their inflated ellipses close the gap in a
+        # narrow corridor, blocking the o-space the graded ladder needs.
+        # Moving people in no group keep their directional ellipse here.
+        if parts[1].strip() not in ("queue", "conversation", "side_by_side"):
             return
 
         now = self.get_ros_time_seconds()

@@ -38,6 +38,12 @@ void SocialCritic::initialize()
   getParam(max_coast_speed_, "max_coast_speed", 2.5f);
   getParam(person_frame_, "person_frame", std::string("map"));
   getParam(topic_, "topic", std::string("/predicted_person_positions"));
+  getParam(narrow_group_relax_, "narrow_group_relax", true);
+  getParam(group_topic_, "group_topic", std::string("/social_groups"));
+  getParam(group_timeout_, "group_timeout", 4.0);
+  getParam(group_match_radius_, "group_match_radius", 0.6);
+  getParam(narrow_margin_, "narrow_margin", 0.15f);
+  getParam(nominal_zone_buffer_, "nominal_zone_buffer", 0.4);
 
   // Reuse the costmap's TF buffer rather than starting a second
   // listener inside controller_server.
@@ -46,6 +52,15 @@ void SocialCritic::initialize()
   sub_ = node->create_subscription<std_msgs::msg::String>(
     topic_, rclcpp::QoS(10),
     std::bind(&SocialCritic::positionsCallback, this, std::placeholders::_1));
+
+  if (narrow_group_relax_) {
+    group_sub_ = node->create_subscription<std_msgs::msg::String>(
+      group_topic_, rclcpp::QoS(10),
+      std::bind(&SocialCritic::groupsCallback, this, std::placeholders::_1));
+    RCLCPP_INFO(
+      logger_, "SocialCritic: narrow-group relaxation ON (topic %s, margin %.2f m)",
+      group_topic_.c_str(), narrow_margin_);
+  }
 
   RCLCPP_INFO(
     logger_,
@@ -129,6 +144,70 @@ void SocialCritic::positionsCallback(const std_msgs::msg::String::SharedPtr msg)
   }
 }
 
+// /social_groups format (social_group_detector_node.py), comma separated:
+//   [0] group_id  [1] type  [9] "ax;ay|bx;by" member map positions
+//   [10] effective zone buffer - shrunk below nominal => NARROW corridor
+void SocialCritic::groupsCallback(const std_msgs::msg::String::SharedPtr msg)
+{
+  std::vector<std::string> parts;
+  std::stringstream ss(msg->data);
+  std::string item;
+  while (std::getline(ss, item, ',')) {
+    parts.push_back(item);
+  }
+  if (parts.size() < 11) {
+    return;
+  }
+  auto node = parent_.lock();
+  if (!node) {
+    return;
+  }
+
+  auto trim = [](std::string s) {
+      s.erase(0, s.find_first_not_of(" \t"));
+      s.erase(s.find_last_not_of(" \t") + 1);
+      return s;
+    };
+  const std::string id = trim(parts[0]);
+  const std::string type = trim(parts[1]);
+  if (type != "conversation" && type != "side_by_side") {
+    return;
+  }
+
+  NarrowGroup g;
+  double buffer = 0.0;
+  try {
+    buffer = std::stod(parts[10]);
+    const std::string mem = parts[9];
+    const auto bar = mem.find('|');
+    if (bar == std::string::npos) {
+      return;
+    }
+    const std::string a = mem.substr(0, bar);
+    const std::string b = mem.substr(bar + 1);
+    const auto sa = a.find(';');
+    const auto sb = b.find(';');
+    if (sa == std::string::npos || sb == std::string::npos) {
+      return;
+    }
+    g.ax = std::stod(a.substr(0, sa));
+    g.ay = std::stod(a.substr(sa + 1));
+    g.bx = std::stod(b.substr(0, sb));
+    g.by = std::stod(b.substr(sb + 1));
+  } catch (const std::exception &) {
+    return;
+  }
+  g.separation = std::hypot(g.bx - g.ax, g.by - g.ay);
+  g.last_seen = node->now();
+
+  std::lock_guard<std::mutex> lock(groups_mutex_);
+  if (buffer < nominal_zone_buffer_ - 0.01) {
+    groups_[id] = g;          // narrow: relax clearance for its members
+  } else {
+    groups_.erase(id);        // wide: full clearance, robot goes around
+  }
+}
+
 std::vector<Target> SocialCritic::collectTargets()
 {
   std::vector<Target> out;
@@ -147,6 +226,37 @@ std::vector<Target> SocialCritic::collectTargets()
     return out;
   }
   const rclcpp::Time now = node->now();
+
+  std::vector<NarrowGroup> narrow;
+  if (narrow_group_relax_) {
+    std::lock_guard<std::mutex> lock(groups_mutex_);
+    for (auto it = groups_.begin(); it != groups_.end(); ) {
+      if ((now - it->second.last_seen).seconds() > group_timeout_) {
+        it = groups_.erase(it);
+      } else {
+        narrow.push_back(it->second);
+        ++it;
+      }
+    }
+  }
+
+  // Clearance for a person at map position (mx, my): reduced if they are
+  // a member of a narrow group, else the normal social_distance_.
+  const float sd_floor = critical_distance_ + 0.05f;
+  auto clearanceFor = [&](double mx, double my) {
+      float sd = social_distance_;
+      for (const auto & g : narrow) {
+        const bool member =
+          std::hypot(mx - g.ax, my - g.ay) < group_match_radius_ ||
+          std::hypot(mx - g.bx, my - g.by) < group_match_radius_;
+        if (member) {
+          const float relaxed =
+            static_cast<float>(g.separation / 2.0) - narrow_margin_;
+          sd = std::min(sd, std::max(sd_floor, relaxed));
+        }
+      }
+      return sd;
+    };
 
   const std::string costmap_frame = costmap_ros_->getGlobalFrameID();
 
@@ -178,6 +288,7 @@ std::vector<Target> SocialCritic::collectTargets()
 
   auto toCostmap = [&](double mx, double my, double mvx, double mvy, float scale) {
       Target t;
+      t.social_distance = clearanceFor(mx, my);
       t.x = static_cast<float>(tx + c * mx - s * my);
       t.y = static_cast<float>(ty + s * mx + c * my);
       // Velocity is a free vector: rotate, do not translate.
@@ -271,7 +382,6 @@ void SocialCritic::score(CriticData & data)
     static_cast<size_t>(data.trajectories.x.size()) / batch;
 
   const int step = std::max(1, trajectory_point_step_);
-  const float span = social_distance_ - critical_distance_;
 
   // DIAGNOSTIC: the critic enforces clearance from the ESTIMATED person
   // position, while analyse_avoidance.py measures clearance from the
@@ -285,10 +395,11 @@ void SocialCritic::score(CriticData & data)
   // bag recorded in sim time, which is why it is repeated here.
   RCLCPP_INFO_THROTTLE(
     logger_, *node->get_clock(), 1000,
-    "SocialCritic: t=%.3f %zu target(s) in %s, first=(%.2f, %.2f) scale=%.2f",
+    "SocialCritic: t=%.3f %zu target(s) in %s, first=(%.2f, %.2f) scale=%.2f sd=%.2f",
     node->now().seconds(),
     targets.size(), costmap_ros_->getGlobalFrameID().c_str(),
-    targets[0].x, targets[0].y, targets[0].weight_scale);
+    targets[0].x, targets[0].y, targets[0].weight_scale,
+    targets[0].social_distance);
 
   float max_added = 0.0f;
   float min_added = std::numeric_limits<float>::max();
@@ -317,7 +428,7 @@ void SocialCritic::score(CriticData & data)
         const float dy = ry - py;
         const float dist = std::sqrt(dx * dx + dy * dy);
 
-        if (dist >= social_distance_) {
+        if (dist >= t.social_distance) {
           continue;
         }
 
@@ -330,7 +441,8 @@ void SocialCritic::score(CriticData & data)
         // critical_distance_. Unlike the costmap gradient this is
         // guaranteed non-zero right up to the boundary, which is the
         // whole point of the critic.
-        const float depth = (social_distance_ - dist) / span;
+        const float span = std::max(1e-3f, t.social_distance - critical_distance_);
+        const float depth = (t.social_distance - dist) / span;
         const float shaped = (cost_power_ == 1) ? depth : depth * depth;
         traj_cost += weight_ * t.weight_scale * shaped;
       }

@@ -551,7 +551,7 @@ class SocialGroupDetector(Node):
 
         group_id = f"conv_{min(id_a, id_b)}_{max(id_a, id_b)}"
         return (group_id, "conversation", cx, cy, axis_x, axis_y,
-                half_length, half_width, [id_a, id_b], [(ta.x, ta.y), (tb.x, tb.y)])
+                half_length, half_width, [id_a, id_b], [(ta.x, ta.y), (tb.x, tb.y)], buffer)
 
     def _build_side_by_side_zone(self, ta, tb, id_a, id_b):
         cx, cy = (ta.x + tb.x) / 2.0, (ta.y + tb.y) / 2.0
@@ -572,7 +572,7 @@ class SocialGroupDetector(Node):
 
         group_id = f"sbs_{min(id_a, id_b)}_{max(id_a, id_b)}"
         return (group_id, "side_by_side", cx, cy, axis_x, axis_y,
-                half_length, half_width, [id_a, id_b], [(ta.x, ta.y), (tb.x, tb.y)])
+                half_length, half_width, [id_a, id_b], [(ta.x, ta.y), (tb.x, tb.y)], buffer)
 
     # -------------------------------------------------------------
     def _save_debug_crop(self, crop, id_a, id_b, label, now):
@@ -723,13 +723,13 @@ class SocialGroupDetector(Node):
 
     def _publish_groups(self, groups):
         for (group_id, group_type, cx, cy, axis_x, axis_y,
-             half_length, half_width, member_ids, member_xy) in groups:
+            half_length, half_width, member_ids, member_xy, buffer) in groups:
             xy_str = "|".join(f"{x:.3f};{y:.3f}" for x, y in member_xy)
             out = String()
             out.data = (
                 f"{group_id},{group_type},{cx:.3f},{cy:.3f},"
                 f"{axis_x:.3f},{axis_y:.3f},{half_length:.3f},{half_width:.3f},"
-                f"{';'.join(str(i) for i in member_ids)},{xy_str}"
+                f"{';'.join(str(i) for i in member_ids)},{xy_str},{buffer:.3f}"
             )
             self.pub.publish(out)
 

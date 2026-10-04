@@ -20,6 +20,7 @@
 #ifndef SOCIAL_CRITIC__SOCIAL_CRITIC_HPP_
 #define SOCIAL_CRITIC__SOCIAL_CRITIC_HPP_
 
+#include <map>
 #include <memory>
 #include <mutex>
 #include <string>
@@ -64,6 +65,18 @@ struct Target
   float vx{0.0f};
   float vy{0.0f};
   float weight_scale{1.0f};
+  // Per-target clearance. Normally social_distance_; reduced for members
+  // of a NARROW-corridor social group so the robot may pass between them.
+  float social_distance{0.8f};
+};
+
+// A stationary pair from /social_groups that the detector flagged as
+// NARROW (no room to go around). Positions in map frame.
+struct NarrowGroup
+{
+  double ax{0.0}, ay{0.0}, bx{0.0}, by{0.0};
+  double separation{0.0};
+  rclcpp::Time last_seen;
 };
 
 class SocialCritic : public CriticFunction
@@ -74,6 +87,7 @@ public:
 
 private:
   void positionsCallback(const std_msgs::msg::String::SharedPtr msg);
+  void groupsCallback(const std_msgs::msg::String::SharedPtr msg);
 
   // Returns everything worth penalising, in the costmap frame: current
   // positions, KF predictions, and coasted extrapolations of tracks that
@@ -85,6 +99,24 @@ private:
 
   std::mutex people_mutex_;
   std::vector<PersonState> people_;
+
+  // NARROW-GROUP RELAXATION (1 Oct 2026, bag narrow_corridor_01).
+  // With two people 1.53 m apart, every point in the gap is ~0.77 m
+  // from BOTH, i.e. inside social_distance (0.94) of each, so every
+  // pass-through rollout was double-penalised and MPPI dithered ~1.7 m
+  // short of the gap. For members of a narrow group the clearance is
+  // shrunk to (separation/2 - narrow_margin_): the gap centreline costs
+  // nothing, drifting toward either person still costs, and
+  // critical_distance_ stays the hard limit.
+  rclcpp::Subscription<std_msgs::msg::String>::SharedPtr group_sub_;
+  std::mutex groups_mutex_;
+  std::map<std::string, NarrowGroup> groups_;
+  bool narrow_group_relax_{true};
+  std::string group_topic_{"/social_groups"};
+  double group_timeout_{4.0};        // matches social_zone_costmap_node
+  double group_match_radius_{0.6};   // person <-> group member, m
+  float narrow_margin_{0.15f};       // m kept below separation/2 (zero-cost band half-width)
+  double nominal_zone_buffer_{0.4};  // MUST match detector ZONE_BUFFER
 
   // --- parameters ---
   // Centre-to-centre distance at which the penalty reaches zero. This is
