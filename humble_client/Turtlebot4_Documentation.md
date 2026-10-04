@@ -4,14 +4,13 @@ ros2 launch turtlebot4_navigation localization.launch.py map:=/root/thesis_socia
 
 ros2 launch turtlebot4_navigation nav2.launch.py namespace:=/turtlebot4
 
-ros2 launch turtlebot4_viz view_robot.launch.py namespace:=/turtlebot4
-
 ros2 launch turtlebot4_navigation slam.launch.py sync:=false namespace:=/turtlebot4
 
 ros2 launch /root/thesis_social_navigation_ws/launch/lab1_bringup.launch.py
 
 ros2 run teleop_twist_keyboard teleop_twist_keyboard --ros-args -r /cmd_vel:=/turtlebot4/cmd_vel
 
+ros2 launch turtlebot4_viz view_robot.launch.py namespace:=/turtlebot4
 
 ros2 run nav2_map_server map_saver_cli -f "hall_map_name" --ros-args -p map_subscribe_transient_local:=true -r __ns:=/turtlebot4
 
@@ -152,3 +151,4 @@ Start position: ros2 topic pub --once /turtlebot4/goal_pose geometry_msgs/PoseSt
 
 Goal Position: ros2 topic pub --once /turtlebot4/goal_pose geometry_msgs/PoseStamped "{header: {frame_id: 'map'}, pose: {position: {x: -9.144237916334216, y: 15.333447075223367, z: 0.0}, orientation: {x: 0.0, y: 0.0, z: -0.3320365108167037, w: 0.943266534699853}}}"
 
+ros2 launch /root/thesis_social_navigation_ws/launch/perception_camray_bringup.launch.py 2>&1 | tee /root/thesis_social_navigation_ws/logs/$(date +%Y%m%d)/perception_$(date +%H%M%S).log
