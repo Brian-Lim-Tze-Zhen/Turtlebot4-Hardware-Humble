@@ -499,7 +499,12 @@ class HumanKFPredictor(Node):
             base_x = float(parts[2])
             base_y = float(parts[3])
             source = parts[11] if len(parts) > 11 else "camera_confirmed"
-            is_lidar_only = (source == "lidar_only")
+            # THESIS FIX (25 Sep): "lidar_hold" = stationary person held
+            # at a fixed anchor by camera_ray_identity_node after leaving
+            # camera view. Same low trust as lidar_only for the KF update,
+            # but exempt from the lidar_only stall drop below - standing
+            # still out of view is exactly what a hold is.
+            is_lidar_only = source in ("lidar_only", "lidar_hold")
 
         except Exception as e:
             self.get_logger().warn(
@@ -528,7 +533,7 @@ class HumanKFPredictor(Node):
             track.vx_filt if track.vx_filt is not None else 0.0,
             track.vy_filt if track.vy_filt is not None else 0.0,
         )
-        if is_lidar_only and speed < track.lidar_only_stall_speed:
+        if source == "lidar_only" and speed < track.lidar_only_stall_speed:
             if track.lidar_only_stall_since is None:
                 track.lidar_only_stall_since = now
             elif now - track.lidar_only_stall_since > track.lidar_only_stall_timeout:
