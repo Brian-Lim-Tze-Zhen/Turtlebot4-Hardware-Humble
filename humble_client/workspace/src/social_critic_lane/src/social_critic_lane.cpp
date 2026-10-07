@@ -1,3 +1,7 @@
+// HARDWARE PORT of SocialCritic v4 (simulation final configuration, library ee5b22ce,
+// branch conversation-rerun of the simulation repository), 7 Oct 2026.
+// Hardware-only additions kept from the 5 Oct port: side_ref_goal_topic
+// (pass side against the robot-goal line) and the Humble goal from the path end.
 #include "social_critic_lane/social_critic_lane.hpp"
 
 #include <array>
@@ -80,6 +84,12 @@ void SocialLaneCritic::initialize()
   getParam(lane_first_sight_min_move_, "lane_first_sight_min_move", 0.25f);
   getParam(lane_ignore_beyond_goal_, "lane_ignore_beyond_goal", false);
   getParam(lane_beyond_goal_margin_, "lane_beyond_goal_margin", 0.5f);
+  getParam(lane_skip_group_members_, "lane_skip_group_members", false);
+  getParam(lane_group_match_radius_, "lane_group_match_radius", 0.0);
+  getParam(lane_group_hold_s_, "lane_group_hold_s", 0.0);
+  getParam(lane_approach_window_s_, "lane_approach_window_s", 0.0f);
+  getParam(lane_approach_min_move_, "lane_approach_min_move", 0.5f);
+  getParam(lane_approach_consistency_, "lane_approach_consistency", 0.6f);
 
   // Reuse the costmap's TF buffer rather than starting a second
   // listener inside controller_server.
@@ -153,6 +163,16 @@ void SocialLaneCritic::initialize()
     "lane at once), people beyond the goal %s",
     lane_first_sight_min_move_, lane_first_sight_confirm_s_,
     lane_ignore_beyond_goal_ ? "ignored" : "not ignored");
+  RCLCPP_INFO(
+    logger_, "SocialLaneCritic: group members get no lane unless closing: %s",
+    (lane_skip_group_members_ && group_aware_) ? "on" : "off");
+  RCLCPP_INFO(
+    logger_, "SocialLaneCritic: group skip match radius %.2f m (0 = match radius of the group), hold %.1f s",
+    lane_group_match_radius_, lane_group_hold_s_);
+  RCLCPP_INFO(
+    logger_, "SocialLaneCritic: lane needs a sustained approach: %s (%.2f m within %.2f s, %.0f %% of the steps towards the robot)",
+    lane_approach_window_s_ > 0.0f ? "on" : "off", lane_approach_min_move_, lane_approach_window_s_,
+    100.0f * lane_approach_consistency_);
 }
 
 // /social_groups, from social_group_detector_node_lidarhold_sim.py:
@@ -219,6 +239,52 @@ bool SocialLaneCritic::isNarrowGroupMember(
     ++it;
   }
   return false;
+}
+
+bool SocialLaneCritic::isGroupMember(
+  double x, double y, const rclcpp::Time & now, double radius)
+{
+  std::lock_guard<std::mutex> lock(groups_mutex_);
+  for (const auto & kv : groups_) {
+    if ((now - kv.second.last_seen).seconds() > group_timeout_) {
+      continue;
+    }
+    for (const auto & m : kv.second.members) {
+      if (std::hypot(x - m.first, y - m.second) <= radius) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+bool SocialLaneCritic::approachConfirmed(int track_id, float ux, float uy) const
+{
+  auto it = approach_hist_.find(track_id);
+  if (it == approach_hist_.end() || it->second.size() < 3) {
+    return false;
+  }
+  const auto & h = it->second;
+  if (h.back().t - h.front().t < 0.8 * lane_approach_window_s_) {
+    return false;   // not watched long enough
+  }
+  // (ux, uy) points from the person to the robot.
+  const float moved = (h.back().x - h.front().x) * ux + (h.back().y - h.front().y) * uy;
+  if (moved < lane_approach_min_move_) {
+    return false;
+  }
+  int towards = 0, steps = 0;
+  for (size_t k = 1; k < h.size(); ++k) {
+    const float s = (h[k].x - h[k - 1].x) * ux + (h[k].y - h[k - 1].y) * uy;
+    if (std::fabs(s) < 1e-4f) {
+      continue;   // repeated message, no new measurement
+    }
+    ++steps;
+    if (s > 0.0f) {
+      ++towards;
+    }
+  }
+  return steps > 0 && static_cast<float>(towards) >= lane_approach_consistency_ * static_cast<float>(steps);
 }
 
 // Message format produced by human_kf_predictor and consumed by
@@ -361,12 +427,27 @@ std::vector<Target> SocialLaneCritic::collectTargets()
     // same pipeline as the group's member positions).
     const float sd = (group_aware_ && isNarrowGroupMember(p.x, p.y, now))
       ? narrow_social_distance_ : social_distance_;
+    bool in_group = false;
+    if (lane_skip_group_members_ && group_aware_) {
+      const double rad = lane_group_match_radius_ > 0.0 ? lane_group_match_radius_ : member_match_radius_;
+      const double now_s = now.seconds();
+      in_group = isGroupMember(p.x, p.y, now, rad);
+      if (in_group && lane_group_hold_s_ > 0.0) {
+        group_member_until_[p.track_id] = now_s + lane_group_hold_s_;
+      } else if (!in_group && lane_group_hold_s_ > 0.0) {
+        auto h = group_member_until_.find(p.track_id);
+        if (h != group_member_until_.end() && now_s <= h->second) {
+          in_group = true;   // was a member a moment ago
+        }
+      }
+    }
 
     if (age <= track_timeout_) {
       // Fresh observation: penalise the reported position, carrying the
       // velocity so score() can propagate it along the rollout.
       out.push_back(toCostmap(p.x, p.y, p.vx, p.vy, 1.0f, sd));
       out.back().track_id = p.track_id;
+      out.back().in_group = in_group;
 
       // The KF's 1 s prediction is only worth adding as a separate
       // target when the critic is NOT propagating targets itself.
@@ -412,6 +493,7 @@ std::vector<Target> SocialLaneCritic::collectTargets()
     out.push_back(toCostmap(cx, cy, p.vx, p.vy, scale, sd));
     out.back().track_id = p.track_id;
     out.back().coasted = true;
+    out.back().in_group = in_group;
   }
 
   return out;
@@ -473,6 +555,35 @@ void SocialLaneCritic::score(CriticData & data)
       t.ux = ex / d;
       t.uy = ey / d;
       t.closing = (t.vx * t.ux + t.vy * t.uy) > pass_side_min_closing_;
+      if (lane_approach_window_s_ > 0.0f && t.track_id >= 0) {
+        // Sustained approach (see lane_approach_window_s_): history of the
+        // measured positions of this track, then the test.
+        const double hs = node->now().seconds();
+        auto & h = approach_hist_[t.track_id];
+        if (!t.coasted) {
+          h.push_back({hs, t.x, t.y});
+        }
+        while (!h.empty() && hs - h.front().t > lane_approach_window_s_) {
+          h.pop_front();
+        }
+        t.closing = t.closing && approachConfirmed(t.track_id, t.ux, t.uy);
+      }
+      if (lane_approach_window_s_ > 0.0f) {
+        const double hs = node->now().seconds();
+        for (auto ah = approach_hist_.begin(); ah != approach_hist_.end(); ) {
+          if (ah->second.empty() || hs - ah->second.back().t > lane_approach_window_s_ + 2.0) {
+            ah = approach_hist_.erase(ah);
+          } else {
+            ++ah;
+          }
+        }
+      }
+      // lane_skip_group_members_: the speed of a standing member is jitter
+      // (its position estimate jumps by up to 0.3 m and the KF reports
+      // 0.3-0.4 m/s for a moment), so a group member is never "closing".
+      if (t.in_group) {
+        t.closing = false;
+      }
     }
 
     // The estimates as received, before a walker is put on its lane below:
@@ -554,6 +665,15 @@ void SocialLaneCritic::score(CriticData & data)
       };
     for (auto & t : targets) {
       if (t.track_id < 0) {
+        continue;
+      }
+      if (t.in_group) {
+        // lane_skip_group_members_: a member of a standing group gets no
+        // lane and no side decision, whatever the KF velocity says.
+        auto g = lane_axes_.find(t.track_id);
+        if (g != lane_axes_.end()) {
+          lane_axes_.erase(g);
+        }
         continue;
       }
       auto it = lane_axes_.find(t.track_id);
@@ -703,7 +823,9 @@ void SocialLaneCritic::score(CriticData & data)
         // (t.ux, t.uy) points from the person to the robot.
         const float moved = (t.x - it->second.pend_x) * t.ux +
           (t.y - it->second.pend_y) * t.uy;
-        if (moved >= lane_first_sight_min_move_) {
+        const bool sustained = lane_approach_window_s_ <= 0.0f ||
+          approachConfirmed(t.track_id, t.ux, t.uy);
+        if (moved >= lane_first_sight_min_move_ && sustained) {
           it->second = newLane(t, true);   // the first-sight lane, a little late
         } else {
           it->second.pending = false;      // standing: no lane unless it closes

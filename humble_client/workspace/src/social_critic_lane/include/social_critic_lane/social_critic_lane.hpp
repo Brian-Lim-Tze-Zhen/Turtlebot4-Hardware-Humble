@@ -24,15 +24,16 @@
 #include <mutex>
 #include <string>
 #include <unordered_map>
+#include <deque>
 #include <utility>
 #include <vector>
 
+#include "geometry_msgs/msg/pose_stamped.hpp"
 #include "nav2_mppi_controller/critic_function.hpp"
 #include "nav2_mppi_controller/models/state.hpp"
 #include "nav2_mppi_controller/tools/utils.hpp"
 
 #include "std_msgs/msg/string.hpp"
-#include "geometry_msgs/msg/pose_stamped.hpp"
 #include "tf2_ros/buffer.h"
 #include "visualization_msgs/msg/marker_array.hpp"
 #include "sensor_msgs/msg/point_cloud2.hpp"
@@ -88,6 +89,9 @@ struct Target
   float side{1.0f};    // +1 pass on the walker's left (robot keeps right), -1 the other way
   bool coasted{false}; // extrapolated from an old observation, not seen this cycle
   bool block_ok{true}; // false: do not publish the planner block for this lane
+  // Matched to a member of a fresh /social_groups group (map-frame position,
+  // same match as the narrow social distance). See lane_skip_group_members_.
+  bool in_group{false};
 };
 
 // THESIS ADDITION (ablation F, narrow case). One group from /social_groups,
@@ -112,6 +116,8 @@ private:
   // True if (x, y) in the map frame is within member_match_radius_ of a
   // member of a fresh narrow group.
   bool isNarrowGroupMember(double x, double y, const rclcpp::Time & now);
+  // Same, for a member of any fresh group (wide or narrow).
+  bool isGroupMember(double x, double y, const rclcpp::Time & now, double radius);
 
   // Returns everything worth penalising, in the costmap frame: current
   // positions, KF predictions, and coasted extrapolations of tracks that
@@ -367,6 +373,41 @@ private:
   float lane_first_sight_min_move_{0.25f};     // m
   bool lane_ignore_beyond_goal_{false};
   float lane_beyond_goal_margin_{0.5f};        // m
+  // lane_skip_group_members_ (needs group_aware_): a person who is a member
+  // of a group from /social_groups (a standing conversation) gets no lane
+  // and no side decision, and is never counted as closing: the KF speed of a
+  // standing member is jitter of its position estimate. In the
+  // conversation corridor the final critic froze a keep-right / keep-left
+  // lane for a member of the standing pair in 2 of 6 narrow runs (bags
+  // conv_F_final_narrow_trial2 and conv_F_final_narrow_screenshot): the
+  // robot left the centreline by 0.5 m before it went through the gap, and
+  // in trial 2 passed 0.58 m from a member. Default off.
+  bool lane_skip_group_members_{false};
+  // Version 3 of the skip. The position estimate of a standing member can jump
+  // by 0.5 m (the ray range locks onto another return), which is more than
+  // member_match_radius_ and made a member look like a walker (bags
+  // conv_F_gs2_narrow_trial1 and _2). The match for the skip therefore uses
+  // lane_group_match_radius_ (0 = member_match_radius_), and a track that was
+  // a member within the last lane_group_hold_s_ seconds stays one.
+  double lane_group_match_radius_{0.0};   // m
+  double lane_group_hold_s_{0.0};         // s
+  std::unordered_map<int, double> group_member_until_;   // track id -> time (s) until which it counts as a member
+  // Sustained approach (lane_approach_window_s_ > 0). A lane is started only
+  // when the person has come at least lane_approach_min_move_ closer to the
+  // robot within the last lane_approach_window_s_ seconds, and at least the
+  // fraction lane_approach_consistency_ of the steps in that window point
+  // towards the robot. A single velocity sample above pass_side_min_closing_
+  // is not enough: the position estimate of a standing person can jump by
+  // 0.3 to 0.5 m in one step, and the Kalman filter turned such a jump into
+  // 0.4 to 0.55 m/s, which started a lane for a member of a standing pair
+  // (bags conv_F_final_narrow_trial2, conv_F_gs2_narrow_trial1 and _2).
+  // A walker at 1.2 m/s covers 1.2 m in 1 s in a consistent direction.
+  float lane_approach_window_s_{0.0f};       // s; 0 = off (old behaviour)
+  float lane_approach_min_move_{0.5f};       // m
+  float lane_approach_consistency_{0.6f};    // share of steps towards the robot
+  struct ApproachSample { double t; float x; float y; };
+  std::unordered_map<int, std::deque<ApproachSample>> approach_hist_;
+  bool approachConfirmed(int track_id, float ux, float uy) const;
   double lane_timeout_{3.0};            // s without the track before forgetting
   float pass_side_min_closing_{0.5f};   // m/s toward the robot
 
