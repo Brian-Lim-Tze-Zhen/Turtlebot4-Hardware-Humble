@@ -1,0 +1,531 @@
+file,w,h,people,kpt,kpt_detail,truth,vlm_node_pfacing,vlm_node,vlm_talking_pfacing,vlm_talking,vlm_with_empty_pfacing,vlm_with_empty,hybrid
+1788270718_3_4_side_by_side.jpg,122,156,2,side_by_side,left_cx=42.5 heading=1 right_cx=83.3 heading=1,,0.758,facing,0.022,not_facing,0.48,abstain,not_facing
+1788270746_4_6_side_by_side.jpg,168,155,2,side_by_side,left_cx=40.1 heading=0 right_cx=124.7 heading=1,,0.966,facing,0.867,facing,0.807,facing,not_facing
+1788346464_1_2_side_by_side.jpg,129,157,2,side_by_side,left_cx=41.8 heading=0 right_cx=88.7 heading=-1,,0.889,facing,0.786,facing,0.74,facing,not_facing
+1788346988_1_2_facing.jpg,146,152,2,facing,left_cx=35.8 heading=1 right_cx=111.4 heading=-1,,0.931,facing,0.83,facing,0.763,facing,facing
+1788348700_0_1_none.jpg,239,174,2,none,left_cx=40.2 heading=0 right_cx=185.5 heading=0,,0.968,facing,0.776,facing,0.688,facing,facing
+1788348701_0_1_none.jpg,237,174,2,none,left_cx=45.8 heading=0 right_cx=187.4 heading=0,,0.943,facing,0.522,abstain,0.647,facing,facing
+1788348702_0_1_none.jpg,238,174,2,none,left_cx=44.6 heading=0 right_cx=188.4 heading=0,,0.966,facing,0.753,facing,0.696,facing,facing
+1788348703_0_1_none.jpg,237,173,2,none,left_cx=46.4 heading=0 right_cx=198.3 heading=0,,0.965,facing,0.712,facing,0.672,facing,facing
+1788348704_0_1_none.jpg,237,174,2,none,left_cx=46.1 heading=0 right_cx=189.9 heading=0,,0.961,facing,0.597,facing,0.651,facing,facing
+1788348705_0_1_none.jpg,236,173,2,none,left_cx=46.8 heading=0 right_cx=196.4 heading=0,,0.968,facing,0.687,facing,0.684,facing,facing
+1788348706_0_1_none.jpg,237,173,2,none,left_cx=46.5 heading=0 right_cx=189.1 heading=0,,0.965,facing,0.737,facing,0.665,facing,facing
+1788348707_0_1_none.jpg,238,175,2,none,left_cx=60.7 heading=0 right_cx=188.9 heading=0,,0.967,facing,0.763,facing,0.749,facing,facing
+1788348708_0_1_none.jpg,223,174,2,none,left_cx=59.1 heading=0 right_cx=174.9 heading=0,,0.977,facing,0.671,facing,0.737,facing,facing
+1788348716_0_1_facing.jpg,155,155,2,facing,left_cx=37.0 heading=1 right_cx=111.0 heading=-1,facing,0.879,facing,0.841,facing,0.655,facing,facing
+1788349451_6_7_none.jpg,131,177,1,none,,,0.803,facing,0.13,not_facing,0.0,no_pair,no_answer
+1788349459_6_3_none.jpg,222,175,2,none,left_cx=50.8 heading=0 right_cx=176.5 heading=0,,0.934,facing,0.197,not_facing,0.53,abstain,facing
+1788349460_6_3_none.jpg,221,175,2,none,left_cx=51.1 heading=0 right_cx=177.1 heading=0,,0.933,facing,0.212,not_facing,0.542,abstain,facing
+1788349460_6_7_none.jpg,162,175,1,none,,,0.933,facing,0.386,not_facing,0.286,no_pair,no_answer
+1788349461_6_3_none.jpg,211,175,2,none,left_cx=51.2 heading=0 right_cx=162.5 heading=0,,0.926,facing,0.349,not_facing,0.561,facing,facing
+1788349464_6_3_none.jpg,220,175,2,none,left_cx=52.1 heading=0 right_cx=174.6 heading=0,,0.926,facing,0.235,not_facing,0.529,abstain,facing
+1788349466_6_3_none.jpg,219,175,2,none,left_cx=51.2 heading=0 right_cx=175.4 heading=0,,0.919,facing,0.202,not_facing,0.454,abstain,facing
+1788349467_6_3_none.jpg,220,175,2,none,left_cx=50.9 heading=0 right_cx=181.2 heading=0,,0.92,facing,0.104,not_facing,0.445,abstain,facing
+1788349468_6_3_none.jpg,220,175,2,none,left_cx=52.3 heading=0 right_cx=187.8 heading=0,facing,0.877,facing,0.157,not_facing,0.374,abstain,facing
+1788349480_6_8_none.jpg,230,175,2,none,left_cx=51.1 heading=0 right_cx=179.0 heading=0,facing,0.939,facing,0.22,not_facing,0.535,abstain,facing
+1788349483_6_3_none.jpg,228,171,2,none,left_cx=50.3 heading=0 right_cx=179.4 heading=0,,0.936,facing,0.382,not_facing,0.592,facing,facing
+1788349484_6_3_none.jpg,223,171,2,none,left_cx=49.2 heading=0 right_cx=174.1 heading=0,,0.954,facing,0.266,not_facing,0.628,facing,facing
+1788349485_6_3_none.jpg,225,171,2,none,left_cx=48.4 heading=0 right_cx=175.4 heading=0,,0.941,facing,0.279,not_facing,0.58,facing,facing
+1788349486_6_3_none.jpg,225,171,2,none,left_cx=48.5 heading=0 right_cx=175.6 heading=0,,0.945,facing,0.328,not_facing,0.588,facing,facing
+1788349487_6_3_none.jpg,224,171,2,none,left_cx=48.6 heading=0 right_cx=176.5 heading=0,,0.947,facing,0.331,not_facing,0.612,facing,facing
+1788349488_6_3_none.jpg,225,171,2,none,left_cx=49.3 heading=0 right_cx=176.0 heading=0,,0.945,facing,0.257,not_facing,0.59,facing,facing
+1788349489_6_3_none.jpg,224,171,2,none,left_cx=49.4 heading=0 right_cx=176.9 heading=0,,0.942,facing,0.321,not_facing,0.591,facing,facing
+1788349490_6_3_none.jpg,225,171,2,none,left_cx=48.1 heading=0 right_cx=176.5 heading=0,facing,0.937,facing,0.301,not_facing,0.577,facing,facing
+1788349491_6_3_none.jpg,227,171,2,none,left_cx=47.9 heading=0 right_cx=176.3 heading=0,,0.948,facing,0.352,not_facing,0.615,facing,facing
+1788349492_6_3_none.jpg,225,171,2,none,left_cx=48.3 heading=0 right_cx=175.3 heading=0,facing,0.944,facing,0.331,not_facing,0.587,facing,facing
+1788349493_6_3_none.jpg,221,171,2,none,left_cx=49.3 heading=0 right_cx=173.0 heading=0,,0.942,facing,0.402,not_facing,0.605,facing,facing
+1788349494_6_3_none.jpg,223,172,2,none,left_cx=50.1 heading=0 right_cx=179.9 heading=0,,0.942,facing,0.359,not_facing,0.574,facing,facing
+1788349495_6_3_none.jpg,222,171,2,none,left_cx=50.0 heading=0 right_cx=172.1 heading=0,,0.957,facing,0.365,not_facing,0.618,facing,facing
+1788349496_6_3_none.jpg,226,171,2,none,left_cx=53.0 heading=0 right_cx=175.4 heading=0,facing,0.967,facing,0.252,not_facing,0.624,facing,facing
+1788349500_6_3_facing.jpg,156,157,2,facing,left_cx=38.2 heading=1 right_cx=123.4 heading=-1,,0.922,facing,0.681,facing,0.738,facing,facing
+1788349511_6_9_none.jpg,92,157,0,none,,,0.763,facing,0.657,facing,0.088,no_pair,no_answer
+1788349512_6_9_none.jpg,92,157,0,none,,,0.791,facing,0.646,facing,0.107,no_pair,no_answer
+1788349513_6_9_none.jpg,92,157,0,none,,,0.786,facing,0.642,facing,0.116,no_pair,no_answer
+1788351262_0_1_facing.jpg,159,154,2,facing,left_cx=40.0 heading=1 right_cx=126.1 heading=-1,facing,0.91,facing,0.361,not_facing,0.672,facing,facing
+1788351587_1_3_side_by_side.jpg,160,155,2,side_by_side,left_cx=41.4 heading=0 right_cx=127.5 heading=-1,,0.877,facing,0.189,not_facing,0.655,facing,not_facing
+1788354403_0_1_facing.jpg,146,152,2,facing,left_cx=34.9 heading=1 right_cx=112.1 heading=-1,facing,0.949,facing,0.685,facing,0.796,facing,facing
+1788354421_0_2_none.jpg,100,217,1,none,,,0.785,facing,0.039,not_facing,0.001,no_pair,no_answer
+1788355532_0_1_facing.jpg,141,152,2,facing,left_cx=37.7 heading=1 right_cx=106.2 heading=-1,,0.888,facing,0.131,not_facing,0.675,facing,facing
+1788355975_0_1_side_by_side.jpg,136,151,2,side_by_side,left_cx=35.7 heading=0 right_cx=100.6 heading=-1,,0.922,facing,0.243,not_facing,0.739,facing,not_facing
+1788356018_3_4_facing.jpg,150,151,2,facing,left_cx=36.5 heading=1 right_cx=116.8 heading=-1,facing,0.917,facing,0.317,not_facing,0.712,facing,facing
+1788356039_3_5_facing.jpg,134,149,2,side_by_side,left_cx=34.1 heading=0 right_cx=101.6 heading=-1,facing,0.888,facing,0.303,not_facing,0.73,facing,not_facing
+1788358447_0_1_side_by_side.jpg,110,149,2,side_by_side,left_cx=36.7 heading=0 right_cx=54.2 heading=-1,not_facing,0.857,facing,0.303,not_facing,0.606,facing,not_facing
+1788358451_1_2_side_by_side.jpg,123,148,2,facing,left_cx=35.2 heading=1 right_cx=93.1 heading=-1,,0.89,facing,0.567,facing,0.682,facing,facing
+1788358452_0_2_none.jpg,75,148,1,none,,,0.566,facing,0.012,not_facing,0.0,no_pair,no_answer
+1788358461_2_3_none.jpg,116,149,3,none,,,0.62,facing,0.002,not_facing,0.473,abstain,no_answer
+1788358462_2_3_side_by_side.jpg,113,149,2,side_by_side,left_cx=32.9 heading=0 right_cx=75.5 heading=-1,not_facing,0.853,facing,0.051,not_facing,0.725,facing,not_facing
+1788358486_2_4_side_by_side.jpg,99,156,2,side_by_side,left_cx=40.2 heading=0 right_cx=65.2 heading=-1,not_facing,0.907,facing,0.076,not_facing,0.495,abstain,not_facing
+1788358807_1_2_none.jpg,89,152,1,none,,,0.734,facing,0.136,not_facing,0.001,no_pair,no_answer
+1788358817_0_2_side_by_side.jpg,132,151,2,facing,left_cx=34.5 heading=1 right_cx=97.5 heading=-1,,0.823,facing,0.209,not_facing,0.672,facing,facing
+1788358839_0_4_side_by_side.jpg,122,150,2,side_by_side,left_cx=26.9 heading=0 right_cx=96.9 heading=-1,,0.886,facing,0.469,abstain,0.754,facing,not_facing
+1788358886_5_6_none.jpg,132,152,1,none,,,0.89,facing,0.526,abstain,0.074,no_pair,no_answer
+1788358898_5_7_side_by_side.jpg,133,153,2,side_by_side,left_cx=40.0 heading=0 right_cx=99.3 heading=-1,,0.89,facing,0.604,facing,0.656,facing,not_facing
+1788358919_7_8_side_by_side.jpg,132,152,2,side_by_side,left_cx=36.9 heading=0 right_cx=98.9 heading=-1,facing,0.889,facing,0.238,not_facing,0.633,facing,not_facing
+1788424561_1_2_facing.jpg,159,152,2,facing,left_cx=40.6 heading=1 right_cx=124.8 heading=-1,facing,0.864,facing,0.275,not_facing,0.623,facing,facing
+1788425213_2_4_facing.jpg,129,145,2,side_by_side,left_cx=35.1 heading=1 right_cx=92.7 heading=0,,0.878,facing,0.7,facing,0.7,facing,not_facing
+1788425224_2_5_side_by_side.jpg,135,147,2,side_by_side,left_cx=36.8 heading=0 right_cx=94.5 heading=0,,0.907,facing,0.045,not_facing,0.32,no_pair,not_facing
+1788425256_5_6_side_by_side.jpg,137,147,2,side_by_side,left_cx=36.3 heading=0 right_cx=102.7 heading=-1,,0.766,facing,0.325,not_facing,0.587,facing,not_facing
+1788426025_1_3_side_by_side.jpg,145,150,2,side_by_side,left_cx=38.1 heading=0 right_cx=110.1 heading=0,not_facing,0.712,facing,0.052,not_facing,0.513,abstain,not_facing
+1788426072_3_5_none.jpg,100,151,3,none,,,0.905,facing,0.017,not_facing,0.513,abstain,no_answer
+1788426072_3_5_side_by_side.jpg,100,151,2,side_by_side,left_cx=36.4 heading=1 right_cx=86.4 heading=0,,0.917,facing,0.257,not_facing,0.802,facing,not_facing
+1788426072_4_5_none.jpg,94,149,3,none,,,0.815,facing,0.01,not_facing,0.452,abstain,no_answer
+1788426072_4_5_side_by_side.jpg,91,150,2,side_by_side,left_cx=8.9 heading=1 right_cx=56.4 heading=0,,0.772,facing,0.015,not_facing,0.419,abstain,not_facing
+1788426083_3_4_side_by_side.jpg,105,151,2,side_by_side,left_cx=34.9 heading=1 right_cx=69.2 heading=0,,0.706,facing,0.054,not_facing,0.679,facing,not_facing
+1788426111_3_6_side_by_side.jpg,122,150,2,side_by_side,left_cx=37.8 heading=1 right_cx=87.4 heading=0,,0.806,facing,0.101,not_facing,0.684,facing,not_facing
+1788426794_0_1_none.jpg,84,156,3,none,,,0.93,facing,0.824,facing,0.025,no_pair,no_answer
+1788426795_0_1_none.jpg,84,156,2,side_by_side,left_cx=46.7 heading=1 right_cx=51.4 heading=1,,0.94,facing,0.776,facing,0.031,no_pair,not_facing
+1788427010_2_3_side_by_side.jpg,100,152,2,side_by_side,left_cx=40.2 heading=0 right_cx=62.3 heading=-1,,0.957,facing,0.946,facing,0.833,facing,not_facing
+1788427019_2_4_side_by_side.jpg,200,156,2,side_by_side,left_cx=52.1 heading=1 right_cx=163.7 heading=0,,0.977,facing,0.954,facing,0.802,facing,not_facing
+1788427063_2_4_side_by_side.jpg,185,155,2,side_by_side,left_cx=50.7 heading=1 right_cx=146.7 heading=0,,0.964,facing,0.975,facing,0.87,facing,not_facing
+1788427065_2_4_side_by_side.jpg,156,155,2,side_by_side,left_cx=44.9 heading=1 right_cx=117.4 heading=0,,0.968,facing,0.989,facing,0.842,facing,not_facing
+1788427113_7_8_none.jpg,107,153,2,none,left_cx=30.2 heading=0 right_cx=71.6 heading=0,,0.938,facing,0.472,abstain,0.66,facing,facing
+1788427120_6_8_none.jpg,138,165,2,none,left_cx=44.0 heading=0 right_cx=107.3 heading=0,,0.975,facing,0.638,facing,0.765,facing,facing
+1788427121_6_8_none.jpg,161,164,2,none,left_cx=37.9 heading=0 right_cx=106.1 heading=0,,0.954,facing,0.916,facing,0.796,facing,facing
+1788427123_6_8_none.jpg,195,162,2,none,left_cx=60.0 heading=0 right_cx=160.0 heading=0,,0.951,facing,0.914,facing,0.752,facing,facing
+1788427129_6_8_side_by_side.jpg,172,153,2,side_by_side,left_cx=37.6 heading=1 right_cx=133.7 heading=0,,0.884,facing,0.682,facing,0.675,facing,not_facing
+1788427246_12_13_none.jpg,123,174,0,none,,,0.846,facing,0.461,abstain,0.162,no_pair,no_answer
+1788427246_9_12_none.jpg,228,174,0,none,,,0.808,facing,0.317,not_facing,0.189,no_pair,no_answer
+1788427246_9_13_none.jpg,228,174,0,none,,,0.808,facing,0.317,not_facing,0.189,no_pair,no_answer
+1788427247_9_13_none.jpg,228,174,0,none,,,0.975,facing,0.904,facing,0.016,no_pair,no_answer
+1788427248_9_13_none.jpg,228,174,0,none,,,0.97,facing,0.883,facing,0.001,no_pair,no_answer
+1788427276_15_18_none.jpg,143,161,1,none,,,0.766,facing,0.096,not_facing,0.0,no_pair,no_answer
+1788427277_15_18_none.jpg,129,162,0,none,,,0.768,facing,0.75,facing,0.291,no_pair,no_answer
+1788783363_23_24_side_by_side.jpg,107,165,2,side_by_side,left_cx=58.9 heading=0 right_cx=100.3 heading=0,,0.908,facing,0.761,facing,0.35,no_pair,not_facing
+1788783396_28_29_none.jpg,97,154,1,none,,,0.773,facing,0.978,facing,0.061,no_pair,no_answer
+1788783397_28_29_none.jpg,130,153,1,none,,,0.562,facing,0.955,facing,0.002,no_pair,no_answer
+1788783398_29_30_side_by_side.jpg,91,155,2,diverging,left_cx=7.3 heading=-1 right_cx=45.3 heading=1,no_pair,0.704,facing,0.922,facing,0.009,no_pair,not_facing
+1788783400_27_31_none.jpg,115,249,0,none,,,0.96,facing,0.892,facing,0.004,no_pair,no_answer
+1788783401_27_31_none.jpg,115,249,0,none,,,0.965,facing,0.908,facing,0.015,no_pair,no_answer
+1788783402_27_31_none.jpg,115,249,1,none,,,0.964,facing,0.96,facing,0.037,no_pair,no_answer
+1789133712_37_40_side_by_side.jpg,249,195,2,side_by_side,left_cx=73.0 heading=1 right_cx=183.8 heading=0,,0.819,facing,0.925,facing,0.467,abstain,not_facing
+1789134006_40_51_none.jpg,249,198,3,none,,,0.764,facing,0.501,abstain,0.453,abstain,no_answer
+1789134406_40_58_side_by_side.jpg,249,193,2,side_by_side,left_cx=61.2 heading=0 right_cx=235.8 heading=1,,0.534,abstain,0.755,facing,0.078,no_pair,not_facing
+1789134482_40_61_none.jpg,249,194,2,none,left_cx=60.2 heading=0 right_cx=235.6 heading=0,,0.484,abstain,0.617,facing,0.068,no_pair,no_answer
+1789134483_40_61_none.jpg,249,192,2,none,left_cx=60.4 heading=0 right_cx=235.5 heading=0,,0.487,abstain,0.623,facing,0.076,no_pair,no_answer
+1789134484_40_61_side_by_side.jpg,249,192,2,none,left_cx=59.5 heading=0 right_cx=235.3 heading=0,,0.468,abstain,0.626,facing,0.083,no_pair,no_answer
+1789134503_40_61_side_by_side.jpg,249,198,2,none,left_cx=59.1 heading=0 right_cx=235.2 heading=0,,0.594,facing,0.822,facing,0.068,no_pair,facing
+1789134518_40_61_none.jpg,249,193,2,none,left_cx=60.1 heading=0 right_cx=235.8 heading=0,,0.553,facing,0.654,facing,0.055,no_pair,facing
+1789134519_40_61_none.jpg,249,193,2,none,left_cx=59.6 heading=0 right_cx=235.5 heading=0,,0.55,abstain,0.671,facing,0.072,no_pair,no_answer
+1789134790_87_91_none.jpg,249,200,2,none,left_cx=61.3 heading=0 right_cx=229.8 heading=0,,0.532,abstain,0.774,facing,0.087,no_pair,no_answer
+1789134791_87_91_none.jpg,249,200,2,none,left_cx=44.5 heading=0 right_cx=235.6 heading=0,,0.518,abstain,0.763,facing,0.071,no_pair,no_answer
+1789134905_96_98_none.jpg,249,200,1,none,,,0.493,abstain,0.708,facing,0.005,no_pair,no_answer
+1789134971_100_101_none.jpg,244,191,1,none,,,0.785,facing,0.888,facing,0.383,abstain,no_answer
+1789135113_104_106_none.jpg,249,191,2,none,left_cx=42.2 heading=0 right_cx=229.1 heading=0,,0.74,facing,0.585,facing,0.155,no_pair,facing
+1789135114_104_106_none.jpg,249,191,1,none,,,0.792,facing,0.65,facing,0.173,no_pair,no_answer
+1789135119_104_106_none.jpg,249,179,2,none,left_cx=40.2 heading=0 right_cx=215.2 heading=0,,0.88,facing,0.87,facing,0.654,facing,facing
+1789135120_104_106_none.jpg,249,179,2,none,left_cx=39.9 heading=0 right_cx=212.6 heading=0,,0.901,facing,0.92,facing,0.72,facing,facing
+1789135121_104_106_none.jpg,249,185,2,none,left_cx=40.5 heading=0 right_cx=211.1 heading=0,,0.869,facing,0.787,facing,0.629,facing,facing
+1789135122_104_106_none.jpg,249,185,2,none,left_cx=40.3 heading=0 right_cx=211.5 heading=0,,0.856,facing,0.782,facing,0.657,facing,facing
+1789135123_104_106_none.jpg,249,185,2,none,left_cx=40.7 heading=0 right_cx=212.6 heading=0,,0.797,facing,0.852,facing,0.624,facing,facing
+1789135124_104_106_none.jpg,249,185,2,none,left_cx=40.9 heading=0 right_cx=211.4 heading=0,,0.822,facing,0.708,facing,0.634,facing,facing
+1789135125_104_106_none.jpg,249,185,2,none,left_cx=41.0 heading=0 right_cx=212.1 heading=0,,0.809,facing,0.882,facing,0.647,facing,facing
+1789135125_104_106_side_by_side.jpg,249,185,2,side_by_side,left_cx=41.3 heading=1 right_cx=212.7 heading=0,,0.765,facing,0.87,facing,0.602,facing,not_facing
+1789135128_104_106_side_by_side.jpg,249,184,2,side_by_side,left_cx=41.4 heading=1 right_cx=212.9 heading=0,,0.769,facing,0.912,facing,0.635,facing,not_facing
+1789135193_104_108_none.jpg,249,204,1,none,,,0.838,facing,0.89,facing,0.366,abstain,no_answer
+1789135193_104_108_side_by_side.jpg,249,180,2,none,left_cx=33.9 heading=0 right_cx=223.3 heading=0,,0.917,facing,0.888,facing,0.582,facing,facing
+1789135265_104_113_side_by_side.jpg,249,175,2,side_by_side,left_cx=16.4 heading=1 right_cx=223.4 heading=1,,0.846,facing,0.741,facing,0.057,no_pair,not_facing
+1789135267_104_113_side_by_side.jpg,249,185,2,side_by_side,left_cx=18.3 heading=0 right_cx=223.6 heading=1,,0.897,facing,0.774,facing,0.202,no_pair,not_facing
+1789135302_113_117_none.jpg,249,177,2,none,left_cx=39.2 heading=0 right_cx=223.0 heading=0,,0.946,facing,0.679,facing,0.609,facing,facing
+1789135303_113_117_none.jpg,249,180,2,side_by_side,left_cx=38.6 heading=0 right_cx=223.8 heading=1,,0.954,facing,0.689,facing,0.598,facing,not_facing
+1789736517_0_1_facing.jpg,148,153,2,facing,left_cx=43.0 heading=1 right_cx=114.5 heading=-1,,0.884,facing,0.289,not_facing,0.688,facing,facing
+1789736524_1_2_none.jpg,92,162,1,none,,,0.918,facing,0.011,not_facing,0.542,abstain,no_answer
+1789736555_0_3_none.jpg,209,167,2,none,left_cx=47.4 heading=0 right_cx=159.7 heading=0,,0.945,facing,0.263,not_facing,0.532,abstain,facing
+1789736556_0_3_none.jpg,206,167,2,none,left_cx=47.1 heading=0 right_cx=157.3 heading=0,,0.944,facing,0.335,not_facing,0.635,facing,facing
+1789736557_0_3_none.jpg,205,167,2,none,left_cx=46.5 heading=0 right_cx=158.6 heading=0,,0.943,facing,0.373,not_facing,0.585,facing,facing
+1789736558_0_3_none.jpg,205,167,2,none,left_cx=49.7 heading=0 right_cx=160.3 heading=0,,0.919,facing,0.267,not_facing,0.53,abstain,facing
+1789736559_0_3_none.jpg,204,168,2,none,left_cx=46.8 heading=0 right_cx=159.7 heading=0,,0.919,facing,0.191,not_facing,0.559,facing,facing
+1789736560_0_3_none.jpg,206,167,2,none,left_cx=48.4 heading=0 right_cx=157.7 heading=0,,0.906,facing,0.222,not_facing,0.551,facing,facing
+1789736561_0_3_none.jpg,206,168,2,none,left_cx=44.1 heading=0 right_cx=158.8 heading=0,,0.927,facing,0.293,not_facing,0.574,facing,facing
+1789736562_0_3_none.jpg,209,165,2,none,left_cx=37.0 heading=0 right_cx=163.6 heading=0,,0.931,facing,0.181,not_facing,0.649,facing,facing
+1789736563_0_3_none.jpg,206,167,2,none,left_cx=35.8 heading=0 right_cx=163.4 heading=0,,0.918,facing,0.136,not_facing,0.564,facing,facing
+1789736564_0_3_none.jpg,204,167,2,none,left_cx=37.8 heading=0 right_cx=161.7 heading=0,,0.922,facing,0.087,not_facing,0.561,facing,facing
+1789736565_0_3_none.jpg,204,166,2,none,left_cx=38.8 heading=0 right_cx=162.0 heading=0,,0.921,facing,0.105,not_facing,0.548,abstain,facing
+1789736566_0_3_none.jpg,202,166,2,none,left_cx=38.3 heading=0 right_cx=159.1 heading=0,,0.953,facing,0.301,not_facing,0.644,facing,facing
+1789736567_0_3_none.jpg,202,166,2,none,left_cx=37.1 heading=0 right_cx=160.0 heading=0,,0.942,facing,0.237,not_facing,0.625,facing,facing
+1789736568_0_3_none.jpg,202,167,2,none,left_cx=53.4 heading=0 right_cx=160.9 heading=0,,0.95,facing,0.205,not_facing,0.611,facing,facing
+1789736569_0_3_none.jpg,185,166,2,none,left_cx=52.1 heading=0 right_cx=143.0 heading=0,,0.861,facing,0.036,not_facing,0.38,not_facing,facing
+1789736570_0_3_none.jpg,177,164,2,none,left_cx=46.7 heading=0 right_cx=128.1 heading=0,,0.809,facing,0.02,not_facing,0.313,not_facing,facing
+1789736571_0_3_none.jpg,170,164,2,none,left_cx=45.5 heading=0 right_cx=121.3 heading=0,,0.836,facing,0.034,not_facing,0.348,not_facing,facing
+1789736572_0_3_none.jpg,171,164,2,none,left_cx=45.6 heading=0 right_cx=122.0 heading=0,,0.806,facing,0.019,not_facing,0.343,not_facing,facing
+1789736573_0_3_none.jpg,177,163,2,none,left_cx=43.3 heading=0 right_cx=129.0 heading=0,,0.794,facing,0.023,not_facing,0.33,not_facing,facing
+1789736574_0_3_none.jpg,202,164,2,none,left_cx=30.5 heading=0 right_cx=154.3 heading=0,,0.952,facing,0.507,abstain,0.634,facing,facing
+1789736575_0_3_none.jpg,206,231,1,none,,,0.659,facing,0.204,not_facing,0.002,no_pair,no_answer
+1789736576_0_3_none.jpg,212,231,1,none,,,0.633,facing,0.215,not_facing,0.002,no_pair,no_answer
+1789736577_0_3_none.jpg,188,231,1,none,,,0.737,facing,0.178,not_facing,0.002,no_pair,no_answer
+1789736602_0_4_none.jpg,219,171,2,none,left_cx=41.2 heading=0 right_cx=175.5 heading=0,,0.965,facing,0.222,not_facing,0.6,facing,facing
+1789736603_0_4_none.jpg,216,171,2,none,left_cx=41.5 heading=0 right_cx=170.0 heading=0,facing,0.96,facing,0.261,not_facing,0.608,facing,facing
+1789736604_0_4_none.jpg,214,171,2,none,left_cx=41.8 heading=0 right_cx=168.2 heading=0,,0.965,facing,0.208,not_facing,0.554,facing,facing
+1789736605_0_4_none.jpg,194,164,2,none,left_cx=57.1 heading=0 right_cx=150.6 heading=0,,0.823,facing,0.077,not_facing,0.433,abstain,facing
+1789736606_0_4_none.jpg,187,164,2,none,left_cx=46.8 heading=0 right_cx=146.0 heading=0,,0.876,facing,0.095,not_facing,0.56,facing,facing
+1789736607_0_4_none.jpg,189,164,2,none,left_cx=44.1 heading=0 right_cx=145.5 heading=0,facing,0.838,facing,0.082,not_facing,0.531,abstain,facing
+1789736608_0_4_none.jpg,186,165,2,none,left_cx=44.8 heading=0 right_cx=143.0 heading=0,,0.903,facing,0.43,not_facing,0.622,facing,facing
+1789736609_0_4_none.jpg,187,164,2,none,left_cx=44.4 heading=0 right_cx=142.7 heading=0,facing,0.923,facing,0.295,not_facing,0.608,facing,facing
+1789736610_0_4_none.jpg,187,164,2,none,left_cx=45.4 heading=0 right_cx=141.9 heading=0,,0.923,facing,0.414,not_facing,0.618,facing,facing
+1789736611_0_4_none.jpg,186,164,2,none,left_cx=45.2 heading=0 right_cx=141.4 heading=0,,0.922,facing,0.463,abstain,0.642,facing,facing
+1789736612_0_4_none.jpg,186,164,2,none,left_cx=46.6 heading=0 right_cx=142.9 heading=0,,0.92,facing,0.41,not_facing,0.624,facing,facing
+1789736613_0_4_none.jpg,169,165,2,none,left_cx=51.8 heading=0 right_cx=124.9 heading=0,,0.852,facing,0.324,not_facing,0.515,abstain,facing
+1789736614_0_4_none.jpg,145,161,2,none,left_cx=40.3 heading=0 right_cx=100.5 heading=0,,0.765,facing,0.145,not_facing,0.461,abstain,facing
+1789736615_0_4_none.jpg,145,161,2,none,left_cx=40.3 heading=0 right_cx=100.5 heading=0,,0.765,facing,0.145,not_facing,0.461,abstain,facing
+1789736617_0_4_side_by_side.jpg,136,155,2,side_by_side,left_cx=36.4 heading=0 right_cx=96.4 heading=0,,0.912,facing,0.919,facing,0.697,facing,not_facing
+1789736689_0_5_none.jpg,219,178,2,none,left_cx=51.4 heading=0 right_cx=188.3 heading=0,,0.962,facing,0.396,not_facing,0.634,facing,facing
+1789736690_0_5_none.jpg,231,182,2,none,left_cx=68.8 heading=0 right_cx=209.9 heading=0,,0.935,facing,0.279,not_facing,0.514,abstain,facing
+1789736691_0_5_none.jpg,199,186,2,none,left_cx=47.1 heading=0 right_cx=177.5 heading=0,,0.883,facing,0.199,not_facing,0.187,no_pair,facing
+1789736692_0_5_none.jpg,231,190,2,none,left_cx=30.4 heading=0 right_cx=196.7 heading=0,,0.959,facing,0.276,not_facing,0.587,facing,facing
+1789736692_0_5_side_by_side.jpg,249,188,2,none,left_cx=25.4 heading=0 right_cx=202.1 heading=0,,0.951,facing,0.271,not_facing,0.54,abstain,facing
+1789736703_0_7_none.jpg,236,216,1,none,,,0.973,facing,0.48,abstain,0.159,no_pair,no_answer
+1789736704_0_7_none.jpg,236,216,0,none,,,0.906,facing,0.801,facing,0.001,no_pair,no_answer
+1789736705_0_7_none.jpg,236,223,1,none,,,0.958,facing,0.603,facing,0.008,no_pair,no_answer
+1789736706_0_7_none.jpg,202,237,1,none,,,0.609,facing,0.015,not_facing,0.002,no_pair,no_answer
+1789736707_0_7_none.jpg,146,249,0,none,,,0.782,facing,0.622,facing,0.355,no_pair,no_answer
+1789736708_0_7_none.jpg,146,249,0,none,,,0.824,facing,0.661,facing,0.046,no_pair,no_answer
+1789736709_0_7_none.jpg,146,249,0,none,,,0.979,facing,0.915,facing,0.049,no_pair,no_answer
+1789736710_0_7_none.jpg,146,249,0,none,,,0.903,facing,0.774,facing,0.213,no_pair,no_answer
+1789736719_9_10_none.jpg,161,249,0,none,,,0.951,facing,0.358,not_facing,0.054,no_pair,no_answer
+1789736720_9_10_none.jpg,249,246,0,none,,,0.958,facing,0.758,facing,0.004,no_pair,no_answer
+1789736728_9_10_none.jpg,165,249,0,none,,,0.972,facing,0.278,not_facing,0.121,no_pair,no_answer
+1789736729_9_10_none.jpg,179,249,0,none,,,0.572,facing,0.146,not_facing,0.446,abstain,no_answer
+1789736730_9_10_none.jpg,179,249,0,none,,,0.941,facing,0.757,facing,0.01,no_pair,no_answer
+1789736731_9_10_none.jpg,179,249,0,none,,,0.897,facing,0.52,abstain,0.0,no_pair,no_answer
+1789736732_9_10_none.jpg,179,249,0,none,,,0.901,facing,0.902,facing,0.0,no_pair,no_answer
+1789736739_12_13_none.jpg,182,232,0,none,,,0.865,facing,0.715,facing,0.047,no_pair,no_answer
+1789736740_12_13_none.jpg,182,232,0,none,,,0.952,facing,0.881,facing,0.004,no_pair,no_answer
+1789736741_12_13_none.jpg,182,232,0,none,,,0.792,facing,0.681,facing,0.115,no_pair,no_answer
+1789738641_0_2_side_by_side.jpg,162,156,2,side_by_side,left_cx=39.0 heading=1 right_cx=125.6 heading=0,,0.867,facing,0.323,not_facing,0.56,facing,not_facing
+1789738661_0_2_none.jpg,204,161,2,none,left_cx=48.2 heading=0 right_cx=161.6 heading=0,,0.942,facing,0.061,not_facing,0.619,facing,facing
+1789738662_0_2_none.jpg,204,161,2,none,left_cx=48.2 heading=0 right_cx=162.5 heading=0,,0.933,facing,0.034,not_facing,0.558,facing,facing
+1789738663_0_2_none.jpg,205,161,2,none,left_cx=48.0 heading=0 right_cx=162.1 heading=0,,0.942,facing,0.074,not_facing,0.587,facing,facing
+1789738664_0_2_none.jpg,205,161,2,none,left_cx=48.1 heading=0 right_cx=162.2 heading=0,,0.948,facing,0.095,not_facing,0.617,facing,facing
+1789738665_0_2_none.jpg,205,162,2,none,left_cx=48.4 heading=0 right_cx=161.7 heading=0,,0.937,facing,0.066,not_facing,0.64,facing,facing
+1789738666_0_2_none.jpg,202,161,2,none,left_cx=49.0 heading=0 right_cx=161.4 heading=0,,0.931,facing,0.043,not_facing,0.601,facing,facing
+1789738667_0_2_none.jpg,203,161,2,none,left_cx=49.0 heading=0 right_cx=162.4 heading=0,,0.919,facing,0.04,not_facing,0.566,facing,facing
+1789738668_0_2_none.jpg,206,161,2,none,left_cx=48.3 heading=0 right_cx=164.6 heading=0,,0.938,facing,0.092,not_facing,0.576,facing,facing
+1789738669_0_2_none.jpg,205,161,2,none,left_cx=48.7 heading=0 right_cx=162.7 heading=0,,0.936,facing,0.059,not_facing,0.601,facing,facing
+1789738670_0_2_none.jpg,205,161,2,none,left_cx=48.7 heading=0 right_cx=161.1 heading=0,,0.933,facing,0.088,not_facing,0.619,facing,facing
+1789738671_0_2_none.jpg,202,161,2,none,left_cx=49.1 heading=0 right_cx=160.2 heading=0,,0.943,facing,0.138,not_facing,0.634,facing,facing
+1789738672_0_2_none.jpg,203,161,2,none,left_cx=48.9 heading=0 right_cx=160.8 heading=0,,0.929,facing,0.064,not_facing,0.613,facing,facing
+1789738673_0_2_none.jpg,199,159,2,none,left_cx=56.3 heading=0 right_cx=162.6 heading=0,,0.946,facing,0.159,not_facing,0.553,facing,facing
+1789738675_0_2_side_by_side.jpg,178,158,2,side_by_side,left_cx=47.6 heading=0 right_cx=139.4 heading=0,,0.893,facing,0.098,not_facing,0.576,facing,not_facing
+1789738691_3_4_none.jpg,124,166,1,none,,,0.886,facing,0.221,not_facing,0.002,no_pair,no_answer
+1789738692_3_4_none.jpg,184,170,3,none,,,0.982,facing,0.585,facing,0.748,facing,no_answer
+1789738695_3_6_none.jpg,218,185,2,none,left_cx=46.1 heading=0 right_cx=191.8 heading=0,,0.94,facing,0.214,not_facing,0.527,abstain,facing
+1789738696_3_6_side_by_side.jpg,249,183,2,side_by_side,left_cx=27.9 heading=0 right_cx=198.8 heading=-1,,0.971,facing,0.25,not_facing,0.549,abstain,not_facing
+1789738699_6_7_none.jpg,236,187,1,none,,,0.92,facing,0.136,not_facing,0.006,no_pair,no_answer
+1789738700_6_7_none.jpg,236,202,1,none,,,0.928,facing,0.296,not_facing,0.007,no_pair,no_answer
+1789738701_3_7_none.jpg,249,202,2,none,left_cx=37.6 heading=0 right_cx=232.1 heading=0,,0.925,facing,0.109,not_facing,0.047,no_pair,facing
+1789738702_3_7_none.jpg,249,203,2,none,left_cx=35.4 heading=0 right_cx=231.6 heading=0,,0.956,facing,0.237,not_facing,0.061,no_pair,facing
+1789738717_3_13_none.jpg,248,249,1,none,,,0.892,facing,0.281,not_facing,0.003,no_pair,no_answer
+1789738730_3_14_none.jpg,180,249,0,none,,,0.833,facing,0.686,facing,0.363,abstain,no_answer
+1789738731_3_14_none.jpg,180,249,0,none,,,0.889,facing,0.561,facing,0.029,no_pair,no_answer
+1789738732_3_14_none.jpg,180,249,0,none,,,0.867,facing,0.542,abstain,0.52,abstain,no_answer
+1789740445_3_4_facing.jpg,125,157,2,facing,left_cx=22.3 heading=1 right_cx=93.4 heading=-1,,0.894,facing,0.345,not_facing,0.719,facing,facing
+1789740460_3_4_side_by_side.jpg,124,157,2,side_by_side,left_cx=24.5 heading=0 right_cx=92.8 heading=-1,,0.863,facing,0.234,not_facing,0.663,facing,not_facing
+1789740477_3_4_facing.jpg,114,155,2,facing,left_cx=20.8 heading=1 right_cx=80.9 heading=-1,,0.839,facing,0.158,not_facing,0.668,facing,facing
+1789741442_3_4_none.jpg,89,165,1,none,,,0.79,facing,0.857,facing,0.037,no_pair,no_answer
+1789741443_3_4_none.jpg,89,162,1,none,,,0.88,facing,0.762,facing,0.42,no_pair,no_answer
+1789741444_3_4_none.jpg,89,160,1,none,,,0.881,facing,0.368,not_facing,0.001,no_pair,no_answer
+1789741469_5_6_side_by_side.jpg,134,157,2,side_by_side,left_cx=43.8 heading=1 right_cx=92.0 heading=0,,0.82,facing,0.861,facing,0.581,facing,not_facing
+1789741499_5_6_facing.jpg,132,155,2,facing,left_cx=37.0 heading=1 right_cx=97.1 heading=-1,,0.933,facing,0.902,facing,0.774,facing,facing
+1789741614_6_7_facing.jpg,142,157,2,facing,left_cx=26.4 heading=1 right_cx=100.1 heading=-1,,0.929,facing,0.747,facing,0.523,abstain,facing
+1789741615_6_8_none.jpg,81,160,1,none,,,0.864,facing,0.147,not_facing,0.002,no_pair,no_answer
+1789741615_7_8_none.jpg,129,160,1,none,,,0.972,facing,0.65,facing,0.003,no_pair,no_answer
+1789741617_8_9_none.jpg,161,161,1,none,,,0.714,facing,0.721,facing,0.0,no_pair,no_answer
+1789741618_6_7_none.jpg,211,168,2,none,left_cx=62.2 heading=0 right_cx=158.5 heading=0,,0.937,facing,0.552,facing,0.601,facing,facing
+1789741618_6_9_none.jpg,87,165,1,none,,,0.92,facing,0.487,abstain,0.327,no_pair,no_answer
+1789741619_6_7_none.jpg,205,171,2,none,left_cx=24.0 heading=0 right_cx=121.1 heading=0,,0.946,facing,0.534,abstain,0.293,no_pair,facing
+1789741619_6_9_none.jpg,111,170,0,none,,,0.836,facing,0.765,facing,0.003,no_pair,no_answer
+1789741620_6_7_none.jpg,190,172,2,none,left_cx=39.6 heading=0 right_cx=147.6 heading=0,,0.92,facing,0.464,abstain,0.553,facing,facing
+1789741620_6_9_none.jpg,120,171,1,none,,,0.654,facing,0.525,abstain,0.0,no_pair,no_answer
+1789741622_6_9_none.jpg,172,180,1,none,,,0.924,facing,0.749,facing,0.077,no_pair,no_answer
+1789741624_6_9_none.jpg,249,188,1,none,,,0.933,facing,0.489,abstain,0.012,no_pair,no_answer
+1789741625_6_9_none.jpg,107,194,1,none,,,0.822,facing,0.177,not_facing,0.002,no_pair,no_answer
+1789741626_6_9_none.jpg,249,208,1,none,,,0.926,facing,0.505,abstain,0.03,no_pair,no_answer
+1789741627_6_9_none.jpg,207,205,1,none,,,0.764,facing,0.197,not_facing,0.001,no_pair,no_answer
+1789741628_6_9_none.jpg,133,201,0,none,,,0.918,facing,0.532,abstain,0.003,no_pair,no_answer
+1789741629_9_12_none.jpg,249,206,2,none,left_cx=133.9 heading=0 right_cx=235.0 heading=0,,0.768,facing,0.169,not_facing,0.001,no_pair,facing
+1789741632_9_12_none.jpg,219,210,1,none,,,0.749,facing,0.036,not_facing,0.001,no_pair,no_answer
+1789741633_9_12_none.jpg,219,210,0,none,,,0.838,facing,0.647,facing,0.033,no_pair,no_answer
+1789741634_9_12_none.jpg,219,210,1,none,,,0.898,facing,0.184,not_facing,0.005,no_pair,no_answer
+1789741635_9_12_none.jpg,219,210,0,none,,,0.881,facing,0.266,not_facing,0.002,no_pair,no_answer
+1789741642_9_13_none.jpg,234,226,0,none,,,0.613,facing,0.954,facing,0.015,no_pair,no_answer
+1789741643_9_13_none.jpg,234,226,0,none,,,0.9,facing,0.27,not_facing,0.009,no_pair,no_answer
+1789741644_9_13_none.jpg,234,226,0,none,,,0.891,facing,0.601,facing,0.007,no_pair,no_answer
+1789741645_9_13_none.jpg,234,238,2,none,left_cx=57.3 heading=0 right_cx=190.6 heading=0,,0.353,not_facing,0.094,not_facing,0.001,no_pair,not_facing
+1789742562_1_2_none.jpg,20,20,0,none,,,0.78,facing,0.332,not_facing,0.506,abstain,no_answer
+1789742563_1_2_none.jpg,20,20,0,none,,,0.787,facing,0.328,not_facing,0.494,abstain,no_answer
+1789742564_1_2_none.jpg,20,20,0,none,,,0.822,facing,0.409,not_facing,0.457,abstain,no_answer
+1789742565_1_2_none.jpg,20,20,0,none,,,0.816,facing,0.349,not_facing,0.471,abstain,no_answer
+1789742567_1_2_none.jpg,20,20,0,none,,,0.781,facing,0.371,not_facing,0.462,abstain,no_answer
+1789742568_1_2_none.jpg,20,20,0,none,,,0.784,facing,0.363,not_facing,0.492,abstain,no_answer
+1789742569_1_2_none.jpg,20,20,0,none,,,0.799,facing,0.386,not_facing,0.475,abstain,no_answer
+1789742570_1_2_none.jpg,20,20,0,none,,,0.785,facing,0.357,not_facing,0.449,abstain,no_answer
+1789742571_1_2_none.jpg,20,20,0,none,,,0.767,facing,0.331,not_facing,0.45,abstain,no_answer
+1789742572_1_2_none.jpg,20,20,0,none,,,0.799,facing,0.397,not_facing,0.476,abstain,no_answer
+1789742573_1_2_none.jpg,20,20,0,none,,,0.804,facing,0.397,not_facing,0.459,abstain,no_answer
+1789742574_1_2_none.jpg,20,20,0,none,,,0.788,facing,0.397,not_facing,0.426,abstain,no_answer
+1789742575_1_2_none.jpg,20,20,0,none,,,0.814,facing,0.423,not_facing,0.452,abstain,no_answer
+1789742576_1_2_none.jpg,20,20,0,none,,,0.807,facing,0.389,not_facing,0.411,no_pair,no_answer
+1789742577_1_2_none.jpg,20,20,0,none,,,0.8,facing,0.535,abstain,0.317,no_pair,no_answer
+1789742578_1_2_none.jpg,20,20,0,none,,,0.8,facing,0.535,abstain,0.317,no_pair,no_answer
+1789742594_3_4_none.jpg,20,20,0,none,,,0.874,facing,0.123,not_facing,0.116,no_pair,no_answer
+1789742595_3_4_none.jpg,20,20,0,none,,,0.902,facing,0.175,not_facing,0.143,no_pair,no_answer
+1789742596_3_4_none.jpg,20,20,0,none,,,0.88,facing,0.144,not_facing,0.219,no_pair,no_answer
+1789742597_3_4_none.jpg,20,20,0,none,,,0.863,facing,0.13,not_facing,0.101,no_pair,no_answer
+1789742598_3_4_none.jpg,20,20,0,none,,,0.885,facing,0.184,not_facing,0.137,no_pair,no_answer
+1789742599_3_4_none.jpg,20,20,0,none,,,0.878,facing,0.132,not_facing,0.175,no_pair,no_answer
+1789742600_3_4_none.jpg,20,20,0,none,,,0.857,facing,0.122,not_facing,0.156,no_pair,no_answer
+1789742601_3_4_none.jpg,20,20,0,none,,,0.861,facing,0.124,not_facing,0.142,no_pair,no_answer
+1789742602_3_4_none.jpg,20,20,0,none,,,0.874,facing,0.166,not_facing,0.226,no_pair,no_answer
+1789742603_3_4_none.jpg,20,20,0,none,,,0.89,facing,0.163,not_facing,0.156,no_pair,no_answer
+1789742604_3_4_none.jpg,20,20,0,none,,,0.875,facing,0.145,not_facing,0.075,no_pair,no_answer
+1789742605_3_4_none.jpg,20,20,0,none,,,0.868,facing,0.167,not_facing,0.089,no_pair,no_answer
+1789742606_3_4_none.jpg,20,20,0,none,,,0.867,facing,0.119,not_facing,0.097,no_pair,no_answer
+1789742607_3_4_none.jpg,20,20,0,none,,,0.878,facing,0.142,not_facing,0.115,no_pair,no_answer
+1789742608_3_4_none.jpg,20,20,0,none,,,0.883,facing,0.083,not_facing,0.164,no_pair,no_answer
+1789742609_3_4_none.jpg,20,20,0,none,,,0.884,facing,0.097,not_facing,0.182,no_pair,no_answer
+1789742610_3_4_none.jpg,20,20,0,none,,,0.889,facing,0.138,not_facing,0.203,no_pair,no_answer
+1789742611_3_4_none.jpg,20,20,0,none,,,0.871,facing,0.102,not_facing,0.171,no_pair,no_answer
+1789742612_3_4_none.jpg,20,20,0,none,,,0.869,facing,0.104,not_facing,0.203,no_pair,no_answer
+1789742613_3_4_none.jpg,20,20,0,none,,,0.893,facing,0.123,not_facing,0.192,no_pair,no_answer
+1789742614_3_4_none.jpg,20,20,0,none,,,0.875,facing,0.094,not_facing,0.238,no_pair,no_answer
+1789742615_3_4_none.jpg,20,20,0,none,,,0.877,facing,0.105,not_facing,0.214,no_pair,no_answer
+1789742616_3_4_none.jpg,20,20,0,none,,,0.875,facing,0.119,not_facing,0.22,no_pair,no_answer
+1789742617_3_4_none.jpg,20,20,0,none,,,0.866,facing,0.113,not_facing,0.22,no_pair,no_answer
+1789742618_3_4_none.jpg,20,20,0,none,,,0.894,facing,0.127,not_facing,0.174,no_pair,no_answer
+1789742619_3_4_none.jpg,20,20,0,none,,,0.866,facing,0.104,not_facing,0.215,no_pair,no_answer
+1789742620_3_4_none.jpg,20,20,0,none,,,0.873,facing,0.133,not_facing,0.243,no_pair,no_answer
+1789742621_3_4_none.jpg,20,20,0,none,,,0.881,facing,0.1,not_facing,0.228,no_pair,no_answer
+1789742622_3_4_none.jpg,20,20,0,none,,,0.879,facing,0.118,not_facing,0.172,no_pair,no_answer
+1789742623_3_4_none.jpg,20,20,0,none,,,0.867,facing,0.098,not_facing,0.174,no_pair,no_answer
+1789742624_3_4_none.jpg,20,20,0,none,,,0.87,facing,0.126,not_facing,0.244,no_pair,no_answer
+1789742625_3_4_none.jpg,20,20,0,none,,,0.884,facing,0.13,not_facing,0.265,no_pair,no_answer
+1789742626_3_4_none.jpg,20,20,0,none,,,0.884,facing,0.127,not_facing,0.289,no_pair,no_answer
+1789742627_3_4_none.jpg,20,20,0,none,,,0.877,facing,0.101,not_facing,0.232,no_pair,no_answer
+1789742628_3_4_none.jpg,20,20,0,none,,,0.878,facing,0.113,not_facing,0.184,no_pair,no_answer
+1789742629_3_4_none.jpg,20,20,0,none,,,0.879,facing,0.097,not_facing,0.252,no_pair,no_answer
+1789742630_3_4_none.jpg,20,20,0,none,,,0.885,facing,0.095,not_facing,0.194,no_pair,no_answer
+1789742631_3_4_none.jpg,20,20,0,none,,,0.877,facing,0.102,not_facing,0.274,no_pair,no_answer
+1789742632_3_4_none.jpg,20,20,0,none,,,0.877,facing,0.102,not_facing,0.274,no_pair,no_answer
+1789743608_0_1_side_by_side.jpg,155,165,2,side_by_side,left_cx=51.8 heading=-1 right_cx=106.1 heading=0,,0.745,facing,0.766,facing,0.368,abstain,not_facing
+1789743615_0_1_none.jpg,115,168,1,none,,,0.814,facing,0.185,not_facing,0.307,not_facing,no_answer
+1789743617_0_1_side_by_side.jpg,160,166,2,none,left_cx=45.5 heading=0 right_cx=106.6 heading=0,,0.799,facing,0.168,not_facing,0.34,abstain,facing
+1789743842_3_4_side_by_side.jpg,165,156,2,side_by_side,left_cx=36.4 heading=1 right_cx=131.5 heading=0,,0.918,facing,0.736,facing,0.665,facing,not_facing
+1789743901_3_4_facing.jpg,154,157,2,facing,left_cx=37.3 heading=1 right_cx=119.2 heading=-1,,0.89,facing,0.71,facing,0.628,facing,facing
+1789743906_3_4_side_by_side.jpg,154,155,2,side_by_side,left_cx=36.2 heading=1 right_cx=118.9 heading=0,,0.889,facing,0.716,facing,0.674,facing,not_facing
+1789743939_3_4_side_by_side.jpg,139,155,2,side_by_side,left_cx=31.8 heading=1 right_cx=102.2 heading=0,,0.898,facing,0.719,facing,0.677,facing,not_facing
+1789743995_3_4_side_by_side.jpg,154,157,2,side_by_side,left_cx=37.2 heading=1 right_cx=112.7 heading=1,,0.876,facing,0.667,facing,0.542,abstain,not_facing
+1789744151_3_4_facing.jpg,134,156,2,facing,left_cx=37.5 heading=1 right_cx=100.6 heading=-1,facing,0.923,facing,0.806,facing,0.758,facing,facing
+1789744184_5_6_none.jpg,186,178,1,none,,,0.945,facing,0.207,not_facing,0.025,no_pair,no_answer
+1789744185_5_6_none.jpg,186,178,2,none,left_cx=9.1 heading=0 right_cx=156.6 heading=0,,0.932,facing,0.178,not_facing,0.194,no_pair,facing
+1789744186_5_6_none.jpg,174,190,0,none,,,0.917,facing,0.282,not_facing,0.027,no_pair,no_answer
+1789744187_4_6_none.jpg,237,190,1,none,,,0.883,facing,0.247,not_facing,0.001,no_pair,no_answer
+1789744188_4_6_none.jpg,227,190,0,none,,,0.828,facing,0.606,facing,0.037,no_pair,no_answer
+1789744191_4_6_none.jpg,249,210,1,none,,,0.813,facing,0.151,not_facing,0.019,no_pair,no_answer
+1789744763_1_2_none.jpg,173,155,1,none,,,0.699,facing,0.868,facing,0.002,no_pair,no_answer
+1789744764_1_2_none.jpg,173,155,1,none,,,0.739,facing,0.887,facing,0.002,no_pair,no_answer
+1789744808_4_5_side_by_side.jpg,129,161,2,side_by_side,left_cx=40.9 heading=0 right_cx=90.1 heading=0,,0.909,facing,0.176,not_facing,0.625,facing,not_facing
+1789744810_4_5_side_by_side.jpg,136,161,2,side_by_side,left_cx=40.4 heading=1 right_cx=97.0 heading=1,,0.815,facing,0.165,not_facing,0.469,abstain,not_facing
+1789744827_4_5_side_by_side.jpg,133,161,2,side_by_side,left_cx=40.0 heading=0 right_cx=95.5 heading=1,,0.795,facing,0.034,not_facing,0.409,abstain,not_facing
+1789744838_4_5_side_by_side.jpg,139,161,2,side_by_side,left_cx=40.9 heading=0 right_cx=100.8 heading=1,,0.799,facing,0.026,not_facing,0.378,not_facing,not_facing
+1789744843_4_5_side_by_side.jpg,140,162,2,side_by_side,left_cx=40.6 heading=0 right_cx=96.4 heading=1,,0.841,facing,0.062,not_facing,0.471,abstain,not_facing
+1789744857_4_5_side_by_side.jpg,131,161,2,side_by_side,left_cx=37.0 heading=1 right_cx=92.4 heading=1,facing,0.906,facing,0.507,abstain,0.586,facing,not_facing
+1789744861_4_5_diverging.jpg,138,159,2,diverging,left_cx=35.3 heading=-1 right_cx=102.6 heading=1,not_facing,0.912,facing,0.329,not_facing,0.588,facing,not_facing
+1789744862_4_5_diverging.jpg,139,160,2,diverging,left_cx=34.1 heading=-1 right_cx=103.0 heading=1,not_facing,0.869,facing,0.289,not_facing,0.504,abstain,not_facing
+1789744863_4_5_diverging.jpg,142,160,2,diverging,left_cx=37.3 heading=-1 right_cx=104.4 heading=1,not_facing,0.916,facing,0.341,not_facing,0.589,facing,not_facing
+1789744864_4_5_side_by_side.jpg,138,160,2,side_by_side,left_cx=38.3 heading=0 right_cx=87.0 heading=1,,0.92,facing,0.115,not_facing,0.282,no_pair,not_facing
+1789744869_4_5_side_by_side.jpg,121,161,2,facing,left_cx=37.6 heading=1 right_cx=82.8 heading=-1,,0.927,facing,0.482,abstain,0.624,facing,facing
+1789744886_4_5_facing.jpg,118,155,2,facing,left_cx=33.1 heading=1 right_cx=87.6 heading=-1,facing,0.902,facing,0.774,facing,0.775,facing,facing
+1789744901_4_5_facing.jpg,119,155,2,facing,left_cx=33.3 heading=1 right_cx=89.1 heading=-1,,0.897,facing,0.719,facing,0.75,facing,facing
+1789744914_4_5_none.jpg,144,154,1,none,,,0.897,facing,0.624,facing,0.002,no_pair,no_answer
+1789744915_4_5_facing.jpg,121,153,2,facing,left_cx=32.8 heading=1 right_cx=88.4 heading=-1,facing,0.908,facing,0.916,facing,0.776,facing,facing
+1789744928_4_5_facing.jpg,126,155,2,facing,left_cx=32.7 heading=1 right_cx=93.2 heading=-1,,0.91,facing,0.78,facing,0.709,facing,facing
+1789744957_4_5_facing.jpg,113,157,2,facing,left_cx=35.8 heading=1 right_cx=79.1 heading=-1,,0.897,facing,0.658,facing,0.767,facing,facing
+1789744983_5_6_side_by_side.jpg,151,160,2,side_by_side,left_cx=39.6 heading=1 right_cx=111.1 heading=0,,0.91,facing,0.648,facing,0.601,facing,not_facing
+1789744984_5_6_facing.jpg,155,160,2,facing,left_cx=38.0 heading=1 right_cx=118.3 heading=-1,facing,0.91,facing,0.873,facing,0.739,facing,facing
+1789745013_6_7_none.jpg,120,199,0,none,,,0.822,facing,0.654,facing,0.288,no_pair,no_answer
+1789745014_6_7_none.jpg,120,199,0,none,,,0.796,facing,0.704,facing,0.435,abstain,no_answer
+1789745472_2_4_side_by_side.jpg,127,157,2,side_by_side,left_cx=35.6 heading=1 right_cx=91.2 heading=1,facing,0.926,facing,0.698,facing,0.739,facing,not_facing
+1789745481_2_4_side_by_side.jpg,128,157,2,side_by_side,left_cx=33.5 heading=1 right_cx=94.6 heading=0,not_facing,0.907,facing,0.607,facing,0.705,facing,not_facing
+1789745560_2_4_facing.jpg,129,156,2,facing,left_cx=32.2 heading=1 right_cx=95.1 heading=-1,,0.935,facing,0.877,facing,0.834,facing,facing
+1789745564_2_4_facing.jpg,130,156,2,facing,left_cx=32.4 heading=1 right_cx=94.7 heading=-1,facing,0.936,facing,0.841,facing,0.805,facing,facing
+1789745567_2_4_side_by_side.jpg,119,157,2,side_by_side,left_cx=32.1 heading=1 right_cx=87.2 heading=0,facing,0.932,facing,0.56,facing,0.767,facing,not_facing
+1789745571_2_4_facing.jpg,118,157,2,facing,left_cx=31.7 heading=1 right_cx=86.1 heading=-1,,0.928,facing,0.667,facing,0.812,facing,facing
+1789745575_2_4_side_by_side.jpg,119,157,2,side_by_side,left_cx=32.5 heading=1 right_cx=88.1 heading=0,,0.918,facing,0.644,facing,0.752,facing,not_facing
+1789994394_3_4_side_by_side.jpg,162,156,2,side_by_side,left_cx=44.1 heading=1 right_cx=111.3 heading=1,,0.876,facing,0.351,not_facing,0.577,facing,not_facing
+1789994418_3_4_side_by_side.jpg,116,158,2,side_by_side,left_cx=37.2 heading=0 right_cx=79.5 heading=0,,0.764,facing,0.01,not_facing,0.517,abstain,not_facing
+1789994436_3_4_side_by_side.jpg,130,159,2,side_by_side,left_cx=41.8 heading=0 right_cx=93.6 heading=0,,0.679,facing,0.013,not_facing,0.334,not_facing,not_facing
+1789994447_3_4_side_by_side.jpg,134,159,2,side_by_side,left_cx=38.9 heading=0 right_cx=95.9 heading=1,,0.767,facing,0.066,not_facing,0.431,not_facing,not_facing
+1789994478_4_5_none.jpg,151,164,1,none,,,0.675,facing,0.07,not_facing,0.0,no_pair,no_answer
+1789994500_4_6_side_by_side.jpg,109,166,2,side_by_side,left_cx=43.8 heading=1 right_cx=98.9 heading=1,,0.71,facing,0.007,not_facing,0.008,no_pair,not_facing
+1789995104_1_2_facing.jpg,142,159,2,facing,left_cx=45.9 heading=1 right_cx=101.9 heading=-1,,0.948,facing,0.88,facing,0.815,facing,facing
+1789995106_1_2_facing.jpg,157,156,2,facing,left_cx=36.1 heading=1 right_cx=122.1 heading=-1,,0.97,facing,0.981,facing,0.919,facing,facing
+1789995120_1_2_facing.jpg,119,156,2,facing,left_cx=38.7 heading=1 right_cx=72.5 heading=-1,not_facing,0.906,facing,0.992,facing,0.849,facing,facing
+1789995127_1_2_facing.jpg,162,156,2,facing,left_cx=35.7 heading=1 right_cx=120.6 heading=-1,,0.976,facing,0.981,facing,0.93,facing,facing
+1789995142_3_4_none.jpg,118,170,1,none,,,0.963,facing,0.943,facing,0.017,no_pair,no_answer
+1789995143_3_4_none.jpg,118,170,1,none,,,0.963,facing,0.943,facing,0.017,no_pair,no_answer
+1789995143_3_5_none.jpg,191,170,2,none,left_cx=17.9 heading=0 right_cx=149.3 heading=0,,0.964,facing,0.912,facing,0.012,no_pair,facing
+1789995144_3_5_side_by_side.jpg,194,170,2,side_by_side,left_cx=17.1 heading=1 right_cx=146.9 heading=0,,0.973,facing,0.921,facing,0.021,no_pair,not_facing
+1789995422_9_10_facing.jpg,141,159,2,facing,left_cx=35.7 heading=1 right_cx=108.2 heading=-1,,0.968,facing,0.991,facing,0.907,facing,facing
+1789995439_9_10_none.jpg,116,157,1,none,,,0.944,facing,0.291,not_facing,0.041,no_pair,no_answer
+1789995440_9_10_none.jpg,106,157,1,none,,,0.801,facing,0.24,not_facing,0.0,no_pair,no_answer
+1789995440_9_10_side_by_side.jpg,138,160,2,side_by_side,left_cx=41.2 heading=0 right_cx=105.5 heading=-1,,0.949,facing,0.906,facing,0.827,facing,not_facing
+1789995456_9_10_side_by_side.jpg,147,162,2,side_by_side,left_cx=48.8 heading=0 right_cx=124.1 heading=0,,0.957,facing,0.89,facing,0.811,facing,not_facing
+1789995468_9_11_none.jpg,187,169,2,side_by_side,left_cx=75.5 heading=0 right_cx=170.8 heading=-1,,0.951,facing,0.487,abstain,0.177,no_pair,not_facing
+1789995489_10_12_none.jpg,123,173,2,none,left_cx=39.2 heading=0 right_cx=72.9 heading=0,,0.923,facing,0.386,not_facing,0.738,facing,facing
+1789995489_10_12_side_by_side.jpg,117,174,1,none,,,0.864,facing,0.092,not_facing,0.368,no_pair,no_answer
+1789997887_1_2_side_by_side.jpg,137,165,2,side_by_side,left_cx=49.5 heading=0 right_cx=94.1 heading=-1,,0.919,facing,0.931,facing,0.816,facing,not_facing
+1789997893_1_2_side_by_side.jpg,157,160,2,facing,left_cx=36.1 heading=1 right_cx=117.5 heading=-1,,0.947,facing,0.888,facing,0.844,facing,facing
+1789997903_1_2_side_by_side.jpg,153,160,2,side_by_side,left_cx=36.3 heading=0 right_cx=114.6 heading=0,,0.95,facing,0.945,facing,0.859,facing,not_facing
+1789997907_1_2_side_by_side.jpg,173,161,2,facing,left_cx=43.8 heading=1 right_cx=135.6 heading=-1,,0.969,facing,0.984,facing,0.886,facing,facing
+1789997928_1_3_side_by_side.jpg,152,163,2,side_by_side,left_cx=39.5 heading=1 right_cx=136.6 heading=0,,0.975,facing,0.878,facing,0.808,facing,not_facing
+1789997949_1_3_side_by_side.jpg,139,163,2,side_by_side,left_cx=47.7 heading=-1 right_cx=105.0 heading=-1,,0.896,facing,0.835,facing,0.729,facing,not_facing
+1789998363_2_3_facing.jpg,144,162,2,facing,left_cx=39.0 heading=1 right_cx=102.3 heading=-1,,0.955,facing,0.964,facing,0.891,facing,facing
+1789998370_2_4_side_by_side.jpg,133,161,2,side_by_side,left_cx=15.3 heading=0 right_cx=91.0 heading=-1,,0.972,facing,0.977,facing,0.454,no_pair,not_facing
+1789998387_2_3_none.jpg,20,20,0,none,,,0.766,facing,0.585,facing,0.366,no_pair,no_answer
+1789998388_2_3_none.jpg,95,165,1,none,,,0.92,facing,0.509,abstain,0.0,no_pair,no_answer
+1789998392_2_3_none.jpg,249,173,2,none,left_cx=175.9 heading=0 right_cx=206.0 heading=0,,0.767,facing,0.827,facing,0.006,no_pair,facing
+1789998393_2_3_side_by_side.jpg,249,173,2,side_by_side,left_cx=173.6 heading=1 right_cx=205.4 heading=0,no_pair,0.725,facing,0.841,facing,0.004,no_pair,not_facing
+1789998401_3_6_none.jpg,166,179,1,none,,,0.967,facing,0.585,facing,0.001,no_pair,no_answer
+1789998443_8_9_side_by_side.jpg,180,173,2,none,left_cx=52.3 heading=0 right_cx=166.2 heading=0,,0.82,facing,0.358,not_facing,0.362,abstain,facing
+1789998458_8_9_none.jpg,179,226,2,none,left_cx=45.0 heading=0 right_cx=127.7 heading=0,,0.861,facing,0.12,not_facing,0.477,abstain,facing
+1789998459_8_9_none.jpg,170,225,2,none,left_cx=77.8 heading=0 right_cx=145.1 heading=0,,0.883,facing,0.036,not_facing,0.36,abstain,facing
+1789998460_8_10_none.jpg,180,182,2,none,left_cx=36.7 heading=0 right_cx=137.4 heading=0,,0.93,facing,0.09,not_facing,0.453,abstain,facing
+1789998461_8_10_none.jpg,174,190,2,none,left_cx=43.5 heading=0 right_cx=140.4 heading=0,,0.903,facing,0.253,not_facing,0.561,facing,facing
+1789998462_8_10_side_by_side.jpg,182,182,2,side_by_side,left_cx=38.2 heading=0 right_cx=148.5 heading=-1,,0.792,facing,0.191,not_facing,0.485,abstain,not_facing
+1789998483_8_10_none.jpg,182,191,2,none,left_cx=51.0 heading=0 right_cx=170.9 heading=0,,0.866,facing,0.285,not_facing,0.251,no_pair,facing
+1789998484_8_10_none.jpg,183,190,2,none,left_cx=51.1 heading=0 right_cx=157.0 heading=0,,0.857,facing,0.214,not_facing,0.403,abstain,facing
+1789998485_8_10_none.jpg,184,188,2,none,left_cx=51.8 heading=0 right_cx=162.1 heading=0,,0.859,facing,0.282,not_facing,0.432,abstain,facing
+1789998486_8_10_none.jpg,183,188,2,none,left_cx=49.7 heading=0 right_cx=159.9 heading=0,,0.864,facing,0.351,not_facing,0.337,no_pair,facing
+1789998487_8_10_none.jpg,183,211,2,none,left_cx=52.1 heading=0 right_cx=147.0 heading=0,,0.83,facing,0.108,not_facing,0.061,no_pair,facing
+1789998488_8_10_none.jpg,182,216,2,none,left_cx=49.2 heading=0 right_cx=117.2 heading=0,,0.844,facing,0.041,not_facing,0.359,not_facing,facing
+1789998509_11_12_side_by_side.jpg,158,154,2,side_by_side,left_cx=33.4 heading=1 right_cx=112.9 heading=1,not_facing,0.918,facing,0.616,facing,0.745,facing,not_facing
+1789998562_13_15_none.jpg,202,183,1,none,,,0.716,facing,0.368,not_facing,0.005,no_pair,no_answer
+1789998563_13_15_none.jpg,210,183,1,none,,,0.704,facing,0.305,not_facing,0.003,no_pair,no_answer
+1789998617_0_1_side_by_side.jpg,135,157,2,side_by_side,left_cx=26.4 heading=1 right_cx=98.7 heading=0,not_facing,0.929,facing,0.402,not_facing,0.679,facing,not_facing
+1789998640_0_1_none.jpg,20,20,0,none,,,0.921,facing,0.294,not_facing,0.742,facing,no_answer
+1789998640_1_0_none.jpg,20,20,0,none,,,0.921,facing,0.294,not_facing,0.742,facing,no_answer
+1789998641_0_1_none.jpg,20,20,1,none,,,0.839,facing,0.342,not_facing,0.587,facing,no_answer
+1789998641_1_0_none.jpg,20,20,1,none,,,0.839,facing,0.342,not_facing,0.587,facing,no_answer
+1789998642_0_1_none.jpg,20,20,1,none,,,0.908,facing,0.646,facing,0.785,facing,no_answer
+1789998642_1_0_none.jpg,20,20,1,none,,,0.908,facing,0.646,facing,0.785,facing,no_answer
+1789998643_0_1_none.jpg,20,20,1,none,,,0.923,facing,0.895,facing,0.851,facing,no_answer
+1789998643_1_0_none.jpg,20,20,1,none,,,0.923,facing,0.895,facing,0.851,facing,no_answer
+1789998644_0_1_none.jpg,20,20,0,none,,,0.917,facing,0.574,facing,0.795,facing,no_answer
+1789998644_1_0_none.jpg,20,20,0,none,,,0.917,facing,0.574,facing,0.795,facing,no_answer
+1789998645_0_1_none.jpg,20,20,0,none,,,0.851,facing,0.119,not_facing,0.578,facing,no_answer
+1789998645_1_0_none.jpg,20,20,0,none,,,0.851,facing,0.119,not_facing,0.578,facing,no_answer
+1789998646_0_1_side_by_side.jpg,150,160,2,side_by_side,left_cx=25.6 heading=1 right_cx=108.2 heading=1,,0.924,facing,0.695,facing,0.703,facing,not_facing
+1789998646_1_0_side_by_side.jpg,150,160,2,side_by_side,left_cx=25.6 heading=1 right_cx=108.2 heading=1,,0.924,facing,0.695,facing,0.703,facing,not_facing
+1789998655_0_1_none.jpg,64,162,1,none,,,0.957,facing,0.463,abstain,0.162,no_pair,no_answer
+1789998657_0_1_none.jpg,20,20,0,none,,,0.755,facing,0.209,not_facing,0.429,abstain,no_answer
+1789998657_1_0_side_by_side.jpg,85,165,2,side_by_side,left_cx=8.3 heading=0 right_cx=77.2 heading=-1,,0.961,facing,0.302,not_facing,0.277,no_pair,not_facing
+1789998660_0_1_none.jpg,180,170,2,none,left_cx=45.6 heading=0 right_cx=140.2 heading=0,,0.869,facing,0.549,abstain,0.544,abstain,facing
+1789998661_0_1_none.jpg,179,170,2,none,left_cx=45.9 heading=0 right_cx=140.0 heading=0,,0.848,facing,0.416,not_facing,0.493,abstain,facing
+1789998661_1_0_none.jpg,179,170,2,none,left_cx=46.0 heading=0 right_cx=139.7 heading=0,,0.857,facing,0.458,abstain,0.526,abstain,facing
+1789998662_0_1_none.jpg,183,170,2,none,left_cx=45.6 heading=0 right_cx=146.2 heading=0,,0.848,facing,0.357,not_facing,0.491,abstain,facing
+1789998663_0_1_none.jpg,197,170,2,none,left_cx=66.8 heading=0 right_cx=175.1 heading=0,,0.887,facing,0.22,not_facing,0.44,abstain,facing
+1789998663_1_0_none.jpg,197,170,2,none,left_cx=66.8 heading=0 right_cx=175.1 heading=0,,0.887,facing,0.22,not_facing,0.44,abstain,facing
+1789998664_0_1_none.jpg,121,167,0,none,,,0.823,facing,0.834,facing,0.028,no_pair,no_answer
+1789998664_1_0_none.jpg,121,167,0,none,,,0.73,facing,0.858,facing,0.016,no_pair,no_answer
+1789998665_0_1_none.jpg,20,20,0,none,,,0.705,facing,0.555,facing,0.444,abstain,no_answer
+1789998665_1_0_none.jpg,20,20,0,none,,,0.705,facing,0.555,facing,0.444,abstain,no_answer
+1789998666_0_1_none.jpg,207,170,1,none,,,0.794,facing,0.195,not_facing,0.004,no_pair,no_answer
+1789998666_1_0_none.jpg,207,170,1,none,,,0.794,facing,0.195,not_facing,0.004,no_pair,no_answer
+1789998667_0_2_none.jpg,216,178,2,none,left_cx=36.3 heading=0 right_cx=159.5 heading=0,,0.912,facing,0.302,not_facing,0.071,no_pair,facing
+1789998668_0_2_none.jpg,170,182,1,none,,,0.832,facing,0.275,not_facing,0.0,no_pair,no_answer
+1789998669_0_2_none.jpg,240,183,2,none,left_cx=34.1 heading=0 right_cx=184.5 heading=0,facing,0.912,facing,0.3,not_facing,0.531,abstain,facing
+1789998670_0_2_none.jpg,160,179,0,none,,,0.914,facing,0.246,not_facing,0.002,no_pair,no_answer
+1789998672_0_2_none.jpg,215,191,1,none,,,0.703,facing,0.054,not_facing,0.0,no_pair,no_answer
+1789998673_0_2_none.jpg,145,191,1,none,,,0.64,facing,0.045,not_facing,0.0,no_pair,no_answer
+1789998674_0_2_none.jpg,225,193,1,none,,,0.907,facing,0.326,not_facing,0.003,no_pair,no_answer
+1790001332_0_1_none.jpg,132,176,2,none,left_cx=32.8 heading=0 right_cx=88.9 heading=0,,0.925,facing,0.865,facing,0.371,no_pair,facing
+1790001333_0_1_side_by_side.jpg,149,177,2,none,left_cx=32.8 heading=0 right_cx=96.3 heading=0,,0.951,facing,0.974,facing,0.384,no_pair,facing
+1790001354_1_3_side_by_side.jpg,139,163,2,side_by_side,left_cx=38.1 heading=0 right_cx=118.8 heading=-1,,0.973,facing,0.939,facing,0.914,facing,not_facing
+1790001400_3_4_none.jpg,134,167,2,none,left_cx=12.1 heading=0 right_cx=87.5 heading=0,,0.978,facing,0.822,facing,0.216,no_pair,facing
+1790001402_3_4_none.jpg,149,164,2,none,left_cx=27.5 heading=0 right_cx=110.8 heading=0,facing,0.966,facing,0.963,facing,0.859,facing,facing
+1790001403_3_4_none.jpg,148,164,2,none,left_cx=27.3 heading=0 right_cx=110.3 heading=0,,0.974,facing,0.956,facing,0.888,facing,facing
+1790001404_3_4_none.jpg,148,164,2,none,left_cx=27.3 heading=0 right_cx=110.3 heading=0,,0.974,facing,0.956,facing,0.888,facing,facing
+1790001405_3_4_none.jpg,149,164,2,none,left_cx=26.9 heading=0 right_cx=110.5 heading=0,facing,0.967,facing,0.969,facing,0.864,facing,facing
+1790001406_3_4_none.jpg,152,163,2,none,left_cx=19.8 heading=0 right_cx=119.5 heading=0,,0.987,facing,0.903,facing,0.894,facing,facing
+1790001407_3_4_side_by_side.jpg,170,163,2,side_by_side,left_cx=11.4 heading=0 right_cx=120.5 heading=-1,,0.991,facing,0.934,facing,0.656,facing,not_facing
+1790005042_0_2_side_by_side.jpg,182,160,2,side_by_side,left_cx=37.0 heading=-1 right_cx=146.0 heading=-1,,0.953,facing,0.968,facing,0.498,abstain,not_facing
+1790005043_2_0_side_by_side.jpg,182,160,3,none,,,0.944,facing,0.958,facing,0.612,facing,no_answer
+1790005075_2_4_none.jpg,153,208,1,none,,,0.914,facing,0.14,not_facing,0.0,no_pair,no_answer
+1790340142_6_7_none.jpg,215,238,2,none,left_cx=142.8 heading=0 right_cx=190.9 heading=0,,0.758,facing,0.026,not_facing,0.031,no_pair,facing
+1790340143_6_7_none.jpg,215,238,1,none,,,0.737,facing,0.033,not_facing,0.005,no_pair,no_answer
+1790340144_6_7_none.jpg,215,238,1,none,,,0.666,facing,0.02,not_facing,0.001,no_pair,no_answer
+1790341923_7_8_none.jpg,228,240,1,none,,,0.577,facing,0.638,facing,0.015,no_pair,no_answer
+1790341924_7_8_none.jpg,226,240,1,none,,,0.716,facing,0.71,facing,0.037,no_pair,no_answer
+1790341925_7_8_none.jpg,219,240,1,none,,,0.618,facing,0.518,abstain,0.018,no_pair,no_answer
+1790342020_9_10_none.jpg,245,244,3,none,,,0.53,abstain,0.172,not_facing,0.275,abstain,no_answer
+1790342021_9_10_none.jpg,245,220,3,none,,,0.723,facing,0.273,not_facing,0.289,abstain,no_answer
+1790342022_9_10_side_by_side.jpg,174,249,2,side_by_side,left_cx=99.0 heading=0 right_cx=110.4 heading=0,,0.936,facing,0.862,facing,0.611,facing,not_facing
+1790342024_9_10_none.jpg,168,249,1,none,,,0.265,not_facing,0.499,abstain,0.001,no_pair,no_answer
+1790342641_3_4_none.jpg,203,196,2,none,left_cx=93.8 heading=0 right_cx=167.7 heading=0,,0.726,facing,0.051,not_facing,0.358,not_facing,facing
+1790342642_3_4_none.jpg,203,196,2,none,left_cx=94.3 heading=0 right_cx=168.0 heading=0,,0.665,facing,0.03,not_facing,0.281,not_facing,facing
+1790342642_3_4_side_by_side.jpg,202,196,2,side_by_side,left_cx=92.3 heading=0 right_cx=167.6 heading=-1,,0.778,facing,0.092,not_facing,0.288,not_facing,not_facing
+1790342729_5_6_none.jpg,207,176,2,none,left_cx=63.8 heading=0 right_cx=166.3 heading=0,,0.938,facing,0.817,facing,0.713,facing,facing
+1790342730_5_6_none.jpg,207,176,2,none,left_cx=64.9 heading=0 right_cx=168.6 heading=0,,0.951,facing,0.861,facing,0.764,facing,facing
+1790342730_5_6_side_by_side.jpg,206,177,2,side_by_side,left_cx=63.8 heading=-1 right_cx=158.4 heading=-1,,0.921,facing,0.896,facing,0.674,facing,not_facing
+1790342774_6_7_side_by_side.jpg,181,192,2,side_by_side,left_cx=53.5 heading=0 right_cx=104.4 heading=-1,,0.788,facing,0.953,facing,0.173,no_pair,not_facing
+1790342834_6_8_side_by_side.jpg,192,189,2,side_by_side,left_cx=54.0 heading=0 right_cx=112.6 heading=-1,,0.786,facing,0.675,facing,0.562,facing,not_facing
+1790342897_6_10_side_by_side.jpg,190,191,2,side_by_side,left_cx=53.4 heading=-1 right_cx=113.4 heading=-1,,0.739,facing,0.825,facing,0.423,abstain,not_facing
+1790342949_6_11_side_by_side.jpg,232,196,2,side_by_side,left_cx=95.3 heading=0 right_cx=153.9 heading=-1,,0.669,facing,0.879,facing,0.515,abstain,not_facing
+1790342963_6_11_none.jpg,175,177,2,none,left_cx=51.3 heading=0 right_cx=128.3 heading=0,,0.922,facing,0.99,facing,0.745,facing,facing
+1790856228_7_9_side_by_side.jpg,141,157,2,side_by_side,left_cx=32.8 heading=1 right_cx=115.8 heading=0,,0.915,facing,0.816,facing,0.798,facing,not_facing
+1790856234_7_10_facing.jpg,201,162,2,facing,left_cx=56.9 heading=1 right_cx=128.3 heading=-1,,0.882,facing,0.814,facing,0.756,facing,facing
+1790856236_10_11_none.jpg,155,164,1,none,,,0.814,facing,0.46,abstain,0.002,no_pair,no_answer
+1790856237_10_11_none.jpg,108,164,1,none,,,0.832,facing,0.172,not_facing,0.0,no_pair,no_answer
+1790856238_10_11_none.jpg,142,167,2,none,left_cx=8.5 heading=0 right_cx=106.7 heading=0,,0.913,facing,0.444,not_facing,0.534,abstain,facing
+1790856239_10_11_none.jpg,195,171,2,none,left_cx=9.0 heading=0 right_cx=115.1 heading=0,,0.925,facing,0.804,facing,0.521,abstain,facing
+1790856239_10_11_side_by_side.jpg,181,172,2,side_by_side,left_cx=57.4 heading=0 right_cx=167.8 heading=-1,,0.933,facing,0.249,not_facing,0.456,abstain,not_facing
+1790856241_9_11_none.jpg,223,173,2,none,left_cx=57.1 heading=0 right_cx=175.3 heading=0,,0.96,facing,0.34,not_facing,0.76,facing,facing
+1790856242_9_11_none.jpg,190,181,1,none,,,0.796,facing,0.771,facing,0.002,no_pair,no_answer
+1790856310_13_14_side_by_side.jpg,144,168,2,side_by_side,left_cx=30.3 heading=0 right_cx=91.6 heading=-1,,0.884,facing,0.604,facing,0.721,facing,not_facing
+1790857403_0_1_none.jpg,249,176,2,none,left_cx=32.0 heading=0 right_cx=237.8 heading=0,,0.928,facing,0.529,abstain,0.014,no_pair,facing
+1790857527_2_3_none.jpg,166,214,1,none,,,0.64,facing,0.021,not_facing,0.003,no_pair,no_answer
+1790857528_2_3_none.jpg,196,214,1,none,,,0.749,facing,0.048,not_facing,0.002,no_pair,no_answer
+1790857534_2_3_none.jpg,244,249,1,none,,,0.769,facing,0.02,not_facing,0.003,no_pair,no_answer
+1790857535_2_3_none.jpg,221,249,0,none,,,0.878,facing,0.161,not_facing,0.005,no_pair,no_answer
+1790858584_38_39_none.jpg,180,168,1,none,,,0.941,facing,0.426,not_facing,0.001,no_pair,no_answer
+1790858730_43_44_facing.jpg,159,161,2,facing,left_cx=36.1 heading=1 right_cx=119.9 heading=-1,,0.939,facing,0.822,facing,0.844,facing,facing
+1790859345_3_4_side_by_side.jpg,170,161,2,side_by_side,left_cx=42.0 heading=1 right_cx=130.7 heading=0,,0.835,facing,0.746,facing,0.691,facing,not_facing
+1790859368_4_5_none.jpg,120,179,1,none,,,0.846,facing,0.294,not_facing,0.003,no_pair,no_answer
+1790859369_4_5_none.jpg,94,182,1,none,,,0.853,facing,0.285,not_facing,0.051,no_pair,no_answer
+1790859372_4_5_none.jpg,234,204,1,none,,,0.912,facing,0.342,not_facing,0.006,no_pair,no_answer
+1790859373_4_5_none.jpg,242,204,0,none,,,0.856,facing,0.265,not_facing,0.005,no_pair,no_answer
+1790859381_4_5_none.jpg,211,242,0,none,,,0.886,facing,0.778,facing,0.0,no_pair,no_answer
+1790859393_4_5_none.jpg,229,228,1,none,,,0.907,facing,0.304,not_facing,0.01,no_pair,no_answer
+1790859394_4_5_none.jpg,229,234,0,none,,,0.807,facing,0.207,not_facing,0.005,no_pair,no_answer
+1790861021_2_3_none.jpg,20,20,0,none,,,0.812,facing,0.204,not_facing,0.331,no_pair,no_answer
+1790861022_2_3_none.jpg,20,20,0,none,,,0.821,facing,0.201,not_facing,0.34,no_pair,no_answer
+1790861023_2_3_side_by_side.jpg,166,162,2,side_by_side,left_cx=42.3 heading=1 right_cx=126.0 heading=0,,0.805,facing,0.939,facing,0.247,no_pair,not_facing
+1790861078_2_4_none.jpg,249,171,2,none,left_cx=18.2 heading=0 right_cx=108.7 heading=0,,0.866,facing,0.342,not_facing,0.033,no_pair,facing
+1790861079_2_4_none.jpg,249,171,1,none,,,0.842,facing,0.175,not_facing,0.0,no_pair,no_answer
+1790861089_3_4_none.jpg,249,210,1,none,,,0.885,facing,0.381,not_facing,0.005,no_pair,no_answer
+1790861090_3_4_none.jpg,208,221,1,none,,,0.787,facing,0.212,not_facing,0.004,no_pair,no_answer
+1790861091_3_4_none.jpg,181,224,0,none,,,0.941,facing,0.811,facing,0.013,no_pair,no_answer
+1790861092_3_4_none.jpg,181,224,0,none,,,0.862,facing,0.703,facing,0.002,no_pair,no_answer
+1790861096_3_4_none.jpg,249,249,0,none,,,0.937,facing,0.868,facing,0.0,no_pair,no_answer
+1790861958_3_4_none.jpg,122,160,1,none,,,0.916,facing,0.314,not_facing,0.002,no_pair,no_answer
+1790861972_3_5_side_by_side.jpg,141,161,2,side_by_side,left_cx=38.7 heading=1 right_cx=99.8 heading=0,,0.934,facing,0.788,facing,0.745,facing,not_facing
+1790862180_1_3_none.jpg,20,20,0,none,,,0.538,abstain,0.551,facing,0.342,abstain,no_answer
+1790862181_1_3_none.jpg,20,20,0,none,,,0.831,facing,0.339,not_facing,0.586,facing,no_answer
+1790932021_2_3_none.jpg,159,155,1,none,,,0.974,facing,0.781,facing,0.083,no_pair,no_answer
+1790932050_4_5_none.jpg,162,184,1,none,,,0.879,facing,0.962,facing,0.32,no_pair,no_answer
+1790932051_4_5_none.jpg,162,184,1,none,,,0.879,facing,0.962,facing,0.32,no_pair,no_answer
+1790932052_4_5_none.jpg,139,189,1,none,,,0.882,facing,0.663,facing,0.037,no_pair,no_answer
+1790932053_4_5_none.jpg,139,189,1,none,,,0.868,facing,0.696,facing,0.012,no_pair,no_answer
+1790932756_6_8_side_by_side.jpg,107,149,2,side_by_side,left_cx=32.2 heading=0 right_cx=73.3 heading=-1,,0.951,facing,0.874,facing,0.885,facing,not_facing
+1790932912_11_12_none.jpg,88,168,1,none,,,0.662,facing,0.673,facing,0.196,no_pair,no_answer
+1790932912_11_12_side_by_side.jpg,104,172,2,side_by_side,left_cx=13.1 heading=-1 right_cx=63.7 heading=-1,,0.634,facing,0.805,facing,0.373,no_pair,not_facing
+1790932917_12_13_facing.jpg,141,179,2,facing,left_cx=11.6 heading=1 right_cx=66.2 heading=-1,,0.768,facing,0.903,facing,0.417,no_pair,facing
+1790936249_5_6_none.jpg,151,186,0,none,,,0.963,facing,0.702,facing,0.021,no_pair,no_answer
+1790937594_12_13_diverging.jpg,72,220,1,none,,,0.925,facing,0.972,facing,0.574,facing,no_answer
+1790937594_12_13_none.jpg,72,220,1,none,,,0.948,facing,0.975,facing,0.663,facing,no_answer
+1790946698_1_3_side_by_side.jpg,85,151,2,side_by_side,left_cx=34.4 heading=0 right_cx=55.6 heading=-1,,0.934,facing,0.862,facing,0.743,facing,not_facing
+1790946724_1_5_none.jpg,20,20,0,none,,,0.693,facing,0.325,not_facing,0.392,abstain,no_answer
+1790946725_1_5_none.jpg,20,20,0,none,,,0.693,facing,0.325,not_facing,0.392,abstain,no_answer
+1790947578_1_2_none.jpg,180,212,2,none,left_cx=39.2 heading=0 right_cx=112.6 heading=0,,0.893,facing,0.838,facing,0.678,facing,facing
+1790947579_1_2_none.jpg,180,212,2,none,left_cx=39.2 heading=0 right_cx=112.6 heading=0,,0.893,facing,0.838,facing,0.678,facing,facing
+1790947579_1_3_side_by_side.jpg,197,185,2,side_by_side,left_cx=56.3 heading=-1 right_cx=135.8 heading=0,,0.788,facing,0.982,facing,0.663,facing,not_facing
+1790947579_1_4_none.jpg,147,207,2,none,left_cx=20.3 heading=0 right_cx=74.7 heading=0,,0.922,facing,0.309,not_facing,0.149,no_pair,facing
