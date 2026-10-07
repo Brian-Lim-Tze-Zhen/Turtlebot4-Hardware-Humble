@@ -10,8 +10,9 @@
 # Collision monitor: the Humble bringup does not start it. Launch with
 # launch/lab2_bringup_cm.launch.py, which adds it between the velocity smoother
 # (cmd_vel_smoothed) and the robot (cmd_vel), as the Jazzy bringup does in simulation.
-# NOT ported: the BlockedHold stop polygon. The Humble collision monitor (1.1.20) has no
-# polygon_sub_topic, so it cannot take a polygon from blocked_person_beep_node.
+# BlockedHold: the Humble collision monitor (1.1.20) has no polygon_sub_topic, so the zone is
+# a FIXED square here (the +/-1.6 m square the simulation node publishes) with enabled: false,
+# and scripts/blocked_person_beep_node.py (hold:=true) switches BlockedHold.enabled at runtime.
 # GOAL-SIDE VARIANT of social_nav2_headon_F_hwreq_block_confirm_hw.yaml: identical except
 # side_ref_goal_topic "goal_pose" (new). side_switch_offset was 0.30 for one run
 # (copy: .bak_20261005_side030) and is 0.10 again.
@@ -649,7 +650,19 @@ collision_monitor:
     stop_pub_timeout: 2.0
     # Polygons represent zone around the robot for "stop", "slowdown" and "limit" action types,
     # and robot footprint for "approach" action type.
-    polygons: ["FootprintApproach"]
+    # BlockedHold first, as in simulation (social_nav2_headon_F_hwreq_block_blockedhold_approach_sim.yaml).
+    polygons: ["BlockedHold", "FootprintApproach"]
+    # Hold while blocked by a person. Simulation: blocked_person_beep_node_sim.py publishes this
+    # square on /blocked_hold_polygon. HUMBLE: fixed square, switched by
+    # scripts/blocked_person_beep_node.py through the parameter BlockedHold.enabled
+    # (tested offline 7 Oct 2026: 0.30 m/s -> 0.00 when enabled, back to 0.30 when disabled).
+    BlockedHold:
+      type: "polygon"
+      action_type: "stop"
+      points: [1.6, 1.6, 1.6, -1.6, -1.6, -1.6, -1.6, 1.6]
+      max_points: 3        # Humble name; = simulation min_points 4
+      visualize: False
+      enabled: False       # switched on only while blocked
     FootprintApproach:
       type: "polygon"
       action_type: "approach"
