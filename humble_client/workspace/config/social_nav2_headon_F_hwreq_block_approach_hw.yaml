@@ -7,8 +7,11 @@
 #     (sustained approach; new in v4)
 # Needs the v4 build of social_critic_lane (branch v4-port-20261007). Kept from the hardware
 # config: side_ref_goal_topic goal_pose, odom_reliable, Humble plugin names, timeouts.
+# Collision monitor: the Humble bringup does not start it. Launch with
+# launch/lab2_bringup_cm.launch.py, which adds it between the velocity smoother
+# (cmd_vel_smoothed) and the robot (cmd_vel), as the Jazzy bringup does in simulation.
 # NOT ported: the BlockedHold stop polygon. The Humble collision monitor (1.1.20) has no
-# polygon_sub_topic and the Humble bringup does not start it.
+# polygon_sub_topic, so it cannot take a polygon from blocked_person_beep_node.
 # GOAL-SIDE VARIANT of social_nav2_headon_F_hwreq_block_confirm_hw.yaml: identical except
 # side_ref_goal_topic "goal_pose" (new). side_switch_offset was 0.30 for one run
 # (copy: .bak_20261005_side030) and is 0.10 again.
@@ -632,6 +635,8 @@ velocity_smoother:
 
 collision_monitor:
   ros__parameters:
+    # HUMBLE (7 Oct 2026): started by launch/lab2_bringup_cm.launch.py. Humble ignores
+    # enable_stamped_cmd_vel and state_topic (Twist, no state topic).
     enable_stamped_cmd_vel: true
     base_frame_id: "base_link"
     odom_frame_id: "odom"
@@ -651,7 +656,9 @@ collision_monitor:
       footprint_topic: "local_costmap/published_footprint"
       time_before_collision: 1.2
       simulation_time_step: 0.1
-      min_points: 6
+      # Humble has max_points (points allowed before the action) instead of Jazzy's
+      # min_points (points needed for the action): max_points 5 = min_points 6.
+      max_points: 5
       visualize: False
       enabled: True
     observation_sources: ["scan"]
