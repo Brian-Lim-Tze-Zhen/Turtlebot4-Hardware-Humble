@@ -1,0 +1,11 @@
+# Table 6.1 recomputed 2026-10-08 16:28:28 with table_6_1.py
+labels: labels_author.csv  (33 crops: facing 18, not_facing 12, no_pair 3)
+truth         n  pose c/w/none   MobileCLIP c/w   talking c/n
+facing       18   11 /  5 /  2      18 /  0        11 / 18
+not_facing   12   11 /  1 /  0       0 / 12         7 / 12
+
+# check: old labels reproduce the earlier table
+labels: labels.csv  (39 crops: facing 26, not_facing 11, no_pair 2)
+truth         n  pose c/w/none   MobileCLIP c/w   talking c/n
+facing       26   10 /  5 / 11      26 /  0        11 / 26
+not_facing   11   10 /  1 /  0       0 / 11         8 / 11
