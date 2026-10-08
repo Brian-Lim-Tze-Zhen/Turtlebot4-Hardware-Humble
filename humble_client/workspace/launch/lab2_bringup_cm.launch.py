@@ -16,7 +16,7 @@ from launch.substitutions import PathJoinSubstitution
 def generate_launch_description():
     map_arg = DeclareLaunchArgument(
         'map',
-        default_value='/root/thesis_social_navigation_ws/lab_map_name.yaml'
+        default_value='/root/thesis_social_navigation_ws/map/map_name.yaml'
     )
     namespace_arg = DeclareLaunchArgument(
         'namespace',
