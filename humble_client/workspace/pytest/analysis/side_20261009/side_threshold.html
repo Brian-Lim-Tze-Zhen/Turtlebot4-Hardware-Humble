@@ -1,0 +1,288 @@
+<title>Pass Side Threshold</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column (~68ch) with full-width figure panels; top view -> ruler with slider -> heading error -> runs table. */
+:root {
+  --bg: #f7f8f7;
+  --panel: #ffffff;
+  --ink: #111513;
+  --ink-2: #4b524e;
+  --muted: #868d89;
+  --rule: #dde1de;
+  --wall: #3a403c;
+  --right: #2a78d6;      /* robot keeps RIGHT */
+  --left: #eb6834;       /* robot keeps LEFT */
+  --right-zone: rgba(42,120,214,.10);
+  --left-zone: rgba(235,104,52,.13);
+  --focus: #2a78d6;
+  --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", Roboto, Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #151816; --panel: #1c201e; --ink: #f2f4f3; --ink-2: #bfc6c2; --muted: #8b938f; --rule: #2f3532;
+    --wall: #c9d0cc; --right: #3987e5; --left: #d95926;
+    --right-zone: rgba(57,135,229,.16); --left-zone: rgba(217,89,38,.18); --focus: #3987e5; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #151816; --panel: #1c201e; --ink: #f2f4f3; --ink-2: #bfc6c2; --muted: #8b938f; --rule: #2f3532;
+  --wall: #c9d0cc; --right: #3987e5; --left: #d95926;
+  --right-zone: rgba(57,135,229,.16); --left-zone: rgba(217,89,38,.18); --focus: #3987e5; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.55; }
+.wrap { max-width: 980px; margin: 0 auto; padding-inline: 20px; padding-block: 36px 64px; display: grid; gap: 34px; }
+header { display: grid; gap: 10px; }
+.eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
+h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(30px, 5vw, 44px); line-height: 1.08; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--f-display); font-weight: 700; font-size: 22px; margin: 0; text-wrap: balance; }
+p { margin: 0; max-width: 68ch; }
+.lede { font-size: 18px; color: var(--ink-2); }
+section { display: grid; gap: 14px; }
+.panel { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 18px; display: grid; gap: 14px; min-width: 0; }
+.fig { overflow-x: auto; }
+.fig svg { display: block; width: 100%; min-width: 620px; height: auto; }
+.cap { font-size: 14px; color: var(--ink-2); }
+.key { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 14px; color: var(--ink-2); }
+.key span { display: inline-flex; align-items: center; gap: 8px; }
+.sw { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+.controls { display: flex; flex-wrap: wrap; gap: 14px 28px; align-items: center; }
+.controls label { font-weight: 600; font-size: 14px; }
+.thr { display: flex; align-items: center; gap: 12px; }
+.thr output { font-family: var(--f-mono); font-weight: 600; font-size: 18px; min-width: 5ch; }
+input[type=range] { width: 200px; accent-color: var(--ink); }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 8px; overflow: hidden; }
+.seg button { font: inherit; font-size: 14px; padding: 7px 12px; background: transparent; color: var(--ink-2); border: 0; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.score { font-family: var(--f-mono); font-size: 15px; }
+.score b { font-size: 20px; }
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+th { font-family: var(--f-mono); font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--ink-2); font-weight: 600; }
+td.num { font-family: var(--f-mono); text-align: right; }
+.pill { display: inline-block; font-family: var(--f-mono); font-size: 12px; font-weight: 600; padding: 1px 8px; border-radius: 999px; border: 1.5px solid currentColor; }
+.pill.R { color: var(--right); }
+.pill.L { color: var(--left); }
+.miss { font-weight: 600; }
+ol.steps { margin: 0; padding-left: 22px; display: grid; gap: 6px; max-width: 68ch; }
+.note { font-size: 14px; color: var(--ink-2); border-left: 3px solid var(--rule); padding-left: 12px; max-width: 68ch; }
+svg text { font-family: var(--f-body); }
+svg .mono { font-family: var(--f-mono); }
+svg .t-ink { fill: var(--ink); } svg .t-ink2 { fill: var(--ink-2); } svg .t-muted { fill: var(--muted); }
+svg .t-right { fill: var(--right); } svg .t-left { fill: var(--left); }
+@media (max-width: 560px) { .wrap { gap: 26px; } .lede { font-size: 16px; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">TurtleBot 4 · head-on hallway · 9 Oct 2026</div>
+    <h1>Which side does the robot pass you on?</h1>
+    <p class="lede">The robot measures how far you stand beside its path when it first sees you, about 6.5&nbsp;m away. If you are more than a threshold to its right, it passes on your right; otherwise it keeps right, the German way. Today's runs say the threshold should be 0.20&nbsp;m, and that the robot's localization has to be checked before every run.</p>
+  </header>
+
+  <section aria-labelledby="h-rule">
+    <h2 id="h-rule">The rule, seen from above</h2>
+    <div class="panel">
+      <div class="fig">
+        <svg viewBox="0 0 960 330" role="img" aria-label="Top view of the hallway: robot on the left, goal on the right, a dashed robot-goal line, a threshold line 0.20 m to the robot's right. A centred walker makes the robot keep right; a walker clearly on the robot's right makes it keep left.">
+          <rect x="40" y="40" width="880" height="145" fill="var(--right-zone)"/>
+          <rect x="40" y="185" width="880" height="105" fill="var(--left-zone)"/>
+          <line x1="40" y1="40" x2="920" y2="40" stroke="var(--wall)" stroke-width="4"/>
+          <line x1="40" y1="290" x2="920" y2="290" stroke="var(--wall)" stroke-width="4"/>
+          <text x="914" y="32" text-anchor="end" font-size="12" class="t-muted">wall</text>
+          <text x="914" y="308" text-anchor="end" font-size="12" class="t-muted">wall</text>
+          <line x1="96" y1="165" x2="870" y2="165" stroke="var(--ink-2)" stroke-width="2" stroke-dasharray="8 6"/>
+          <text x="470" y="157" text-anchor="middle" font-size="13" class="t-ink2">robot–goal line (offset 0)</text>
+          <line x1="40" y1="185" x2="920" y2="185" stroke="var(--left)" stroke-width="2"/>
+          <text x="905" y="202" text-anchor="end" font-size="13" font-weight="600" class="t-left">threshold 0.20 m to the robot's right</text>
+          <!-- robot -->
+          <circle cx="80" cy="165" r="20" fill="var(--ink)"/>
+          <line x1="80" y1="165" x2="100" y2="165" stroke="var(--bg)" stroke-width="4"/>
+          <text x="80" y="205" text-anchor="middle" font-size="13" font-weight="600" class="t-ink">robot</text>
+          <!-- goal -->
+          <path d="M 880 151 l 12 14 l -12 14 l -12 -14 z" fill="var(--ink-2)"/>
+          <text x="880" y="200" text-anchor="middle" font-size="13" class="t-ink2">goal</text>
+          <!-- walker A centred -->
+          <circle cx="600" cy="158" r="13" fill="var(--panel)" stroke="var(--right)" stroke-width="4"/>
+          <text x="600" y="134" text-anchor="middle" font-size="13" font-weight="600" class="t-ink">you, centred</text>
+          <path d="M 102 165 C 330 165, 430 232, 520 240 S 690 240, 840 180" fill="none" stroke="var(--right)" stroke-width="3"/>
+          <text x="300" y="258" font-size="14" font-weight="600" class="t-right">keeps RIGHT: passes on your left</text>
+          <!-- walker B right -->
+          <circle cx="740" cy="250" r="13" fill="var(--panel)" stroke="var(--left)" stroke-width="4"/>
+          <text x="760" y="255" font-size="13" font-weight="600" class="t-ink">you, clearly on its right</text>
+          <path d="M 102 165 C 360 165, 520 100, 640 92 S 790 100, 840 150" fill="none" stroke="var(--left)" stroke-width="3" stroke-dasharray="10 6"/>
+          <text x="420" y="86" font-size="14" font-weight="600" class="t-left">keeps LEFT: does not cut across you</text>
+        </svg>
+      </div>
+      <p class="cap">The side is set by the first position sample. After that the side hold keeps it, unless you later read more than 0.30&nbsp;m on the other side. So the threshold acts on one early, noisy estimate.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-ruler">
+    <h2 id="h-ruler">Where each run's first sample fell</h2>
+    <div class="panel">
+      <div class="controls">
+        <div class="thr">
+          <label for="thr">Threshold</label>
+          <input id="thr" type="range" min="0" max="3" step="1" value="1" aria-valuetext="0.20 m">
+          <output id="thr-out" for="thr">0.20 m</output>
+        </div>
+        <div>
+          <span class="seg" role="group" aria-label="Localization">
+            <button type="button" id="b-loc" aria-pressed="true">Localization checked</button>
+            <button type="button" id="b-raw" aria-pressed="false">As recorded</button>
+          </span>
+        </div>
+        <div class="score" id="score" aria-live="polite"></div>
+      </div>
+      <div class="fig"><svg id="ruler" viewBox="0 0 960 330" role="img" aria-label="Ruler of first-sample offsets with the threshold line"></svg></div>
+      <div class="key">
+        <span><i class="sw" style="background:var(--right)"></i>robot keeps RIGHT at this threshold</span>
+        <span><i class="sw" style="background:var(--left)"></i>robot keeps LEFT</span>
+        <span><svg width="18" height="18" aria-hidden="true"><circle cx="9" cy="9" r="7" fill="none" stroke="var(--ink)" stroke-width="1.5" stroke-dasharray="3 2"/></svg>not the side you'd want</span>
+      </div>
+      <p class="cap">Decisions are recomputed from each bag at 0.15, 0.20, 0.25 and 0.30&nbsp;m, with the critic's rule (first sample, 0.6&nbsp;s average, side hold 0.30&nbsp;m). "Localization checked" corrects each run for the AMCL heading error measured at its start. "As recorded" uses the positions the robot actually had. Hover a dot for its run.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-loc">
+    <h2 id="h-loc">Why a few degrees matter</h2>
+    <div class="panel">
+      <div class="fig">
+        <svg viewBox="0 0 960 250" role="img" aria-label="A heading error of 2 degrees at the robot moves a walker 6.4 m away by 0.22 m sideways; 3.5 degrees moves them 0.39 m.">
+          <circle cx="90" cy="125" r="20" fill="var(--ink)"/>
+          <text x="90" y="166" text-anchor="middle" font-size="13" font-weight="600" class="t-ink">robot</text>
+          <line x1="110" y1="125" x2="820" y2="125" stroke="var(--ink-2)" stroke-width="2"/>
+          <line x1="110" y1="125" x2="820" y2="170" stroke="var(--left)" stroke-width="2" stroke-dasharray="8 6"/>
+          <circle cx="820" cy="125" r="13" fill="var(--panel)" stroke="var(--right)" stroke-width="4"/>
+          <text x="842" y="122" font-size="13" font-weight="600" class="t-ink">where you are</text>
+          <circle cx="820" cy="170" r="13" fill="var(--panel)" stroke="var(--left)" stroke-width="4" stroke-dasharray="4 3"/>
+          <text x="842" y="176" font-size="13" font-weight="600" class="t-left">where the robot puts you</text>
+          <line x1="790" y1="125" x2="790" y2="170" stroke="var(--ink)" stroke-width="1.5"/>
+          <text x="782" y="152" text-anchor="end" font-size="13" class="mono t-ink">0.22 m</text>
+          <path d="M 260 125 A 150 150 0 0 1 259 134" fill="none" stroke="var(--ink)" stroke-width="1.5"/>
+          <text x="270" y="146" font-size="13" class="mono t-ink">2°</text>
+          <text x="465" y="112" text-anchor="middle" font-size="13" class="t-ink2">6.4 m (angle drawn larger than scale)</text>
+          <text x="110" y="228" font-size="14" class="t-ink2">2° → 0.22 m · 3.5° → 0.39 m. That is more than the whole gap between "centred" and "clearly right".</text>
+        </svg>
+      </div>
+      <p class="cap">Today AMCL was off by 2–3.5° at the start of four runs. After the manual pose reset at 11:46 it was 3.5° off, and both following runs went LEFT for a centred walker. <code>check_localization.py --fix</code> measures this from the laser scan and corrects it before a run.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-runs">
+    <h2 id="h-runs">The runs</h2>
+    <div class="panel">
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Run</th><th>AMCL error</th><th>First sample, recorded</th><th>Corrected</th><th>Robot did</th><th>Wanted</th><th>Note</th></tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+      <p class="cap">Offsets in metres; + is the robot's left. "Run" means the rec15 + noghost run of 9 Oct. Source: <code>workspace/pytest/analysis/side_20261009/sidesweep_result.txt</code>.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-proc">
+    <h2 id="h-proc">The procedure</h2>
+    <ol class="steps">
+      <li>Send the robot to the start.</li>
+      <li>Run <code>check_localization.py --fix</code> and repeat it until it prints OK (heading within 1°, position within 0.10&nbsp;m).</li>
+      <li>Start the run with <code>side_switch_offset: 0.20</code>.</li>
+      <li>The first sample sets the side: offset −0.20&nbsp;m or further right → keep LEFT; anything else → keep RIGHT. The side hold keeps it.</li>
+    </ol>
+    <p class="note">Based on 11 runs; the margins are a few centimetres (run 06 at −0.16, 5 Oct at −0.26). The simulation still uses 0.15 until this is tested there. The threshold does not change the hard swerve after the side is chosen.</p>
+  </section>
+</div>
+
+<script>
+(function () {
+  // first samples (m), raw = as recorded, loc = corrected for the AMCL heading error; dec = side at 0.15/0.20/0.25/0.30
+  const runs = [
+    { id: '5 Oct', name: 'goal-side run 01 (5 Oct)', err: +2.0, raw: -0.49, loc: -0.26, did: 'R', want: 'L', note: 'you had to yield',
+      decLoc: 'LLLR', decRaw: 'LLLL' },
+    { id: 'rec15 01', name: 'rec15 run 01', err: -1.0, raw: -0.29, loc: -0.33, did: 'L', want: 'L', note: 'Wi-Fi blackout, seen late',
+      decLoc: 'LLLL', decRaw: 'LLLR' },
+    { id: 'rec15 02', name: 'rec15 run 02', err: -0.5, raw: 0.06, loc: 0.00, did: 'R', want: 'R', note: '', decLoc: 'RRRR', decRaw: 'RRRR' },
+    { id: 'rec15 03', name: 'rec15 run 03', err: -0.5, raw: -0.10, loc: -0.16, did: 'R', want: 'R', note: '', decLoc: 'LRRR', decRaw: 'RRRR' },
+    { id: 'rec15 04', name: 'rec15 run 04', err: +2.0, raw: -0.20, loc: 0.03, did: 'L', want: 'R', note: '', decLoc: 'RRRR', decRaw: 'LLRR' },
+    { id: 'run 01', name: 'noghost run 01', err: +3.5, raw: -0.45, loc: -0.06, did: 'L', want: 'R', note: 'right after the pose reset', decLoc: 'RRRR', decRaw: 'LLLL' },
+    { id: 'run 02', name: 'noghost run 02', err: +2.0, raw: -0.36, loc: -0.13, did: 'L', want: 'R', note: '', decLoc: 'RRRR', decRaw: 'LLLL' },
+    { id: 'run 03', name: 'noghost run 03', err: 0.0, raw: 0.15, loc: 0.15, did: 'R', want: 'R', note: 'checked before the run', decLoc: 'RRRR', decRaw: 'RRRR' },
+    { id: 'run 04', name: 'noghost run 04', err: 0.0, raw: 0.01, loc: 0.01, did: 'R', want: 'R', note: '', decLoc: 'RRRR', decRaw: 'RRRR' },
+    { id: 'run 05', name: 'noghost run 05', err: -1.0, raw: -0.11, loc: -0.20, did: 'R', want: 'L', note: 'read -0.31 after 0.6 s', decLoc: 'LLLL', decRaw: 'RRRR' },
+    { id: 'run 06', name: 'noghost run 06', err: +0.5, raw: -0.22, loc: -0.16, did: 'L', want: 'R', note: 'passed on your right', decLoc: 'LRRR', decRaw: 'LLRR' },
+  ];
+  const TH = [0.15, 0.20, 0.25, 0.30];
+  let ti = 1, mode = 'loc';
+  const svg = document.getElementById('ruler');
+  const NS = 'http://www.w3.org/2000/svg';
+  const lo = -0.55, hi = 0.20, x0 = 60, x1 = 920, ybase = 270;
+  const X = v => x0 + (v - lo) / (hi - lo) * (x1 - x0);
+  const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); (parent || svg).appendChild(e); return e; };
+  const txt = (x, y, s, attrs) => { const t = el('text', Object.assign({ x, y }, attrs)); t.textContent = s; return t; };
+
+  function draw() {
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    const th = TH[ti];
+    // zones
+    el('rect', { x: x0, y: 30, width: X(-th) - x0, height: ybase - 30, fill: 'var(--left-zone)' });
+    el('rect', { x: X(-th), y: 30, width: x1 - X(-th), height: ybase - 30, fill: 'var(--right-zone)' });
+    // axis
+    el('line', { x1: x0, y1: ybase, x2: x1, y2: ybase, stroke: 'var(--ink-2)', 'stroke-width': 2 });
+    for (let v = -0.55; v <= 0.2001; v += 0.05) {
+      const vv = Math.round(v * 100) / 100;
+      el('line', { x1: X(vv), y1: ybase, x2: X(vv), y2: ybase + 6, stroke: 'var(--ink-2)', 'stroke-width': 1.5 });
+      if (Math.round(vv * 100) % 10 === 0) txt(X(vv), ybase + 22, (vv > 0 ? '+' : '') + vv.toFixed(2).replace('-0.00', '0.00'), { 'text-anchor': 'middle', 'font-size': 12, class: 'mono t-ink2' });
+    }
+    txt(x0, ybase + 44, '← robot’s right', { 'font-size': 13, 'font-weight': 600, class: 't-ink2' });
+    txt(x1, ybase + 44, 'robot’s left →', { 'font-size': 13, 'font-weight': 600, class: 't-ink2', 'text-anchor': 'end' });
+    // centre line
+    el('line', { x1: X(0), y1: 30, x2: X(0), y2: ybase, stroke: 'var(--rule)', 'stroke-width': 1.5 });
+    // threshold
+    el('line', { x1: X(-th), y1: 22, x2: X(-th), y2: ybase, stroke: 'var(--ink)', 'stroke-width': 2.5 });
+    txt(X(-th) - 8, 22, 'keeps LEFT', { 'text-anchor': 'end', 'font-size': 13, 'font-weight': 600, class: 't-left' });
+    txt(X(-th) + 8, 22, 'keeps RIGHT', { 'font-size': 13, 'font-weight': 600, class: 't-right' });
+    // dots, stacked where they collide
+    const placed = []; let ok = 0;
+    const sorted = runs.map((r, i) => ({ r, v: mode === 'loc' ? r.loc : r.raw })).sort((a, b) => a.v - b.v);
+    for (const { r, v } of sorted) {
+      const x = X(v); let lvl = 0;
+      while (placed.some(p => Math.abs(p.x - x) < 26 && p.l === lvl)) lvl++;
+      placed.push({ x, l: lvl });
+      const y = ybase - 34 - lvl * 46;
+      const dec = (mode === 'loc' ? r.decLoc : r.decRaw)[ti];
+      const good = dec === r.want; if (good) ok++;
+      const g = el('g', { tabindex: 0, 'aria-label': `${r.name}: ${v.toFixed(2)} m, robot keeps ${dec === 'R' ? 'RIGHT' : 'LEFT'}, wanted ${r.want === 'R' ? 'RIGHT' : 'LEFT'}` });
+      const tt = el('title', {}, g); tt.textContent = `${r.name}\nfirst sample ${v >= 0 ? '+' : ''}${v.toFixed(2)} m\nrobot keeps ${dec === 'R' ? 'RIGHT' : 'LEFT'} · wanted ${r.want === 'R' ? 'RIGHT' : 'LEFT'}${r.note ? '\n' + r.note : ''}`;
+      el('circle', { cx: x, cy: y, r: 16, fill: 'transparent' }, g);
+      if (!good) el('circle', { cx: x, cy: y, r: 14, fill: 'none', stroke: 'var(--ink)', 'stroke-width': 1.5, 'stroke-dasharray': '3 2' }, g);
+      el('circle', { cx: x, cy: y, r: 8, fill: dec === 'R' ? 'var(--right)' : 'var(--left)', stroke: 'var(--panel)', 'stroke-width': 2 }, g);
+      const lab = txt(x, y - 20, r.id, { 'text-anchor': 'middle', 'font-size': 11.5, class: good ? 't-ink2' : 't-ink', 'font-weight': good ? 400 : 700 }); g.appendChild(lab);
+    }
+    document.getElementById('score').innerHTML = `<b>${ok}</b> of ${runs.length} runs on the side you'd want`;
+    document.getElementById('thr-out').textContent = th.toFixed(2) + ' m';
+    document.getElementById('thr').setAttribute('aria-valuetext', th.toFixed(2) + ' m');
+  }
+
+  function table() {
+    const tb = document.getElementById('tbody');
+    const f = v => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(2);
+    tb.innerHTML = runs.map(r => `<tr><td>${r.name}</td><td class="num">${(r.err > 0 ? '+' : r.err < 0 ? '−' : '') + Math.abs(r.err).toFixed(1)}°</td><td class="num">${f(r.raw)}</td><td class="num">${f(r.loc)}</td>
+      <td><span class="pill ${r.did}">${r.did === 'R' ? 'RIGHT' : 'LEFT'}</span></td><td><span class="pill ${r.want}">${r.want === 'R' ? 'RIGHT' : 'LEFT'}</span></td>
+      <td class="${r.did !== r.want ? 'miss' : ''}">${r.note}</td></tr>`).join('');
+  }
+
+  document.getElementById('thr').addEventListener('input', e => { ti = +e.target.value; draw(); });
+  const bl = document.getElementById('b-loc'), br = document.getElementById('b-raw');
+  bl.addEventListener('click', () => { mode = 'loc'; bl.setAttribute('aria-pressed', 'true'); br.setAttribute('aria-pressed', 'false'); draw(); });
+  br.addEventListener('click', () => { mode = 'raw'; br.setAttribute('aria-pressed', 'true'); bl.setAttribute('aria-pressed', 'false'); draw(); });
+  draw(); table();
+})();
+</script>

@@ -1,0 +1,255 @@
+<title>Ten Head-On Runs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: summary tiles -> ten top-view panels in a 2-column grid -> side-decision ruler -> full table -> method notes. */
+:root {
+  --bg: #f7f8f7; --panel: #ffffff; --ink: #111513; --ink-2: #4b524e; --muted: #868d89; --rule: #dde1de;
+  --wall: #3a403c; --right: #2a78d6; --left: #eb6834; --walker: #6b5bd2; --walker-2: #b3aaf0;
+  --near: #111513; --axis: #c4c9c6; --focus: #2a78d6;
+  --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", Roboto, Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #151816; --panel: #1c201e; --ink: #f2f4f3; --ink-2: #bfc6c2; --muted: #8b938f; --rule: #2f3532;
+    --wall: #c9d0cc; --right: #3987e5; --left: #d95926; --walker: #9085e9; --walker-2: #574d9e; --near: #f2f4f3;
+    --axis: #3d4441; --focus: #3987e5; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #151816; --panel: #1c201e; --ink: #f2f4f3; --ink-2: #bfc6c2; --muted: #8b938f; --rule: #2f3532;
+  --wall: #c9d0cc; --right: #3987e5; --left: #d95926; --walker: #9085e9; --walker-2: #574d9e; --near: #f2f4f3;
+  --axis: #3d4441; --focus: #3987e5; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.55; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-inline: 20px; padding-block: 36px 64px; display: grid; gap: 34px; }
+header { display: grid; gap: 10px; }
+.eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
+h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(30px, 5vw, 44px); line-height: 1.08; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--f-display); font-weight: 700; font-size: 22px; margin: 0; text-wrap: balance; }
+p { margin: 0; max-width: 70ch; }
+.lede { font-size: 18px; color: var(--ink-2); }
+section { display: grid; gap: 14px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.tile { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; display: grid; gap: 2px; }
+.tile .k { font-family: var(--f-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); }
+.tile .v { font-family: var(--f-display); font-weight: 800; font-size: 32px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.tile .s { font-size: 13px; color: var(--ink-2); }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+.card { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px 8px; display: grid; gap: 6px; min-width: 0; }
+.card.flag { border-color: var(--left); }
+.card h3 { margin: 0; font-family: var(--f-display); font-weight: 700; font-size: 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.card .meta { font-family: var(--f-mono); font-size: 12.5px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.card .note { font-size: 13px; color: var(--ink); }
+.card svg { width: 100%; height: auto; display: block; }
+.pill { display: inline-block; font-family: var(--f-mono); font-size: 11.5px; font-weight: 600; padding: 1px 8px; border-radius: 999px; border: 1.5px solid currentColor; }
+.pill.R { color: var(--right); } .pill.L { color: var(--left); }
+.key { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 13.5px; color: var(--ink-2); align-items: center; }
+.key span { display: inline-flex; align-items: center; gap: 7px; }
+.panel { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 16px; display: grid; gap: 12px; min-width: 0; }
+.fig { overflow-x: auto; } .fig svg { display: block; width: 100%; min-width: 620px; height: auto; }
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 7px 9px; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+th { font-family: var(--f-mono); font-size: 11.5px; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-2); font-weight: 600; vertical-align: bottom; }
+td.n { font-family: var(--f-mono); text-align: right; }
+tr.flag td { background: color-mix(in srgb, var(--left) 9%, transparent); }
+tfoot td { font-weight: 600; border-bottom: 0; }
+.cap { font-size: 14px; color: var(--ink-2); }
+ul.notes { margin: 0; padding-left: 20px; display: grid; gap: 6px; max-width: 75ch; font-size: 14.5px; }
+code { font-family: var(--f-mono); font-size: .92em; }
+svg text { font-family: var(--f-body); } svg .mono { font-family: var(--f-mono); }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">TurtleBot 4 · head-on hallway · side threshold 0.20 m · noghost critic · 9 Oct 2026</div>
+    <h1>Ten head-on runs</h1>
+    <p class="lede">The ten valid runs with <code>side_switch_offset</code> 0.20&nbsp;m. In each run the robot drives from the near end to the far end while Brian walks towards it. Localization was checked before each run, and broken runs were removed.</p>
+  </header>
+
+  <section aria-label="Summary">
+    <div class="tiles" id="tiles"></div>
+  </section>
+
+  <section aria-labelledby="h-top">
+    <h2 id="h-top">Every run from above</h2>
+    <div class="key" aria-label="Legend">
+      <span><svg width="26" height="10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--right)" stroke-width="3"/></svg>robot path, went right</span>
+      <span><svg width="26" height="10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--left)" stroke-width="3"/></svg>robot path, went left</span>
+      <span><svg width="12" height="12" aria-hidden="true"><circle cx="6" cy="6" r="4" fill="var(--walker)"/></svg>walker, camera confirmed</span>
+      <span><svg width="12" height="12" aria-hidden="true"><circle cx="6" cy="6" r="3.5" fill="none" stroke="var(--walker)" stroke-width="1.5"/></svg>walker, LiDAR only</span>
+      <span><svg width="14" height="14" aria-hidden="true"><path d="M7 1 L13 7 L7 13 L1 7 Z" fill="var(--ink)"/></svg>robot where the side was fixed</span>
+      <span><svg width="14" height="14" aria-hidden="true"><path d="M2 2 L12 12 M12 2 L2 12" stroke="var(--near)" stroke-width="2"/></svg>closest LiDAR return not on the map</span>
+    </div>
+    <div class="grid" id="grid"></div>
+    <p class="cap">Hallway frame: the start (−6.88, 13.41) is at the left, the goal (−12.20, 17.75) at the right, and up is the robot's left. Walls come from the map. The view covers 0–14&nbsp;s after the goal was sent. Walker points are shown from the goal until 9&nbsp;s. Hover a mark for its time.</p>
+  </section>
+
+  <section aria-labelledby="h-side">
+    <h2 id="h-side">Where each side was decided</h2>
+    <div class="panel">
+      <div class="fig"><svg id="ruler" viewBox="0 0 960 210" role="img" aria-label="Walker offsets at the side decision against the 0.20 m threshold"></svg></div>
+      <p class="cap">The offset is the walker's average sideways position from the robot–goal line while the side was decided, as logged by the critic. Below −0.20&nbsp;m the robot keeps LEFT. A ring marks the run where the robot did not go the way the critic decided.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-table">
+    <h2 id="h-table">All numbers</h2>
+    <div class="panel">
+      <div class="tbl">
+        <table>
+          <thead><tr><th>Run</th><th>Critic<br>side</th><th>Offset<br>m</th><th>Decided at<br>s · m ahead</th><th>Robot<br>went</th><th>Max<br>sideways m</th><th>Max<br>heading °</th><th>Closest<br>return m</th><th>Slowest<br>m/s</th><th>Time to<br>goal s</th><th>AMCL error<br>at start °</th></tr></thead>
+          <tbody id="tbody"></tbody>
+          <tfoot id="tfoot"></tfoot>
+        </table>
+      </div>
+      <p class="cap">"Closest return" is the nearest LiDAR point within 2.5&nbsp;m that is not on the map. It is measured from the sensor near the robot's centre, at 2–12&nbsp;s, ahead of the start, which leaves out Brian's table behind the start. That point is usually the walker. "Slowest" is the lowest forward speed at 3–10&nbsp;s; most runs dip while the robot turns to swerve.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-notes">
+    <h2 id="h-notes">What stands out</h2>
+    <ul class="notes" id="notes"></ul>
+  </section>
+
+  <section aria-labelledby="h-src">
+    <h2 id="h-src">Sources</h2>
+    <p class="cap">Bags in <code>workspace/bags/headon_rec20noghost_run01–10_*</code>; config <code>config/social_nav2_headon_F_hwreq_block_approach_tf05_rec20_noghost_hw.yaml</code>; critic <code>social_critic_lane_noghost</code> (lib 5551fdef). Extraction <code>extract_runs.py</code>, metrics <code>summarise_runs.py</code>, data <code>rec20_runs_data.json</code> / <code>rec20_summary.json</code> in <code>workspace/pytest/analysis/side_20261009/</code>. Run log: <code>Task/HARDWARE_DAY_20261009.md</code>.</p>
+  </section>
+</div>
+
+<script id="data" type="application/json">__DATA__</script>
+<script>
+(function () {
+  const D = JSON.parse(document.getElementById('data').textContent);
+  const R = D.runs;
+  const NS = 'http://www.w3.org/2000/svg';
+  const el = (tag, a, p) => { const e = document.createElementNS(NS, tag); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
+  const tip = (e, s) => { const t = el('title', {}, e); t.textContent = s; return e; };
+  const fmt = (v, d = 2) => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(d);
+  const mean = a => a.reduce((x, y) => x + y, 0) / a.length;
+  const sd = a => { const m = mean(a); return Math.sqrt(a.reduce((x, y) => x + (y - m) ** 2, 0) / (a.length - 1)); };
+  const asIntended = r => r.side === r.robot_side;
+
+  // ---------- tiles
+  const keptRight = R.filter(r => r.robot_side === 'R').length;
+  const cl = R.map(r => r.clearance);
+  const tiles = [
+    ['Goal reached', `${R.length}/${R.length}`, 'no stops of 0.5 s or longer'],
+    ['Passed on your left', `${keptRight}/${R.length}`, `robot kept right; run 05 kept left on purpose, run 09 by mistake`],
+    ['Closest return', `${mean(cl).toFixed(2)} m`, `mean ± ${sd(cl).toFixed(2)}, lowest ${Math.min(...cl).toFixed(2)} m (run 09)`],
+    ['Side fixed at', `${mean(R.map(r => r.decision_dist)).toFixed(1)} m`, `walker distance, ${Math.min(...R.map(r => r.decision_dist)).toFixed(1)}–${Math.max(...R.map(r => r.decision_dist)).toFixed(1)} m`],
+  ];
+  document.getElementById('tiles').innerHTML = tiles.map(t => `<div class="tile"><span class="k">${t[0]}</span><span class="v">${t[1]}</span><span class="s">${t[2]}</span></div>`).join('');
+
+  // ---------- small multiples
+  const s0 = -0.5, s1 = 7.5, l0 = -1.9, l1 = 1.35, W = 500, Hh = 200, pad = 8;
+  const X = s => pad + (s - s0) / (s1 - s0) * (W - 2 * pad);
+  const Y = l => pad + (l1 - l) / (l1 - l0) * (Hh - 2 * pad);
+  const notes = {
+    run01: 'Side fixed at 6.8 m; one of the smallest swerves.',
+    run03: 'AMCL 2° off at the start (check not run); corrected, the walker was about centred, so the side is the same.',
+    run05: 'Walker about 0.2 m to the robot\'s right in every measure; LEFT is the rule\'s result.',
+    run07: 'Walker started late; side fixed at t+5.2 s.',
+    run09: 'Critic and global plan said RIGHT; the controller turned left after a late decision (4.7 m) and passed 0.33 m from the walker.',
+    run10: 'A second, unrelated track to the robot\'s left; the walker\'s side was fixed separately.',
+  };
+  const grid = document.getElementById('grid');
+  for (const r of R) {
+    const card = document.createElement('article');
+    card.className = 'card' + (asIntended(r) ? '' : ' flag');
+    card.innerHTML = `<h3>${r.run.replace('run', 'Run ')} <span class="pill ${r.side}">critic ${r.side === 'R' ? 'RIGHT' : 'LEFT'}</span>${asIntended(r) ? '' : ` <span class="pill ${r.robot_side}">robot went ${r.robot_side === 'R' ? 'RIGHT' : 'LEFT'}</span>`}</h3>
+      <div class="meta">offset ${fmt(r.offset)} m · fixed ${r.decision_dist.toFixed(1)} m ahead · closest return ${r.clearance.toFixed(2)} m · ${r.time_to_goal.toFixed(1)} s</div>`;
+    const svg = el('svg', { viewBox: `0 0 ${W} ${Hh}`, role: 'img', 'aria-label': `${r.run} top view` });
+    // walls
+    const wl = D.walls.filter(w => w[1] != null), wr = D.walls.filter(w => w[2] != null);
+    el('path', { d: 'M' + wl.map(w => `${X(w[0]).toFixed(1)} ${Y(Math.min(w[1], l1)).toFixed(1)}`).join(' L'), fill: 'none', stroke: 'var(--wall)', 'stroke-width': 3 }, svg);
+    el('path', { d: 'M' + wr.map(w => `${X(w[0]).toFixed(1)} ${Y(Math.max(w[2], l0)).toFixed(1)}`).join(' L'), fill: 'none', stroke: 'var(--wall)', 'stroke-width': 3 }, svg);
+    el('line', { x1: X(0), y1: Y(0), x2: X(6.85), y2: Y(0), stroke: 'var(--axis)', 'stroke-width': 1.5, 'stroke-dasharray': '6 5' }, svg);
+    el('path', { d: `M ${X(6.85)} ${Y(0) - 7} l 7 7 l -7 7 l -7 -7 z`, fill: 'var(--ink-2)' }, svg);
+    // walker
+    for (const w of r.walker) {
+      const c = w[3] ? el('circle', { cx: X(w[1]), cy: Y(w[2]), r: 3.2, fill: 'var(--walker)', 'fill-opacity': .85 }, svg)
+                     : el('circle', { cx: X(w[1]), cy: Y(w[2]), r: 3, fill: 'none', stroke: 'var(--walker)', 'stroke-width': 1.3 }, svg);
+      tip(c, `walker t+${w[0].toFixed(1)} s (${w[3] ? 'camera confirmed' : 'LiDAR only'})`);
+    }
+    // robot path
+    const col = r.robot_side === 'R' ? 'var(--right)' : 'var(--left)';
+    el('path', { d: 'M' + r.path.map(p => `${X(p[1]).toFixed(1)} ${Y(p[2]).toFixed(1)}`).join(' L'), fill: 'none', stroke: col, 'stroke-width': 3, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, svg);
+    // decision marker
+    const pd = r.path.reduce((b, p) => Math.abs(p[0] - r.decision_t) < Math.abs(b[0] - r.decision_t) ? p : b, r.path[0]);
+    tip(el('path', { d: `M ${X(pd[1])} ${Y(pd[2]) - 7} l 7 7 l -7 7 l -7 -7 z`, fill: 'var(--ink)', stroke: 'var(--panel)', 'stroke-width': 1.5 }, svg), `side fixed at t+${r.decision_t.toFixed(1)} s`);
+    // closest return
+    const [cs, cl_] = r.clearance_sl;
+    const g = el('g', {}, svg);
+    el('path', { d: `M ${X(cs) - 6} ${Y(cl_) - 6} L ${X(cs) + 6} ${Y(cl_) + 6} M ${X(cs) + 6} ${Y(cl_) - 6} L ${X(cs) - 6} ${Y(cl_) + 6}`, stroke: 'var(--near)', 'stroke-width': 2.2 }, g);
+    tip(g, `closest return not on the map: ${r.clearance.toFixed(2)} m at t+${r.clearance_t.toFixed(1)} s`);
+    // labels
+    const t1 = el('text', { x: X(0), y: Hh - 4, 'font-size': 11, fill: 'var(--muted)' }, svg); t1.textContent = 'start';
+    const t2 = el('text', { x: X(6.85), y: Hh - 4, 'font-size': 11, fill: 'var(--muted)', 'text-anchor': 'middle' }, svg); t2.textContent = 'goal';
+    card.appendChild(svg);
+    if (notes[r.run]) { const n = document.createElement('div'); n.className = 'note'; n.textContent = notes[r.run]; card.appendChild(n); }
+    grid.appendChild(card);
+  }
+
+  // ---------- ruler
+  const ru = document.getElementById('ruler');
+  const lo = -0.40, hi = 0.45, x0 = 60, x1 = 920, yb = 160;
+  const RX = v => x0 + (v - lo) / (hi - lo) * (x1 - x0);
+  el('rect', { x: x0, y: 30, width: RX(-0.20) - x0, height: yb - 30, fill: 'var(--left)', 'fill-opacity': .10 }, ru);
+  el('rect', { x: RX(-0.20), y: 30, width: x1 - RX(-0.20), height: yb - 30, fill: 'var(--right)', 'fill-opacity': .08 }, ru);
+  el('line', { x1: x0, y1: yb, x2: x1, y2: yb, stroke: 'var(--ink-2)', 'stroke-width': 2 }, ru);
+  for (let v = -0.4; v <= 0.4501; v += 0.1) {
+    const vv = Math.round(v * 10) / 10;
+    el('line', { x1: RX(vv), y1: yb, x2: RX(vv), y2: yb + 6, stroke: 'var(--ink-2)', 'stroke-width': 1.5 }, ru);
+    const t = el('text', { x: RX(vv), y: yb + 22, 'text-anchor': 'middle', 'font-size': 12, class: 'mono', fill: 'var(--ink-2)' }, ru);
+    t.textContent = (vv > 0 ? '+' : '') + vv.toFixed(1);
+  }
+  el('line', { x1: RX(-0.2), y1: 22, x2: RX(-0.2), y2: yb, stroke: 'var(--ink)', 'stroke-width': 2.5 }, ru);
+  const tl = el('text', { x: RX(-0.2) - 8, y: 22, 'text-anchor': 'end', 'font-size': 13, 'font-weight': 600, fill: 'var(--left)' }, ru); tl.textContent = 'keeps LEFT';
+  const tr = el('text', { x: RX(-0.2) + 8, y: 22, 'font-size': 13, 'font-weight': 600, fill: 'var(--right)' }, ru); tr.textContent = 'keeps RIGHT (threshold −0.20 m)';
+  const lab1 = el('text', { x: x0, y: yb + 42, 'font-size': 12.5, 'font-weight': 600, fill: 'var(--ink-2)' }, ru); lab1.textContent = '← robot’s right';
+  const lab2 = el('text', { x: x1, y: yb + 42, 'font-size': 12.5, 'font-weight': 600, fill: 'var(--ink-2)', 'text-anchor': 'end' }, ru); lab2.textContent = 'robot’s left →';
+  const placed = [];
+  for (const r of [...R].sort((a, b) => a.offset - b.offset)) {
+    const x = RX(r.offset); let lvl = 0;
+    while (placed.some(p => Math.abs(p.x - x) < 30 && p.l === lvl)) lvl++;
+    placed.push({ x, l: lvl });
+    const y = yb - 30 - lvl * 40;
+    const g = el('g', { tabindex: 0 }, ru);
+    tip(g, `${r.run}: offset ${fmt(r.offset)} m, critic ${r.side === 'R' ? 'RIGHT' : 'LEFT'}, robot went ${r.robot_side === 'R' ? 'RIGHT' : 'LEFT'}`);
+    if (!asIntended(r)) el('circle', { cx: x, cy: y, r: 14, fill: 'none', stroke: 'var(--ink)', 'stroke-width': 1.5, 'stroke-dasharray': '3 2' }, g);
+    el('circle', { cx: x, cy: y, r: 8, fill: r.side === 'R' ? 'var(--right)' : 'var(--left)', stroke: 'var(--panel)', 'stroke-width': 2 }, g);
+    const t = el('text', { x, y: y - 17, 'text-anchor': 'middle', 'font-size': 11.5, fill: 'var(--ink)' }, g); t.textContent = r.run.replace('run', '');
+  }
+
+  // ---------- table
+  document.getElementById('tbody').innerHTML = R.map(r => `<tr class="${asIntended(r) ? '' : 'flag'}">
+    <td>${r.run.replace('run', 'Run ')}</td><td><span class="pill ${r.side}">${r.side === 'R' ? 'RIGHT' : 'LEFT'}</span></td>
+    <td class="n">${fmt(r.offset)}</td><td class="n">${r.decision_t.toFixed(1)} · ${r.decision_dist.toFixed(2)}</td>
+    <td><span class="pill ${r.robot_side}">${r.robot_side === 'R' ? 'RIGHT' : 'LEFT'}</span></td>
+    <td class="n">${r.max_lateral.toFixed(2)}</td><td class="n">${r.max_heading.toFixed(0)}</td><td class="n">${r.clearance.toFixed(2)}</td>
+    <td class="n">${r.min_speed.toFixed(2)}</td><td class="n">${r.time_to_goal.toFixed(1)}</td><td class="n">${fmt(r.loc_err_deg, 1)}</td></tr>`).join('');
+  const m = k => `${mean(R.map(r => r[k])).toFixed(2)} ± ${sd(R.map(r => r[k])).toFixed(2)}`;
+  document.getElementById('tfoot').innerHTML = `<tr><td>Mean ± SD</td><td></td><td class="n">${m('offset')}</td><td class="n">${m('decision_dist')}</td><td></td>
+    <td class="n">${m('max_lateral')}</td><td class="n">${mean(R.map(r => r.max_heading)).toFixed(0)} ± ${sd(R.map(r => r.max_heading)).toFixed(0)}</td><td class="n">${m('clearance')}</td>
+    <td class="n">${m('min_speed')}</td><td class="n">${mean(R.map(r => r.time_to_goal)).toFixed(1)} ± ${sd(R.map(r => r.time_to_goal)).toFixed(1)}</td><td></td></tr>`;
+
+  // ---------- notes
+  const hd = R.map(r => r.max_heading);
+  document.getElementById('notes').innerHTML = [
+    `The side rule worked in 9 of 10 runs: 8 kept right for a centred walker, and run 05 kept left for a walker about 0.2&nbsp;m to the robot's right.`,
+    `Run 09 is the one miss. The critic and the global plan said RIGHT, but the controller went left after a late decision at 4.7&nbsp;m and passed 0.33&nbsp;m from the walker, the closest of all ten runs.`,
+    `The swerve is still sharp. The robot turned ${Math.min(...hd)}–${Math.max(...hd)}° away from the hallway, ${mean(hd).toFixed(0)}° on average, and slid up to ${Math.max(...R.map(r => r.max_lateral)).toFixed(2)}&nbsp;m sideways. This is the main thing left to improve.`,
+    `The camera loses the walker during that turn in every run, and LiDAR carries the track. In runs 03, 05, 09 and 10 the track was dropped as a ghost near the robot.`,
+    `The occlusion slow-down came on only in run 10, while the walker was really going by. No run stopped for 0.5&nbsp;s or longer.`,
+    `Localization was checked before each run. Run 03 still started 2° off; corrected, its side is the same.`,
+  ].map(s => `<li>${s}</li>`).join('');
+})();
+</script>

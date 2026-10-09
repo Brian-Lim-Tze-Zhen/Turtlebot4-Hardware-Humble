@@ -1,0 +1,13 @@
+[
+ {"name":"headon_lanegoalside_run01_20261005","bag":"bags/headon_lanegoalside_run01_20261005_100329/bag","lane_abs":1791194643.23,"track":0,"actual":"R","corr":2.0,"note":"5 Oct: walker 0.4-0.65 m right, should be L"},
+ {"name":"headon_rec15_run01_20261009","bag":"bags/headon_rec15_run01_20261009_090432/bag","lane_abs":1791536716.64,"track":2,"actual":"L","corr":-1.0,"note":"Wi-Fi blackout, lane at 2.8 m"},
+ {"name":"headon_rec15_run02_20261009","bag":"bags/headon_rec15_run02_20261009_091048/bag","lane_abs":1791537086.41,"track":4,"actual":"R","corr":-0.5},
+ {"name":"headon_rec15_run03_20261009","bag":"bags/headon_rec15_run03_20261009_091505/bag","lane_abs":1791537326.59,"track":6,"actual":"R","corr":-0.5},
+ {"name":"headon_rec15_run04_20261009","bag":"bags/headon_rec15_run04_20261009_092705/bag","lane_abs":1791538046.96,"track":9,"actual":"L","corr":2.0},
+ {"name":"headon_noghost_run01_20261009","bag":"bags/headon_rec15noghost_run01_20261009_094820/bag","lane_abs":1791539345.69,"track":1,"actual":"L","corr":3.5},
+ {"name":"headon_noghost_run02_20261009","bag":"bags/headon_rec15noghost_run02_20261009_095414/bag","lane_abs":1791539676.56,"track":6,"actual":"L","corr":2.0},
+ {"name":"headon_noghost_run03_20261009","bag":"bags/headon_rec15noghost_run03_20261009_100317/bag","lane_abs":1791540248.01,"track":10,"actual":"R","corr":0.0},
+ {"name":"headon_noghost_run04_20261009","bag":"bags/headon_rec15noghost_run04_20261009_100916/bag","lane_abs":1791540631.84,"track":13,"actual":"R","corr":0.0},
+ {"name":"headon_noghost_run05_20261009","bag":"bags/headon_rec15noghost_run05_20261009_101253/bag","lane_abs":1791540793.30,"track":17,"actual":"R","corr":-1.0},
+ {"name":"headon_noghost_run06_20261009","bag":"bags/headon_rec15noghost_run06_20261009_102112/bag","lane_abs":1791541291.77,"track":19,"actual":"L","corr":0.5,"note":"Brian: passed my right"}
+]

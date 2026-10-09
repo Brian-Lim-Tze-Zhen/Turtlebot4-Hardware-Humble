@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1000" viewBox="0 0 1400 1000" font-family="DejaVu Sans, Arial, sans-serif">
+<rect width="1400" height="1000" fill="#fcfcfb"/>
+<text x="60" y="52" font-size="26" fill="#0b0b0b" text-anchor="start" font-weight="bold">How the robot picks its pass side - and why the threshold should be 0.20 m</text>
+<text x="60" y="82" font-size="15" fill="#52514e" text-anchor="start" font-weight="normal">Head-on hallway runs, TurtleBot 4, rec15 + noghost critic, 9 Oct 2026 (and the 5 Oct goal-side run)</text>
+<text x="60" y="130" font-size="19" fill="#0b0b0b" text-anchor="start" font-weight="bold">1  The rule (top view)</text>
+<rect x="120" y="175.0" width="1170" height="145.0" fill="#2a78d6" fill-opacity="0.10"/>
+<rect x="120" y="320.0" width="1170" height="105.0" fill="#eb6834" fill-opacity="0.12"/>
+<line x1="120" y1="175.0" x2="1290" y2="175.0" stroke="#52514e" stroke-width="4"/>
+<line x1="120" y1="425.0" x2="1290" y2="425.0" stroke="#52514e" stroke-width="4"/>
+<text x="1284" y="165.0" font-size="13" fill="#8a8984" text-anchor="end" font-weight="normal">wall</text>
+<text x="1284" y="447.0" font-size="13" fill="#8a8984" text-anchor="end" font-weight="normal">wall</text>
+<line x1="160" y1="300" x2="1250" y2="300" stroke="#52514e" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="640" y="290" font-size="14" fill="#52514e" text-anchor="middle" font-weight="normal">robot-goal line (offset 0)</text>
+<line x1="120" y1="320.0" x2="1290" y2="320.0" stroke="#eb6834" stroke-width="2"/>
+<text x="1040" y="338.0" font-size="14" fill="#eb6834" text-anchor="middle" font-weight="bold">threshold: 0.20 m to the robot's right</text>
+<circle cx="160" cy="300" r="22" fill="#0b0b0b"/>
+<line x1="160" y1="300" x2="182" y2="300" stroke="#fcfcfb" stroke-width="4"/>
+<text x="160" y="346" font-size="14" fill="#0b0b0b" text-anchor="middle" font-weight="bold">robot</text>
+<path d="M 1250 286 l 12 14 l -12 14 l -12 -14 z" fill="#52514e"/>
+<text x="1250" y="336" font-size="14" fill="#52514e" text-anchor="middle" font-weight="normal">goal</text>
+<circle cx="820" cy="288" r="14" fill="#fcfcfb" stroke="#2a78d6" stroke-width="4"/>
+<text x="820" y="260" font-size="14" fill="#0b0b0b" text-anchor="middle" font-weight="bold">walker centred</text>
+<path d="M 184 300 C 420 300, 560 370, 730 382 S 940 382, 1180 320" fill="none" stroke="#2a78d6" stroke-width="3"/>
+<text x="560" y="404" font-size="15" fill="#2a78d6" text-anchor="start" font-weight="bold">robot keeps RIGHT  -  passes on your left (German keep-right)</text>
+<circle cx="1000" cy="375.0" r="14" fill="#fcfcfb" stroke="#eb6834" stroke-width="4"/>
+<text x="1024" y="381.0" font-size="14" fill="#0b0b0b" text-anchor="start" font-weight="bold">walker clearly on the robot's right</text>
+<path d="M 184 300 C 500 300, 700 240, 940 230 S 1140 240, 1180 284" fill="none" stroke="#eb6834" stroke-width="3" stroke-dasharray="10 6"/>
+<text x="700" y="216" font-size="15" fill="#eb6834" text-anchor="start" font-weight="bold">robot keeps LEFT - does not cut across you</text>
+<text x="60" y="483.0" font-size="15" fill="#52514e" text-anchor="start" font-weight="normal">The side is set by the FIRST position sample (~6.5 m away); the side hold keeps it unless you later read</text>
+<text x="60" y="505.0" font-size="15" fill="#52514e" text-anchor="start" font-weight="normal">more than 0.30 m on the other side. So the threshold decides on one early, noisy estimate.</text>
+<text x="60" y="545" font-size="19" fill="#0b0b0b" text-anchor="start" font-weight="bold">2  Where each run's first sample fell (corrected for the AMCL heading error)</text>
+<line x1="150" y1="800" x2="1290" y2="800" stroke="#52514e" stroke-width="2"/>
+<line x1="150.0" y1="800" x2="150.0" y2="808" stroke="#52514e" stroke-width="2"/>
+<text x="150.0" y="828" font-size="14" fill="#52514e" text-anchor="middle" font-weight="normal">-0.40</text>
+<line x1="245.0" y1="800" x2="245.0" y2="808" stroke="#52514e" stroke-width="2"/>
+<text x="245.00000000000006" y="828" font-size="14" fill="#52514e" text-anchor="middle" font-weight="normal">-0.35</text>
+<line x1="340.0" y1="800" x2="340.0" y2="808" stroke="#52514e" stroke-width="2"/>
+<text x="340.0" y="828" font-size="14" fill="#52514e" text-anchor="middle" font-weight="normal">-0.30</text>
+<line x1="435.0" y1="800" x2="435.0" y2="808" stroke="#52514e" stroke-width="2"/>
+<text x="435.0" y="828" font-size="14" fill="#52514e" text-anchor="middle" font-weight="normal">-0.25</text>
+<line x1="530.0" y1="800" x2="530.0" y2="808" stroke="#52514e" stroke-width="2"/>
+<text x="530.0" y="828" font-size="14" fill="#52514e" text-anchor="middle" font-weight="normal">-0.20</text>
+<line x1="625.0" y1="800" x2="625.0" y2="808" stroke="#52514e" stroke-width="2"/>
+<text x="625.0" y="828" font-size="14" fill="#52514e" text-anchor="middle" font-weight="normal">-0.15</text>
+<line x1="720.0" y1="800" x2="720.0" y2="808" stroke="#52514e" stroke-width="2"/>
+<text x="720.0" y="828" font-size="14" fill="#52514e" text-anchor="middle" font-weight="normal">-0.10</text>
+<line x1="815.0" y1="800" x2="815.0" y2="808" stroke="#52514e" stroke-width="2"/>
+<text x="814.9999999999999" y="828" font-size="14" fill="#52514e" text-anchor="middle" font-weight="normal">-0.05</text>
+<line x1="910.0" y1="800" x2="910.0" y2="808" stroke="#52514e" stroke-width="2"/>
+<text x="910.0" y="828" font-size="14" fill="#52514e" text-anchor="middle" font-weight="normal">0</text>
+<line x1="1005.0" y1="800" x2="1005.0" y2="808" stroke="#52514e" stroke-width="2"/>
+<text x="1004.9999999999999" y="828" font-size="14" fill="#52514e" text-anchor="middle" font-weight="normal">+0.05</text>
+<line x1="1100.0" y1="800" x2="1100.0" y2="808" stroke="#52514e" stroke-width="2"/>
+<text x="1100.0" y="828" font-size="14" fill="#52514e" text-anchor="middle" font-weight="normal">+0.10</text>
+<line x1="1195.0" y1="800" x2="1195.0" y2="808" stroke="#52514e" stroke-width="2"/>
+<text x="1195.0" y="828" font-size="14" fill="#52514e" text-anchor="middle" font-weight="normal">+0.15</text>
+<line x1="1290.0" y1="800" x2="1290.0" y2="808" stroke="#52514e" stroke-width="2"/>
+<text x="1290.0" y="828" font-size="14" fill="#52514e" text-anchor="middle" font-weight="normal">+0.20</text>
+<text x="150" y="856" font-size="15" fill="#52514e" text-anchor="start" font-weight="bold"><- robot's RIGHT</text>
+<text x="1290" y="856" font-size="15" fill="#52514e" text-anchor="end" font-weight="bold">robot's LEFT -></text>
+<text x="720.0" y="856" font-size="15" fill="#52514e" text-anchor="middle" font-weight="normal">walker offset from the robot-goal line at the first sample (m)</text>
+<line x1="340.0" y1="597" x2="340.0" y2="800" stroke="#8a8984" stroke-width="2" stroke-dasharray="6 5"/>
+<line x1="530.0" y1="597" x2="530.0" y2="800" stroke="#0b0b0b" stroke-width="3"/>
+<line x1="625.0" y1="597" x2="625.0" y2="800" stroke="#8a8984" stroke-width="2" stroke-dasharray="6 5"/>
+<text x="332.0" y="589" font-size="14" fill="#52514e" text-anchor="end" font-weight="normal">0.30 (5 Oct value): 5 Oct back to RIGHT  x</text>
+<text x="530.0" y="571" font-size="14" fill="#0b0b0b" text-anchor="middle" font-weight="bold">0.20 proposed: splits the groups  ok</text>
+<text x="633.0" y="589" font-size="14" fill="#52514e" text-anchor="start" font-weight="normal">x  0.15 now: run 06, rec15 03 go LEFT</text>
+<circle cx="283.0" cy="764" r="9" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<text x="283.0" y="748" font-size="12" fill="#0b0b0b" text-anchor="middle" font-weight="normal">rec15 01</text>
+<circle cx="416.0" cy="764" r="9" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<text x="416.0" y="748" font-size="12" fill="#0b0b0b" text-anchor="middle" font-weight="normal">5 Oct</text>
+<circle cx="530.0" cy="764" r="9" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/>
+<text x="530.0" y="748" font-size="12" fill="#0b0b0b" text-anchor="middle" font-weight="normal">run 05</text>
+<circle cx="606.0" cy="764" r="9" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<text x="606.0" y="748" font-size="12" fill="#0b0b0b" text-anchor="middle" font-weight="normal">run 06</text>
+<circle cx="606.0" cy="720" r="9" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<text x="606.0" y="704" font-size="12" fill="#0b0b0b" text-anchor="middle" font-weight="normal">rec15 03</text>
+<circle cx="663.0" cy="764" r="9" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<text x="663.0" y="748" font-size="12" fill="#0b0b0b" text-anchor="middle" font-weight="normal">run 02</text>
+<circle cx="796.0" cy="764" r="9" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<text x="796.0" y="748" font-size="12" fill="#0b0b0b" text-anchor="middle" font-weight="normal">run 01</text>
+<circle cx="910.0" cy="764" r="9" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<text x="910.0" y="748" font-size="12" fill="#0b0b0b" text-anchor="middle" font-weight="normal">rec15 02</text>
+<circle cx="929.0" cy="720" r="9" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<text x="928.9999999999999" y="704" font-size="12" fill="#0b0b0b" text-anchor="middle" font-weight="normal">run 04</text>
+<circle cx="967.0" cy="764" r="9" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<text x="967.0" y="748" font-size="12" fill="#0b0b0b" text-anchor="middle" font-weight="normal">rec15 04</text>
+<circle cx="1195.0" cy="764" r="9" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/>
+<text x="1195.0" y="748" font-size="12" fill="#0b0b0b" text-anchor="middle" font-weight="normal">run 03</text>
+<circle cx="150" cy="935" r="8" fill="#eb6834"/>
+<text x="166" y="940" font-size="14" fill="#0b0b0b" text-anchor="start" font-weight="normal">should go LEFT (walker clearly on the robot's right; 5 Oct: Brian had to yield)</text>
+<circle cx="150" cy="963" r="8" fill="#2a78d6"/>
+<text x="166" y="968" font-size="14" fill="#0b0b0b" text-anchor="start" font-weight="normal">should go RIGHT (walker centred; "run" = rec15 + noghost run of 9 Oct)</text>
+<text x="1340" y="940" font-size="14" fill="#52514e" text-anchor="end" font-weight="bold">Only holds if localization is right:</text>
+<text x="1340" y="968" font-size="14" fill="#52514e" text-anchor="end" font-weight="normal">2 deg heading error moves you 0.22 m at 6.4 m -> check_localization.py --fix</text>
+</svg>

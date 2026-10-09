@@ -1,0 +1,212 @@
+[
+ {
+  "name": "headon_rec20noghost_run01_20261009_125322",
+  "bag": "/root/thesis_social_navigation_ws/bags/headon_rec20noghost_run01_20261009_125322",
+  "t0": 1791550416.44,
+  "loc_err_deg": 0.0,
+  "track": 0,
+  "events": [
+   [
+    1.95,
+    "lane rule now follows track 0 (6.76 m ahead), robot keeps RIGHT"
+   ],
+   [
+    2.55,
+    "track 0 pass side fixed: robot keeps RIGHT (walker's mean offset +0.35 m over 13 samples)"
+   ]
+  ]
+ },
+ {
+  "name": "headon_rec20noghost_run02_20261009_120453",
+  "bag": "/root/thesis_social_navigation_ws/bags/headon_rec20noghost_run02_20261009_120453",
+  "t0": 1791547509.89,
+  "loc_err_deg": 0.0,
+  "track": 11,
+  "events": [
+   [
+    1.96,
+    "lane rule now follows track 11 (6.97 m ahead), robot keeps RIGHT"
+   ],
+   [
+    2.56,
+    "track 11 pass side fixed: robot keeps RIGHT (walker's mean offset +0.12 m over 13 samples)"
+   ]
+  ]
+ },
+ {
+  "name": "headon_rec20noghost_run03_20261009_121336",
+  "bag": "/root/thesis_social_navigation_ws/bags/headon_rec20noghost_run03_20261009_121336",
+  "t0": 1791548052.89,
+  "loc_err_deg": -2.0,
+  "track": 19,
+  "events": [
+   [
+    2.15,
+    "lane rule now follows track 19 (5.95 m ahead), robot keeps RIGHT"
+   ],
+   [
+    2.75,
+    "track 19 pass side fixed: robot keeps RIGHT (walker's mean offset +0.27 m over 13 samples)"
+   ],
+   [
+    6.1,
+    "track 19 dropped as a ghost (coasted to 0.83 m from the robot, not seen there)"
+   ]
+  ]
+ },
+ {
+  "name": "headon_rec20noghost_run04_20261009_122047",
+  "bag": "/root/thesis_social_navigation_ws/bags/headon_rec20noghost_run04_20261009_122047",
+  "t0": 1791548467.61,
+  "loc_err_deg": 0.0,
+  "track": 22,
+  "events": [
+   [
+    1.84,
+    "lane rule now follows track 22 (6.49 m ahead), robot keeps RIGHT"
+   ],
+   [
+    2.46,
+    "track 22 pass side fixed: robot keeps RIGHT (walker's mean offset -0.10 m over 13 samples)"
+   ]
+  ]
+ },
+ {
+  "name": "headon_rec20noghost_run05_20261009_122245",
+  "bag": "/root/thesis_social_navigation_ws/bags/headon_rec20noghost_run05_20261009_122245",
+  "t0": 1791548585.04,
+  "loc_err_deg": 0.0,
+  "track": 27,
+  "events": [
+   [
+    1.51,
+    "lane rule now follows track 27 (6.61 m ahead), robot keeps LEFT"
+   ],
+   [
+    2.16,
+    "track 27 pass side fixed: robot keeps LEFT (walker's mean offset -0.23 m over 14 samples)"
+   ],
+   [
+    6.1,
+    "track 27 dropped as a ghost (coasted to 0.96 m from the robot, not seen there)"
+   ]
+  ]
+ },
+ {
+  "name": "headon_rec20noghost_run06_20261009_122539",
+  "bag": "/root/thesis_social_navigation_ws/bags/headon_rec20noghost_run06_20261009_122539",
+  "t0": 1791548756.3,
+  "loc_err_deg": 0.0,
+  "track": 29,
+  "events": [
+   [
+    2.03,
+    "lane rule now follows track 29 (5.88 m ahead), robot keeps RIGHT"
+   ],
+   [
+    2.63,
+    "track 29 pass side fixed: robot keeps RIGHT (walker's mean offset +0.31 m over 13 samples)"
+   ]
+  ]
+ },
+ {
+  "name": "headon_rec20noghost_run07_20261009_122715",
+  "bag": "/root/thesis_social_navigation_ws/bags/headon_rec20noghost_run07_20261009_122715",
+  "t0": 1791548850.45,
+  "loc_err_deg": 0.0,
+  "track": 30,
+  "events": [
+   [
+    -0.09,
+    "lane rule now follows track 30 (7.54 m ahead), robot keeps RIGHT"
+   ],
+   [
+    4.61,
+    "lane rule now follows track 30 (5.87 m ahead), robot keeps RIGHT"
+   ],
+   [
+    5.25,
+    "track 30 pass side fixed: robot keeps RIGHT (walker's mean offset +0.34 m over 14 samples)"
+   ]
+  ]
+ },
+ {
+  "name": "headon_rec20noghost_run08_20261009_122959",
+  "bag": "/root/thesis_social_navigation_ws/bags/headon_rec20noghost_run08_20261009_122959",
+  "t0": 1791549014.41,
+  "loc_err_deg": 0.0,
+  "track": 32,
+  "events": [
+   [
+    2.08,
+    "lane rule now follows track 32 (6.36 m ahead), robot keeps RIGHT"
+   ],
+   [
+    2.68,
+    "track 32 pass side fixed: robot keeps RIGHT (walker's mean offset +0.05 m over 13 samples)"
+   ]
+  ]
+ },
+ {
+  "name": "headon_rec20noghost_run09_20261009_123149",
+  "bag": "/root/thesis_social_navigation_ws/bags/headon_rec20noghost_run09_20261009_123149",
+  "t0": 1791549123.95,
+  "loc_err_deg": 0.0,
+  "track": 34,
+  "events": [
+   [
+    2.84,
+    "lane rule now follows track 34 (4.70 m ahead), robot keeps RIGHT"
+   ],
+   [
+    3.48,
+    "track 34 pass side fixed: robot keeps RIGHT (walker's mean offset -0.11 m over 14 samples)"
+   ],
+   [
+    6.04,
+    "track 34 dropped as a ghost (coasted to 0.46 m from the robot, not seen there)"
+   ]
+  ]
+ },
+ {
+  "name": "headon_rec20noghost_run10_20261009_123533",
+  "bag": "/root/thesis_social_navigation_ws/bags/headon_rec20noghost_run10_20261009_123533",
+  "t0": 1791549370.34,
+  "loc_err_deg": 0.0,
+  "track": 38,
+  "events": [
+   [
+    2.38,
+    "lane rule now follows track 37 (5.36 m ahead), robot keeps RIGHT"
+   ],
+   [
+    2.98,
+    "track 37 pass side fixed: robot keeps RIGHT (walker's mean offset +1.18 m over 13 samples)"
+   ],
+   [
+    3.23,
+    "track 38 pass side fixed: robot keeps RIGHT (walker's mean offset -0.13 m over 14 samples)"
+   ],
+   [
+    6.17,
+    "lane rule now follows track 38 (0.94 m ahead), robot keeps RIGHT"
+   ],
+   [
+    6.17,
+    "occlusion slow-down ON (a walker is going by, the view behind it is blocked)"
+   ],
+   [
+    6.63,
+    "track 38 dropped as a ghost (coasted to 0.43 m from the robot, not seen there)"
+   ],
+   [
+    6.63,
+    "lane rule now follows track 37 (1.08 m ahead), robot keeps RIGHT"
+   ],
+   [
+    7.62,
+    "occlusion slow-down off"
+   ]
+  ]
+ }
+]

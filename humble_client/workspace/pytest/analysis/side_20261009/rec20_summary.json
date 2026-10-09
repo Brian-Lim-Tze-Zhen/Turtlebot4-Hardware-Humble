@@ -1,0 +1,222 @@
+[
+ {
+  "run": "run01",
+  "name": "headon_rec20noghost_run01_20261009_125322",
+  "loc_err_deg": 0.0,
+  "side": "R",
+  "offset": 0.35,
+  "decision_t": 2.55,
+  "decision_dist": 6.76,
+  "robot_side": "R",
+  "max_lateral": 0.5,
+  "max_heading": 85.0,
+  "clearance": 0.64,
+  "clearance_t": 6.44,
+  "clearance_sl": [
+   0.69,
+   0.12
+  ],
+  "min_speed": 0.02,
+  "time_to_goal": 26.1,
+  "occlusion": false,
+  "ghost_drop": null
+ },
+ {
+  "run": "run02",
+  "name": "headon_rec20noghost_run02_20261009_120453",
+  "loc_err_deg": 0.0,
+  "side": "R",
+  "offset": 0.12,
+  "decision_t": 2.56,
+  "decision_dist": 6.97,
+  "robot_side": "R",
+  "max_lateral": 0.95,
+  "max_heading": 96.0,
+  "clearance": 0.9,
+  "clearance_t": 6.37,
+  "clearance_sl": [
+   0.67,
+   0.0
+  ],
+  "min_speed": 0.08,
+  "time_to_goal": 29.1,
+  "occlusion": false,
+  "ghost_drop": null
+ },
+ {
+  "run": "run03",
+  "name": "headon_rec20noghost_run03_20261009_121336",
+  "loc_err_deg": -2.0,
+  "side": "R",
+  "offset": 0.27,
+  "decision_t": 2.75,
+  "decision_dist": 5.95,
+  "robot_side": "R",
+  "max_lateral": 0.95,
+  "max_heading": 68.0,
+  "clearance": 0.6,
+  "clearance_t": 6.43,
+  "clearance_sl": [
+   1.15,
+   -0.25
+  ],
+  "min_speed": 0.06,
+  "time_to_goal": 26.3,
+  "occlusion": false,
+  "ghost_drop": 6.1
+ },
+ {
+  "run": "run04",
+  "name": "headon_rec20noghost_run04_20261009_122047",
+  "loc_err_deg": 0.0,
+  "side": "R",
+  "offset": -0.1,
+  "decision_t": 2.46,
+  "decision_dist": 6.49,
+  "robot_side": "R",
+  "max_lateral": 0.57,
+  "max_heading": 67.0,
+  "clearance": 0.66,
+  "clearance_t": 6.1,
+  "clearance_sl": [
+   1.09,
+   0.09
+  ],
+  "min_speed": 0.15,
+  "time_to_goal": 25.2,
+  "occlusion": false,
+  "ghost_drop": null
+ },
+ {
+  "run": "run05",
+  "name": "headon_rec20noghost_run05_20261009_122245",
+  "loc_err_deg": 0.0,
+  "side": "L",
+  "offset": -0.23,
+  "decision_t": 2.16,
+  "decision_dist": 6.61,
+  "robot_side": "L",
+  "max_lateral": 0.85,
+  "max_heading": 88.0,
+  "clearance": 0.78,
+  "clearance_t": 6.92,
+  "clearance_sl": [
+   0.81,
+   0.09
+  ],
+  "min_speed": 0.2,
+  "time_to_goal": 27.0,
+  "occlusion": false,
+  "ghost_drop": 6.1
+ },
+ {
+  "run": "run06",
+  "name": "headon_rec20noghost_run06_20261009_122539",
+  "loc_err_deg": 0.0,
+  "side": "R",
+  "offset": 0.31,
+  "decision_t": 2.63,
+  "decision_dist": 5.88,
+  "robot_side": "R",
+  "max_lateral": 0.8,
+  "max_heading": 69.0,
+  "clearance": 0.73,
+  "clearance_t": 5.79,
+  "clearance_sl": [
+   0.97,
+   0.16
+  ],
+  "min_speed": 0.19,
+  "time_to_goal": 25.8,
+  "occlusion": false,
+  "ghost_drop": null
+ },
+ {
+  "run": "run07",
+  "name": "headon_rec20noghost_run07_20261009_122715",
+  "loc_err_deg": 0.0,
+  "side": "R",
+  "offset": 0.34,
+  "decision_t": 5.25,
+  "decision_dist": 5.87,
+  "robot_side": "R",
+  "max_lateral": 0.6,
+  "max_heading": 74.0,
+  "clearance": 0.72,
+  "clearance_t": 8.46,
+  "clearance_sl": [
+   1.22,
+   0.1
+  ],
+  "min_speed": 0.12,
+  "time_to_goal": 26.7,
+  "occlusion": false,
+  "ghost_drop": null
+ },
+ {
+  "run": "run08",
+  "name": "headon_rec20noghost_run08_20261009_122959",
+  "loc_err_deg": 0.0,
+  "side": "R",
+  "offset": 0.05,
+  "decision_t": 2.68,
+  "decision_dist": 6.36,
+  "robot_side": "R",
+  "max_lateral": 0.47,
+  "max_heading": 84.0,
+  "clearance": 0.5,
+  "clearance_t": 6.21,
+  "clearance_sl": [
+   1.09,
+   0.02
+  ],
+  "min_speed": 0.15,
+  "time_to_goal": 25.3,
+  "occlusion": false,
+  "ghost_drop": null
+ },
+ {
+  "run": "run09",
+  "name": "headon_rec20noghost_run09_20261009_123149",
+  "loc_err_deg": 0.0,
+  "side": "R",
+  "offset": -0.11,
+  "decision_t": 3.48,
+  "decision_dist": 4.7,
+  "robot_side": "L",
+  "max_lateral": 0.76,
+  "max_heading": 85.0,
+  "clearance": 0.33,
+  "clearance_t": 7.07,
+  "clearance_sl": [
+   0.93,
+   0.28
+  ],
+  "min_speed": 0.03,
+  "time_to_goal": 27.4,
+  "occlusion": false,
+  "ghost_drop": 6.04
+ },
+ {
+  "run": "run10",
+  "name": "headon_rec20noghost_run10_20261009_123533",
+  "loc_err_deg": 0.0,
+  "side": "R",
+  "offset": -0.13,
+  "decision_t": 3.23,
+  "decision_dist": 5.36,
+  "robot_side": "R",
+  "max_lateral": 0.64,
+  "max_heading": 78.0,
+  "clearance": 0.51,
+  "clearance_t": 6.41,
+  "clearance_sl": [
+   0.88,
+   -0.05
+  ],
+  "min_speed": 0.02,
+  "time_to_goal": 26.8,
+  "occlusion": true,
+  "ghost_drop": 6.63
+ }
+]
