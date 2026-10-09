@@ -92,9 +92,10 @@ def main():
     n = Turn()
     t0 = time.time()
     h = None
-    while time.time() - t0 < 3.0 and (h is None or n.front is None):
-        rclpy.spin_once(n, timeout_sec=0.1)
-        h = n.heading()
+    while time.time() - t0 < 8.0 and (h is None or n.front is None):
+        rclpy.spin_once(n, timeout_sec=0.05)
+        if time.time() - t0 > 1.0:   # let the TF buffer fill first
+            h = n.heading()
     if h is None:
         print('NO TF map -> base_link (AMCL running? /tf remapped?)')
         sys.exit(2)
