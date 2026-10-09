@@ -1,0 +1,255 @@
+<title>Standing-Pair Runs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single report column (~72ch text) with full-width figures; figures are numbered and captioned like a thesis chapter. */
+:root {
+  --bg: #ffffff;
+  --ink: #16191d;
+  --ink-2: #4f565e;
+  --muted: #8a9097;
+  --rule: #d9dde1;
+  --map: #eceef0;
+  --wall: #5b6168;
+  --robot: #1f6fbf;
+  --person: #7a4fc4;
+  --mark: #16191d;
+  --hi: #d2691e;
+  --f-head: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --f-body: "Source Sans 3", "Segoe UI", Roboto, Arial, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14171a; --ink: #e8eaec; --ink-2: #b4bac0; --muted: #80868d; --rule: #2e3338; --map: #1f2327;
+    --wall: #9aa1a8; --robot: #5aa2e6; --person: #a888e6; --mark: #e8eaec; --hi: #f0a050; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14171a; --ink: #e8eaec; --ink-2: #b4bac0; --muted: #80868d; --rule: #2e3338; --map: #1f2327;
+  --wall: #9aa1a8; --robot: #5aa2e6; --person: #a888e6; --mark: #e8eaec; --hi: #f0a050; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 17px; line-height: 1.6; }
+main { max-width: 1000px; margin: 0 auto; padding-inline: 20px; padding-block: 48px 72px; }
+.meta { font-family: var(--f-mono); font-size: 12.5px; color: var(--ink-2); letter-spacing: .02em; }
+h1 { font-family: var(--f-head); font-weight: 700; font-size: clamp(30px, 4.6vw, 42px); line-height: 1.12; margin: 10px 0 14px; text-wrap: balance; }
+h2 { font-family: var(--f-head); font-weight: 600; font-size: 23px; margin: 48px 0 10px; text-wrap: balance; }
+p { margin: 0 0 14px; max-width: 72ch; }
+.abstract { font-size: 18.5px; color: var(--ink-2); max-width: 70ch; }
+hr { border: 0; border-top: 1px solid var(--rule); margin: 28px 0; }
+.kv { display: grid; grid-template-columns: max-content 1fr; gap: 4px 18px; font-size: 15.5px; margin: 6px 0 0; max-width: 72ch; }
+.kv dt { color: var(--ink-2); } .kv dd { margin: 0; font-variant-numeric: tabular-nums; }
+figure { margin: 26px 0 8px; }
+.plot { overflow-x: auto; }
+.plot svg { display: block; width: 100%; min-width: 640px; height: auto; }
+figcaption { font-size: 14.5px; color: var(--ink-2); max-width: 80ch; margin-top: 8px; }
+figcaption b { color: var(--ink); font-weight: 600; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 22px; font-size: 13.5px; color: var(--ink-2); margin: 4px 0 6px; }
+.legend span { display: inline-flex; align-items: center; gap: 7px; }
+.tbl { overflow-x: auto; margin-top: 18px; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums; }
+caption { caption-side: top; text-align: left; font-size: 14.5px; color: var(--ink-2); padding-bottom: 8px; }
+caption b { color: var(--ink); }
+thead th { border-top: 1.5px solid var(--ink); border-bottom: 1px solid var(--ink); font-weight: 600; text-align: right; padding: 7px 10px; vertical-align: bottom; white-space: nowrap; }
+thead th:first-child, thead th:nth-child(2), tbody td:first-child, tbody td:nth-child(2) { text-align: left; }
+tbody td { padding: 5px 10px; text-align: right; white-space: nowrap; }
+tbody tr.first td { border-top: 1px solid var(--rule); }
+tbody tr:hover td { background: color-mix(in srgb, var(--robot) 8%, transparent); }
+tfoot td { border-top: 1px solid var(--ink); border-bottom: 1.5px solid var(--ink); padding: 6px 10px; text-align: right; font-weight: 600; white-space: nowrap; }
+tfoot td:first-child { text-align: left; }
+.foot { font-size: 14px; color: var(--ink-2); }
+code { font-family: var(--f-mono); font-size: .86em; }
+svg text { font-family: var(--f-body); }
+svg .ax { font-family: var(--f-mono); font-size: 11px; fill: var(--ink-2); }
+svg .lab { font-size: 12.5px; fill: var(--ink-2); }
+.run-path { transition: stroke-width .12s, opacity .12s; }
+.dim .run-path { opacity: .18; }
+.dim .run-path.on { opacity: 1; stroke-width: 3.2; stroke: var(--hi); }
+@media (prefers-reduced-motion: reduce) { .run-path { transition: none; } }
+@media (max-width: 600px) { body { font-size: 16px; } .abstract { font-size: 17px; } }
+</style>
+
+<main>
+  <div class="meta">TurtleBot 4 · lab hallway · 9 October 2026 · Nav2 MPPI with the social critic (rec20, noghost)</div>
+  <h1>Passing a standing conversation pair</h1>
+  <p class="abstract">Two people stood face to face across the hallway while the robot drove past them. We recorded ten runs in the wide hallway and ten in the narrow section, all with the configuration used for the head-on runs. Before each run, localization was checked against the map and the robot waited until it detected the pair as a conversation.</p>
+
+  <dl class="kv" id="kv"></dl>
+
+  <h2>Wide hallway</h2>
+  <p>The pair stood in the right half of the hallway, about 4.3&nbsp;m from the robot's start and about 0.9&nbsp;m apart. The robot kept to the free left half in every run and never cut between the two people.</p>
+  <figure>
+    <div class="legend" aria-hidden="true">
+      <span><svg width="24" height="8"><line x1="0" y1="4" x2="24" y2="4" stroke="var(--robot)" stroke-width="2"/></svg>robot path, one line per run</span>
+      <span><svg width="12" height="12"><circle cx="6" cy="6" r="4.5" fill="var(--person)" fill-opacity=".55"/></svg>pair member, one dot per run</span>
+      <span><svg width="12" height="12"><path d="M2 2 L10 10 M10 2 L2 10" stroke="var(--mark)" stroke-width="1.6"/></svg>closest LiDAR return near the pair</span>
+    </div>
+    <div class="plot" id="fig-wide"></div>
+    <figcaption><b>Figure 1.</b> All ten wide-hallway runs drawn to scale. The robot drives from the start (left) to the goal (right), and up is the robot's left. Grey is outside the walls on the map. The start shown is the head-on start; the pair runs began about 0.6&nbsp;m further on. Hover over a run in the table to highlight its path.</figcaption>
+  </figure>
+
+  <h2>Narrow section</h2>
+  <p>Here the hallway is about 2.2&nbsp;m wide, and the pair stood across all of it. The gaps beside the two people were about 0.2–0.65&nbsp;m, too narrow for the robot, so the only usable gap was between them. The robot went through it in every run, as it did in all three runs recorded on 5 October.</p>
+  <figure>
+    <div class="plot" id="fig-narrow"></div>
+    <figcaption><b>Figure 2.</b> All ten narrow-section runs, drawn the same way as Figure 1. The start is (−1.18, 8.82) and the goal (−6.80, 13.50).</figcaption>
+  </figure>
+
+  <h2>Clearance</h2>
+  <figure>
+    <div class="plot" id="fig-clear"></div>
+    <figcaption><b>Figure 3.</b> Distance from the LiDAR to the nearest point that is not on the map, within 1.5&nbsp;m before and 1.0&nbsp;m after the pair. This is the distance to the nearer person. Dots are runs and the bar is the mean ± SD. Open circles are the three narrow runs of 5 October.</figcaption>
+  </figure>
+
+  <div class="tbl">
+    <table>
+      <caption><b>Table 1.</b> Every run. The AMCL error is the heading correction that best fits the start scans to the map. Group messages count from t−1 to t+35&nbsp;s. A lane is the walker side rule given to a standing person; these counts come from the critic log, recorded in the day log.</caption>
+      <thead><tr><th>Set</th><th>Run</th><th>AMCL error (°)</th><th>Group messages</th><th>“Conversation”</th><th>Passed</th><th>Sideways at pair (m)</th><th>Closest (m)</th><th>Lane</th><th>Stops</th><th>Time (s)</th></tr></thead>
+      <tbody id="tbody"></tbody>
+      <tfoot id="tfoot"></tfoot>
+    </table>
+  </div>
+
+  <h2>Observations</h2>
+  <div id="obs"></div>
+
+  <hr>
+  <p class="foot">Removed runs, with reasons in <code>Task/HARDWARE_DAY_20261009.md</code>: wide run 03, where a third person walked at the robot, was recorded again. Four narrow attempts were also recorded again: two where no goal was sent, one judged failed after the robot stopped in front of the pair, and one held up by an object left near the goal.</p>
+  <p class="foot">Data: bags <code>pairwide_rec20noghost_run01–10</code> and <code>pairnarrow_rec20noghost_run01–10</code>. Configuration <code>social_nav2_headon_F_hwreq_block_approach_tf05_rec20_noghost_hw.yaml</code>. Extraction <code>workspace/pytest/analysis/side_20261009/extract_pairs.py</code>, which writes <code>pairs_page_data.json</code>.</p>
+</main>
+
+<script id="data" type="application/json">__DATA__</script>
+<script>
+(function () {
+  const D = JSON.parse(document.getElementById('data').textContent);
+  const LANES = { pairwide: { '01': 1, '02': 1, '03': 1, '04': 0, '05': 1, '06': 0, '07': 1, '08': 1, '09': 0, '10': 1 },
+                  pairnarrow: { '01': 2, '02': 1, '03': 1, '04': 1, '05': 0, '06': 0, '07': 0, '08': 1, '09': 2, '10': 1 } };
+  const REF_NARROW_5OCT = [0.44, 0.51, 0.36];
+  const NS = 'http://www.w3.org/2000/svg';
+  const el = (tag, a, p) => { const e = document.createElementNS(NS, tag); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
+  const mean = a => a.reduce((x, y) => x + y, 0) / a.length;
+  const sd = a => { const m = mean(a); return Math.sqrt(a.reduce((x, y) => x + (y - m) ** 2, 0) / (a.length - 1)); };
+  const f2 = v => v.toFixed(2), sg = (v, d = 2) => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(d);
+  const S = { pairwide: D.runs.filter(r => r.scenario === 'pairwide'), pairnarrow: D.runs.filter(r => r.scenario === 'pairnarrow') };
+
+  // summary list
+  const W = S.pairwide, N = S.pairnarrow;
+  const kv = [
+    ['Runs', `10 wide, 10 narrow. All reached the goal.`],
+    ['Side', `wide: left of the pair 10/10 · narrow: between the two 10/10`],
+    ['Closest return', `wide ${f2(mean(W.map(r => r.clearance)))} ± ${f2(sd(W.map(r => r.clearance)))} m · narrow ${f2(mean(N.map(r => r.clearance)))} ± ${f2(sd(N.map(r => r.clearance)))} m`],
+    ['Time to goal', `wide ${mean(W.map(r => r.time_to_goal)).toFixed(1)} s · narrow ${mean(N.map(r => r.time_to_goal)).toFixed(1)} s`],
+    ['Stops ≥ 0.5 s', `wide 0 · narrow 1 (run 07)`],
+  ];
+  document.getElementById('kv').innerHTML = kv.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
+
+  // overlay figure
+  function overlay(id, key, s0, s1, l0, l1, goalS) {
+    const ppm = 110, m = { l: 46, r: 16, t: 14, b: 40 };
+    const Wd = m.l + m.r + (s1 - s0) * ppm, Hd = m.t + m.b + (l1 - l0) * ppm;
+    const X = s => m.l + (s - s0) * ppm, Y = l => m.t + (l1 - l) * ppm;
+    const svg = el('svg', { viewBox: `0 0 ${Wd.toFixed(0)} ${Hd.toFixed(0)}`, role: 'img', 'aria-label': `${key} runs overlaid, to scale` });
+    const walls = D.walls[key].filter(w => w[0] >= s0 - 0.01 && w[0] <= s1 + 0.01);
+    // map outside the walls
+    const top = walls.filter(w => w[1] != null), bot = walls.filter(w => w[2] != null);
+    el('path', { d: `M ${X(s0)} ${Y(l1)} ` + top.map(w => `L ${X(w[0]).toFixed(1)} ${Y(Math.min(w[1], l1)).toFixed(1)}`).join(' ') + ` L ${X(s1)} ${Y(l1)} Z`, fill: 'var(--map)' }, svg);
+    el('path', { d: `M ${X(s0)} ${Y(l0)} ` + bot.map(w => `L ${X(w[0]).toFixed(1)} ${Y(Math.max(w[2], l0)).toFixed(1)}`).join(' ') + ` L ${X(s1)} ${Y(l0)} Z`, fill: 'var(--map)' }, svg);
+    el('path', { d: 'M' + top.map(w => `${X(w[0]).toFixed(1)} ${Y(Math.min(w[1], l1)).toFixed(1)}`).join(' L'), fill: 'none', stroke: 'var(--wall)', 'stroke-width': 1.6 }, svg);
+    el('path', { d: 'M' + bot.map(w => `${X(w[0]).toFixed(1)} ${Y(Math.max(w[2], l0)).toFixed(1)}`).join(' L'), fill: 'none', stroke: 'var(--wall)', 'stroke-width': 1.6 }, svg);
+    // axes
+    for (let s = Math.ceil(s0); s <= s1; s++) {
+      el('line', { x1: X(s), y1: Y(l0), x2: X(s), y2: Y(l0) + 5, stroke: 'var(--ink-2)' }, svg);
+      el('text', { x: X(s), y: Y(l0) + 18, 'text-anchor': 'middle', class: 'ax' }, svg).textContent = s;
+    }
+    el('text', { x: X(s1), y: Y(l0) + 34, 'text-anchor': 'end', class: 'lab' }, svg).textContent = 'distance along the hallway from the start (m)';
+    for (let l = Math.ceil(l0); l <= l1; l++) {
+      el('line', { x1: m.l - 5, y1: Y(l), x2: m.l, y2: Y(l), stroke: 'var(--ink-2)' }, svg);
+      el('text', { x: m.l - 8, y: Y(l) + 4, 'text-anchor': 'end', class: 'ax' }, svg).textContent = (l > 0 ? '+' : '') + l;
+    }
+    el('line', { x1: m.l, y1: Y(l0), x2: X(s1), y2: Y(l0), stroke: 'var(--ink-2)' }, svg);
+    el('line', { x1: m.l, y1: Y(l0), x2: m.l, y2: Y(l1), stroke: 'var(--ink-2)' }, svg);
+    el('line', { x1: X(0), y1: Y(0), x2: X(goalS), y2: Y(0), stroke: 'var(--muted)', 'stroke-width': 1, 'stroke-dasharray': '4 4' }, svg);
+    el('text', { x: X(0) + 4, y: Y(0) - 6, class: 'lab' }, svg).textContent = 'start';
+    el('text', { x: X(goalS) - 4, y: Y(0) - 6, class: 'lab', 'text-anchor': 'end' }, svg).textContent = 'goal';
+    const g = el('g', {}, svg);
+    for (const r of S[key]) {
+      for (const p of r.members) el('circle', { cx: X(p[0]), cy: Y(p[1]), r: 6, fill: 'var(--person)', 'fill-opacity': .45 }, g);
+    }
+    for (const r of S[key]) {
+      const pts = r.path.filter(p => p[0] >= 0 && p[1] >= s0 && p[1] <= s1);
+      const path = el('path', { d: 'M' + pts.map(p => `${X(p[1]).toFixed(1)} ${Y(p[2]).toFixed(1)}`).join(' L'), fill: 'none', stroke: 'var(--robot)', 'stroke-width': 1.8, opacity: .8, class: 'run-path', 'data-run': key + r.run, 'stroke-linejoin': 'round' }, g);
+      el('title', {}, path).textContent = `run ${r.run}: closest ${f2(r.clearance)} m, ${r.time_to_goal.toFixed(1)} s`;
+      if (r.clearance_sl) {
+        const [cs, cl] = r.clearance_sl;
+        el('path', { d: `M ${X(cs) - 4} ${Y(cl) - 4} L ${X(cs) + 4} ${Y(cl) + 4} M ${X(cs) + 4} ${Y(cl) - 4} L ${X(cs) - 4} ${Y(cl) + 4}`, stroke: 'var(--mark)', 'stroke-width': 1.4 }, g);
+      }
+    }
+    el('text', { x: m.l - 34, y: Y(l1) + 4, class: 'lab', 'font-size': 11 }, svg).textContent = 'left';
+    el('text', { x: m.l - 34, y: Y(l0), class: 'lab', 'font-size': 11 }, svg).textContent = 'right';
+    document.getElementById(id).appendChild(svg);
+  }
+  overlay('fig-wide', 'pairwide', -0.5, 7.5, -1.95, 1.35, 6.86);
+  overlay('fig-narrow', 'pairnarrow', -0.3, 7.6, -1.8, 1.3, 7.31);
+
+  // clearance strip chart
+  (function () {
+    const lo = 0.3, hi = 1.0, m = { l: 120, r: 24, t: 16, b: 44 }, Wd = 900, rowH = 58, Hd = m.t + m.b + rowH * 2;
+    const X = v => m.l + (v - lo) / (hi - lo) * (Wd - m.l - m.r);
+    const svg = el('svg', { viewBox: `0 0 ${Wd} ${Hd}`, role: 'img', 'aria-label': 'Closest return per run, wide and narrow' });
+    for (let v = 0.3; v <= 1.0001; v += 0.1) {
+      const vv = Math.round(v * 10) / 10;
+      el('line', { x1: X(vv), y1: m.t, x2: X(vv), y2: Hd - m.b, stroke: 'var(--rule)' }, svg);
+      el('text', { x: X(vv), y: Hd - m.b + 18, 'text-anchor': 'middle', class: 'ax' }, svg).textContent = vv.toFixed(1);
+    }
+    el('text', { x: Wd - m.r, y: Hd - 6, 'text-anchor': 'end', class: 'lab' }, svg).textContent = 'closest LiDAR return near the pair (m)';
+    [['pairwide', 'Wide hallway'], ['pairnarrow', 'Narrow section']].forEach(([k, name], i) => {
+      const y = m.t + rowH * i + rowH / 2, v = S[k].map(r => r.clearance), mu = mean(v), s = sd(v);
+      el('text', { x: 0, y: y + 4, class: 'lab', fill: 'var(--ink)' }, svg).textContent = name;
+      el('rect', { x: X(mu - s), y: y - 14, width: X(mu + s) - X(mu - s), height: 28, fill: 'var(--robot)', 'fill-opacity': .10 }, svg);
+      el('line', { x1: X(mu), y1: y - 16, x2: X(mu), y2: y + 16, stroke: 'var(--robot)', 'stroke-width': 2 }, svg);
+      S[k].forEach((r, j) => {
+        const c = el('circle', { cx: X(r.clearance), cy: y + ((j % 3) - 1) * 6, r: 4.5, fill: 'var(--ink)', 'fill-opacity': .75 }, svg);
+        el('title', {}, c).textContent = `run ${r.run}: ${f2(r.clearance)} m`;
+      });
+      el('text', { x: X(mu + s) + 8, y: y + 4, class: 'ax' }, svg).textContent = `${f2(mu)} ± ${f2(s)}`;
+      if (k === 'pairnarrow') REF_NARROW_5OCT.forEach((v5, j) => el('circle', { cx: X(v5), cy: y + 18, r: 4.5, fill: 'none', stroke: 'var(--ink-2)', 'stroke-width': 1.3 }, svg));
+    });
+    document.getElementById('fig-clear').appendChild(svg);
+  })();
+
+  // table
+  const label = { pairwide: 'Wide', pairnarrow: 'Narrow' };
+  const rows = [];
+  for (const [k, R] of Object.entries(S)) R.forEach((r, i) => {
+    const n = Object.values(r.group_types).reduce((a, b) => a + b, 0), conv = r.group_types.conversation || 0;
+    const ln = LANES[k][r.run];
+    rows.push(`<tr class="${i === 0 ? 'first' : ''}" data-run="${k}${r.run}"><td>${i === 0 ? label[k] : ''}</td><td>${r.run}</td><td>${sg(r.loc_err_deg)}</td><td>${n}</td>
+      <td>${Math.round(100 * conv / n)} %</td><td>${r.side}</td><td>${sg(r.robot_l_at_pair)}</td><td>${f2(r.clearance)}</td>
+      <td>${ln === 2 ? 'both' : ln === 1 ? 'one' : '–'}</td><td>${r.stops}</td><td>${r.time_to_goal.toFixed(1)}</td></tr>`);
+  });
+  document.getElementById('tbody').innerHTML = rows.join('');
+  document.getElementById('tfoot').innerHTML = Object.entries(S).map(([k, R]) => `<tr><td>${label[k]}, mean</td><td></td><td></td><td></td><td></td><td></td>
+    <td>${sg(mean(R.map(r => r.robot_l_at_pair)))}</td><td>${f2(mean(R.map(r => r.clearance)))}</td><td>${R.filter(r => LANES[k][r.run]).length}/10</td>
+    <td>${R.reduce((a, r) => a + r.stops, 0)}</td><td>${mean(R.map(r => r.time_to_goal)).toFixed(1)}</td></tr>`).join('');
+  // highlight a run's path from its table row
+  document.getElementById('tbody').addEventListener('mouseover', e => {
+    const tr = e.target.closest('tr'); if (!tr) return;
+    document.querySelectorAll('.plot').forEach(p => p.classList.add('dim'));
+    document.querySelectorAll('.run-path').forEach(p => p.classList.toggle('on', p.dataset.run === tr.dataset.run));
+  });
+  document.getElementById('tbody').addEventListener('mouseleave', () => {
+    document.querySelectorAll('.plot').forEach(p => p.classList.remove('dim'));
+    document.querySelectorAll('.run-path').forEach(p => p.classList.remove('on'));
+  });
+
+  // observations
+  const obs = [
+    `<b>Side choice follows the space available.</b> In the wide hallway the robot used the free half in every run, with the pair ${f2(mean(W.map(r => r.clearance)))}&nbsp;m away on average and a spread of only ±${f2(sd(W.map(r => r.clearance)))}&nbsp;m. In the narrow section the pair left no way round, and the robot went through the gap between the two people at ${f2(mean(N.map(r => r.clearance)))}&nbsp;m. That is slightly wider than on 5 October (0.36–0.51&nbsp;m).`,
+    `<b>The group detection held.</b> Every group message in every run described the pair, with the zone buffer matching the section. One narrow run (02) was mostly classed as side by side rather than conversation, and the robot behaved the same.`,
+    `<b>Standing people still sometimes get a walker's lane.</b> This happened in 7 of 10 runs in each set. It always pointed to the side the robot was already taking, so it changed nothing in the wide runs. When both people got one (narrow runs 01 and 09), the two rules pulled against each other: the robot made a small S-curve or drove more slowly, up to 33&nbsp;s instead of about 28&nbsp;s. This is the remaining perception issue for standing groups.`,
+  ];
+  document.getElementById('obs').innerHTML = obs.map(s => `<p>${s}</p>`).join('');
+})();
+</script>

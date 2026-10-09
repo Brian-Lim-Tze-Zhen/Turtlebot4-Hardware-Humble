@@ -259,3 +259,39 @@ same as all three counted 5 Oct runs); nearest return not on the map near the pa
 time to goal 29.2 s (25.9-34.6); stops: one run (07, one stop); no stop-and-beep holds; localization within 1° at every start;
 group detected in every message of every run, `conversation` except run 02 (91 of 155 `side_by_side`); narrow buffer throughout;
 lanes for pair members in 7 of 10 (both members in 01 and 09).
+- 17:30 simulation synced to the robot's final configuration: sim critic gets the two noghost parameters (default off; lib 98844e8d -> 894884fa), config `..._hwsync_rec20_noghost_sim.yaml` (57 critic parameters equal to the robot), at-goal hold node for simulation, pair trials with the robot stack (`run_conv_F_trial_hwsync.sh`), batch `run_rec20noghost_test.sh`. Details: ~/thesis_social_navigation/notes/rec20_sim_20261009.md.
+- 18:45 simulation batch with the robot's final configuration finished, 30/30 counted (run_rec20noghost_test.sh headon wide narrow). Robot vs simulation, nearest LiDAR return not on the map: head-on 0.64 +/- 0.16 vs 0.50 +/- 0.04 m; wide 0.83 +/- 0.03 vs 0.78 +/- 0.04 m; narrow 0.52 +/- 0.06 vs 0.60 +/- 0.02 m. Details: ~/thesis_social_navigation/notes/rec20_sim_20261009.md.
+
+## Group skip, offline replay (9 Oct, ~19:30)
+
+Why standing members get a lane (wide run 01, track 8): camera/LiDAR switches move the estimate 0.4-0.6 m towards the robot
+(hold released t+1.14 -> +0.39 m; camera back t+2.86 -> +0.58 m in 0.2 s), the KF makes 0.4-0.6 m/s of it, and the sustained-
+approach test (0.5 m in 1 s) passes. Group skip (lane_skip_group_members) was tested in simulation on 7 Oct (v3: radius 1.0 m,
+hold 10 s; no member lanes, narrow 0.692 +/- 0.006 m) and replaced the same day by sustained approach (v4); why is not recorded.
+New config `..._tf05_rec20_noghost_groupskip_hw.yaml` (+ lane_skip_group_members true, lane_group_match_radius 1.0,
+lane_group_hold_s 10.0). Replay of the 30 rec20noghost robot bags (bags/replay_rec15_port/tools/replay_groupskip_9oct.sh, out/
+humble_rec20ng_9oct vs humble_groupskip_9oct, Humble critic offline, --network none):
+- Replay fidelity: the current config reproduces 12 of the 14 live member lanes (misses wide 02 and narrow 02, both started at
+  t-0.2 s live, at the start of the replayed goal).
+- Group skip: member lanes 0/20 pair runs (current config: 6/10 wide, 7/10 narrow in the replay, both members in narrow 01 and 09).
+- Head-on: lanes and pass sides identical in all 10 runs (no group present), including run 10's second track.
+Open loop (the replay cannot show the changed path); a walker passing close to a standing group is not tested.
+
+## Today's robot sets against earlier robot days (same measures, `pytest/analysis/side_20261009/compare_days.py`, result in `compare_days_result.txt`)
+
+Frame per run: start-to-end of the robot's motion. Clearance = nearest LiDAR return not on the map (head-on: ahead of the start,
+first 15 s of motion; pairs: 1.5 m before to 1.0 m after the pair).
+
+| Set | n | Clearance (m) | Sides | Max sideways (m) | Max heading (°) | Stops | Time (s) |
+|---|---|---|---|---|---|---|---|
+| 5 Oct head-on, old pipeline (cloud on) | 3 | 0.27 +/- 0.05 | 2 L / 1 R | 0.26 | 38 | 2 | 29.9 +/- 5.8 |
+| 5 Oct head-on, old pipeline, no reversing | 3 | 0.24 +/- 0.05 | 2 R / 1 L | 0.34 | 46 | 2 | 27.6 +/- 2.9 |
+| 5 Oct head-on, lane rules | 3 | 0.80 +/- 0.03 | 2 R / 1 L | 0.93 | 74 | 0 | 27.2 +/- 0.1 |
+| 8 Oct head-on, v4 (front, noghost, tf05) | 8 | 0.55 +/- 0.09 | 4 R / 4 L | 0.68 | 122 (three runs turned ~180°) | 8 | 35.6 +/- 15.1 |
+| **9 Oct head-on, rec20 noghost** | 10 | **0.62 +/- 0.14** | **8 R / 2 L** | 0.68 | 80 | **0** | **26.7 +/- 1.2** |
+| 5 Oct wide pair | 3 | 0.82 +/- 0.01 | left of pair 3/3 | 0.57 | 32 | 0 | 26.4 +/- 1.9 |
+| **9 Oct wide pair** | 10 | **0.83 +/- 0.03** | left of pair 10/10 | 0.62 | 41 | 0 | 25.4 +/- 0.8 |
+| 5 Oct narrow pair | 3 | 0.44 +/- 0.07 | between 3/3 | 0.34 | 49 | 0 | 31.5 +/- 3.4 |
+| **9 Oct narrow pair** | 10 | **0.52 +/- 0.06** | between 10/10 | 0.26 | 46 | 0 | 29.1 +/- 2.1 |
+(8 Oct: headon_v4front_run02 has three bags and is left out; 9 runs listed on 8 Oct, 8 analysed.)
+- 20:45 simulation with group skip (rec20 noghost + group skip), 30/30 counted: member lanes 0/20 pair trials (without: 2/20), all other measures within run-to-run variation of the rec20 noghost batch (head-on 0.757 vs 0.725 m centre, wide 0.871 vs 0.884, narrow 0.715 vs 0.707; LiDAR clearance 0.54 / 0.77 / 0.60 vs 0.50 / 0.78 / 0.60 m). Details in ~/thesis_social_navigation/notes/rec20_sim_20261009.md.

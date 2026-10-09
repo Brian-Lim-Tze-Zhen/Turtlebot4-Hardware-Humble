@@ -1,0 +1,203 @@
+<title>Standing-Pair Runs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: summary tiles per set -> wide-pair top views -> narrow-pair top views -> tables -> notes. */
+:root {
+  --bg: #f7f8f7; --panel: #ffffff; --ink: #111513; --ink-2: #4b524e; --muted: #868d89; --rule: #dde1de;
+  --wall: #3a403c; --right: #2a78d6; --left: #eb6834; --walker: #6b5bd2; --walker-2: #b3aaf0;
+  --near: #111513; --axis: #c4c9c6; --focus: #2a78d6;
+  --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", Roboto, Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #151816; --panel: #1c201e; --ink: #f2f4f3; --ink-2: #bfc6c2; --muted: #8b938f; --rule: #2f3532;
+    --wall: #c9d0cc; --right: #3987e5; --left: #d95926; --walker: #9085e9; --walker-2: #574d9e; --near: #f2f4f3;
+    --axis: #3d4441; --focus: #3987e5; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #151816; --panel: #1c201e; --ink: #f2f4f3; --ink-2: #bfc6c2; --muted: #8b938f; --rule: #2f3532;
+  --wall: #c9d0cc; --right: #3987e5; --left: #d95926; --walker: #9085e9; --walker-2: #574d9e; --near: #f2f4f3;
+  --axis: #3d4441; --focus: #3987e5; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.55; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-inline: 20px; padding-block: 36px 64px; display: grid; gap: 34px; }
+header { display: grid; gap: 10px; }
+.eyebrow { font-family: var(--f-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-2); }
+h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(30px, 5vw, 44px); line-height: 1.08; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--f-display); font-weight: 700; font-size: 22px; margin: 0; text-wrap: balance; }
+p { margin: 0; max-width: 70ch; }
+.lede { font-size: 18px; color: var(--ink-2); }
+section { display: grid; gap: 14px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.tile { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; display: grid; gap: 2px; }
+.tile .k { font-family: var(--f-mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); }
+.tile .v { font-family: var(--f-display); font-weight: 800; font-size: 32px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.tile .s { font-size: 13px; color: var(--ink-2); }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+.card { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 12px 14px 8px; display: grid; gap: 6px; min-width: 0; }
+.card.flag { border-color: var(--left); }
+.card h3 { margin: 0; font-family: var(--f-display); font-weight: 700; font-size: 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.card .meta { font-family: var(--f-mono); font-size: 12.5px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.card .note { font-size: 13px; color: var(--ink); }
+.card svg { width: 100%; height: auto; display: block; }
+.pill { display: inline-block; font-family: var(--f-mono); font-size: 11.5px; font-weight: 600; padding: 1px 8px; border-radius: 999px; border: 1.5px solid currentColor; }
+.pill.R { color: var(--right); } .pill.L { color: var(--left); }
+.key { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 13.5px; color: var(--ink-2); align-items: center; }
+.key span { display: inline-flex; align-items: center; gap: 7px; }
+.panel { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 16px; display: grid; gap: 12px; min-width: 0; }
+.fig { overflow-x: auto; } .fig svg { display: block; width: 100%; min-width: 620px; height: auto; }
+.tbl { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 7px 9px; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+th { font-family: var(--f-mono); font-size: 11.5px; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-2); font-weight: 600; vertical-align: bottom; }
+td.n { font-family: var(--f-mono); text-align: right; }
+tr.flag td { background: color-mix(in srgb, var(--left) 9%, transparent); }
+tfoot td { font-weight: 600; border-bottom: 0; }
+.cap { font-size: 14px; color: var(--ink-2); }
+ul.notes { margin: 0; padding-left: 20px; display: grid; gap: 6px; max-width: 75ch; font-size: 14.5px; }
+code { font-family: var(--f-mono); font-size: .92em; }
+svg text { font-family: var(--f-body); } svg .mono { font-family: var(--f-mono); }
+</style>
+<style>
+.sets { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+.set { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; display: grid; gap: 10px; }
+.set h3 { margin: 0; font-family: var(--f-display); font-weight: 700; font-size: 17px; }
+.set .row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.set .k { font-family: var(--f-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); display: block; }
+.set .v { font-family: var(--f-display); font-weight: 800; font-size: 26px; line-height: 1.15; font-variant-numeric: tabular-nums; }
+.set .s { font-size: 12.5px; color: var(--ink-2); }
+a { color: var(--right); }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">TurtleBot 4 · standing pair · side threshold 0.20 m · noghost critic · 9 Oct 2026</div>
+    <h1>Standing-pair runs</h1>
+    <p class="lede">Two people talk face to face across the hallway while the robot drives past. There are ten valid runs in the wide hallway and ten in the narrow section, all with the same Nav2 configuration as the head-on set. Before each run the robot checked its localization and waited until it detected the pair as a conversation.</p>
+  </header>
+
+  <section aria-label="Summary"><div class="sets" id="sets"></div></section>
+
+  <section aria-labelledby="h-wide">
+    <h2 id="h-wide">Wide hallway, from above</h2>
+    <div class="key">
+      <span><svg width="26" height="10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--right)" stroke-width="3"/></svg>robot path</span>
+      <span><svg width="16" height="16" aria-hidden="true"><circle cx="8" cy="8" r="6" fill="var(--walker)" fill-opacity=".85"/></svg>pair member (median position, first 10 s)</span>
+      <span><svg width="26" height="10" aria-hidden="true"><line x1="1" y1="5" x2="25" y2="5" stroke="var(--walker)" stroke-width="2" stroke-dasharray="3 3"/></svg>conversation link</span>
+      <span><svg width="14" height="14" aria-hidden="true"><path d="M2 2 L12 12 M12 2 L2 12" stroke="var(--near)" stroke-width="2"/></svg>closest LiDAR return not on the map, near the pair</span>
+    </div>
+    <div class="grid" id="grid-wide"></div>
+    <p class="cap">Frame: the head-on hallway, with the start of the head-on runs at the left (−6.88, 13.41) and the far end at the right. Up is the robot's left. The wide-pair runs start about 0.6&nbsp;m further on, at the start of the counted 5 Oct wide runs (−6.44, 13.69). Walls come from the map.</p>
+  </section>
+
+  <section aria-labelledby="h-narrow">
+    <h2 id="h-narrow">Narrow section, from above</h2>
+    <div class="grid" id="grid-narrow"></div>
+    <p class="cap">Frame: the narrow section, with the start (−1.18, 8.82) at the left and the goal (−6.80, 13.50) at the right. The section is about 2.2&nbsp;m wide where the pair stands, so the only gap wide enough is between the two people. All three counted 5 Oct narrow runs passed between them as well.</p>
+  </section>
+
+  <section aria-labelledby="h-table">
+    <h2 id="h-table">All numbers</h2>
+    <div class="panel"><div class="tbl"><table>
+      <thead><tr><th>Set</th><th>Run</th><th>AMCL error<br>at start °</th><th>Group messages<br>during the run</th><th>Passed</th><th>Robot sideways<br>at the pair m</th><th>Closest return<br>near the pair m</th><th>Lane for a<br>pair member</th><th>Stops</th><th>Time to<br>goal s</th></tr></thead>
+      <tbody id="tbody"></tbody><tfoot id="tfoot"></tfoot>
+    </table></div>
+    <p class="cap">"Closest return" is the nearest LiDAR point within 2.5&nbsp;m that is not on the map, measured from the sensor near the robot's centre. It counts only points from 1.5&nbsp;m before to 1.0&nbsp;m after the pair, so it is the distance to the nearer person. The pair-member lanes come from the critic log, as recorded in the day log, because the Nav2 logs were not kept. "Group messages" counts /social_groups from t−1 to t+35&nbsp;s.</p></div>
+  </section>
+
+  <section aria-labelledby="h-notes"><h2 id="h-notes">What stands out</h2><ul class="notes" id="notes"></ul></section>
+
+  <section aria-labelledby="h-src"><h2 id="h-src">Sources</h2>
+    <p class="cap">Bags <code>workspace/bags/pairwide_rec20noghost_run01–10_*</code>, <code>pairnarrow_rec20noghost_run01–10_*</code>; config <code>config/social_nav2_headon_F_hwreq_block_approach_tf05_rec20_noghost_hw.yaml</code>; run script <code>scripts/run_scenario_hw_v3.sh</code>; extraction <code>extract_pairs.py</code>, data <code>pairs_page_data.json</code> in <code>workspace/pytest/analysis/side_20261009/</code>; run log <code>Task/HARDWARE_DAY_20261009.md</code>. The head-on set is on its own page.</p></section>
+</div>
+
+<script id="data" type="application/json">__DATA__</script>
+<script>
+(function () {
+  const D = JSON.parse(document.getElementById('data').textContent);
+  const LANES = { pairwide: { '01': 1, '02': 1, '03': 1, '04': 0, '05': 1, '06': 0, '07': 1, '08': 1, '09': 0, '10': 1 },
+                  pairnarrow: { '01': 2, '02': 1, '03': 1, '04': 1, '05': 0, '06': 0, '07': 0, '08': 1, '09': 2, '10': 1 } };
+  const NS = 'http://www.w3.org/2000/svg';
+  const el = (tag, a, p) => { const e = document.createElementNS(NS, tag); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
+  const tip = (e, s) => { el('title', {}, e).textContent = s; return e; };
+  const mean = a => a.reduce((x, y) => x + y, 0) / a.length;
+  const sd = a => { const m = mean(a); return Math.sqrt(a.reduce((x, y) => x + (y - m) ** 2, 0) / (a.length - 1)); };
+  const fmt = (v, d = 2) => (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v).toFixed(d);
+  const sets = { pairwide: D.runs.filter(r => r.scenario === 'pairwide'), pairnarrow: D.runs.filter(r => r.scenario === 'pairnarrow') };
+  const label = { pairwide: 'Wide hallway', pairnarrow: 'Narrow section' };
+  const passTxt = { pairwide: 'left of the pair', pairnarrow: 'between the two' };
+
+  document.getElementById('sets').innerHTML = Object.entries(sets).map(([k, R]) => {
+    const cl = R.map(r => r.clearance), tt = R.map(r => r.time_to_goal);
+    const passed = R.filter(r => r.side === (k === 'pairwide' ? 'left' : 'between')).length;
+    const stops = R.reduce((a, r) => a + r.stops, 0);
+    return `<div class="set"><h3>${label[k]} · ${R.length} runs</h3><div class="row">
+      <div><span class="k">Passed ${passTxt[k]}</span><span class="v">${passed}/${R.length}</span></div>
+      <div><span class="k">Closest return</span><span class="v">${mean(cl).toFixed(2)}&nbsp;m</span><span class="s">± ${sd(cl).toFixed(2)}, ${Math.min(...cl).toFixed(2)}–${Math.max(...cl).toFixed(2)}</span></div>
+      <div><span class="k">Time to goal</span><span class="v">${mean(tt).toFixed(1)}&nbsp;s</span><span class="s">${stops} stop${stops === 1 ? '' : 's'} in all runs</span></div></div></div>`;
+  }).join('');
+
+  function grid(k, id, s0, s1, l0, l1, goalS) {
+    const W = 500, Hh = Math.round(500 * (l1 - l0) / (s1 - s0) * 1.55), pad = 8;
+    const X = s => pad + (s - s0) / (s1 - s0) * (W - 2 * pad), Y = l => pad + (l1 - l) / (l1 - l0) * (Hh - 2 * pad);
+    const g = document.getElementById(id);
+    for (const r of sets[k]) {
+      const card = document.createElement('article'); card.className = 'card';
+      const types = Object.entries(r.group_types).map(([t, n]) => `${n} ${t.replace('_', ' ')}`).join(', ');
+      card.innerHTML = `<h3>Run ${r.run} <span class="pill R">passed ${r.side}</span></h3>
+        <div class="meta">closest ${r.clearance.toFixed(2)} m · ${r.time_to_goal.toFixed(1)} s · ${types}${r.stops ? ` · ${r.stops} stop` : ''}</div>`;
+      const svg = el('svg', { viewBox: `0 0 ${W} ${Hh}`, role: 'img', 'aria-label': `${label[k]} run ${r.run} top view` });
+      const wl = D.walls[k].filter(w => w[1] != null && w[0] >= s0 && w[0] <= s1), wr = D.walls[k].filter(w => w[2] != null && w[0] >= s0 && w[0] <= s1);
+      el('path', { d: 'M' + wl.map(w => `${X(w[0]).toFixed(1)} ${Y(Math.min(w[1], l1)).toFixed(1)}`).join(' L'), fill: 'none', stroke: 'var(--wall)', 'stroke-width': 3 }, svg);
+      el('path', { d: 'M' + wr.map(w => `${X(w[0]).toFixed(1)} ${Y(Math.max(w[2], l0)).toFixed(1)}`).join(' L'), fill: 'none', stroke: 'var(--wall)', 'stroke-width': 3 }, svg);
+      el('line', { x1: X(0), y1: Y(0), x2: X(goalS), y2: Y(0), stroke: 'var(--axis)', 'stroke-width': 1.5, 'stroke-dasharray': '6 5' }, svg);
+      el('path', { d: `M ${X(goalS)} ${Y(0) - 7} l 7 7 l -7 7 l -7 -7 z`, fill: 'var(--ink-2)' }, svg);
+      const m = r.members;
+      if (m.length === 2) el('line', { x1: X(m[0][0]), y1: Y(m[0][1]), x2: X(m[1][0]), y2: Y(m[1][1]), stroke: 'var(--walker)', 'stroke-width': 2, 'stroke-dasharray': '3 3' }, svg);
+      const rad = 0.22 / (s1 - s0) * (W - 2 * pad);
+      for (const p of m) tip(el('circle', { cx: X(p[0]), cy: Y(p[1]), r: rad, fill: 'var(--walker)', 'fill-opacity': .85 }, svg), `pair member at s ${p[0].toFixed(2)} m, l ${fmt(p[1])} m`);
+      el('path', { d: 'M' + r.path.filter(p => p[0] >= 0).map(p => `${X(p[1]).toFixed(1)} ${Y(p[2]).toFixed(1)}`).join(' L'), fill: 'none', stroke: 'var(--right)', 'stroke-width': 3, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, svg);
+      if (r.clearance_sl) {
+        const [cs, cl] = r.clearance_sl, gg = el('g', {}, svg);
+        el('path', { d: `M ${X(cs) - 6} ${Y(cl) - 6} L ${X(cs) + 6} ${Y(cl) + 6} M ${X(cs) + 6} ${Y(cl) - 6} L ${X(cs) - 6} ${Y(cl) + 6}`, stroke: 'var(--near)', 'stroke-width': 2.2 }, gg);
+        tip(gg, `closest return ${r.clearance.toFixed(2)} m at t+${r.clearance_t.toFixed(1)} s`);
+      }
+      el('text', { x: X(0), y: Hh - 4, 'font-size': 11, fill: 'var(--muted)' }, svg).textContent = 'start';
+      el('text', { x: X(goalS), y: Hh - 4, 'font-size': 11, fill: 'var(--muted)', 'text-anchor': 'middle' }, svg).textContent = 'goal';
+      card.appendChild(svg); g.appendChild(card);
+    }
+  }
+  grid('pairwide', 'grid-wide', -0.5, 7.5, -1.9, 1.35, 6.86);
+  grid('pairnarrow', 'grid-narrow', -0.3, 7.6, -1.8, 1.3, 7.31);
+
+  const rows = [];
+  for (const [k, R] of Object.entries(sets)) for (const r of R) {
+    const n = Object.values(r.group_types).reduce((a, b) => a + b, 0);
+    const conv = r.group_types.conversation || 0, buf = r.buffers[k === 'pairwide' ? 'wide' : 'narrow'] || 0;
+    rows.push(`<tr><td>${label[k]}</td><td>${r.run}</td><td class="n">${fmt(r.loc_err_deg)}</td>
+      <td class="n">${n} · ${conv} conversation · ${buf} ${k === 'pairwide' ? 'wide' : 'narrow'}</td><td>${r.side}</td><td class="n">${fmt(r.robot_l_at_pair)}</td>
+      <td class="n">${r.clearance.toFixed(2)}</td><td class="n">${LANES[k][r.run] ? (LANES[k][r.run] === 2 ? 'both' : 'one') : '—'}</td><td class="n">${r.stops}</td><td class="n">${r.time_to_goal.toFixed(1)}</td></tr>`);
+  }
+  document.getElementById('tbody').innerHTML = rows.join('');
+  document.getElementById('tfoot').innerHTML = Object.entries(sets).map(([k, R]) => `<tr><td>${label[k]} mean ± SD</td><td></td><td></td><td></td><td></td>
+    <td class="n">${fmt(mean(R.map(r => r.robot_l_at_pair)))}</td><td class="n">${mean(R.map(r => r.clearance)).toFixed(2)} ± ${sd(R.map(r => r.clearance)).toFixed(2)}</td>
+    <td class="n">${R.filter(r => LANES[k][r.run]).length}/10</td><td class="n">${R.reduce((a, r) => a + r.stops, 0)}</td><td class="n">${mean(R.map(r => r.time_to_goal)).toFixed(1)} ± ${sd(R.map(r => r.time_to_goal)).toFixed(1)}</td></tr>`).join('');
+
+  const w = sets.pairwide, nr = sets.pairnarrow;
+  document.getElementById('notes').innerHTML = [
+    `In the wide hallway the robot passed on the free side, left of the pair, in all ten runs. It never went between the two people, and its closest return was ${Math.min(...w.map(r => r.clearance)).toFixed(2)}–${Math.max(...w.map(r => r.clearance)).toFixed(2)}&nbsp;m.`,
+    `In the narrow section the pair stood across the whole 2.2&nbsp;m, leaving only the gap between them. The robot went through it in all ten runs at ${mean(nr.map(r => r.clearance)).toFixed(2)}&nbsp;m, slightly wider than on 5 Oct (0.36–0.51&nbsp;m). There was one stop in one run (07) and no stop-and-beep hold.`,
+    `The detector saw the pair as a group in every message of every run, with the zone buffer matching the section. Narrow run 02 was mostly labelled "side by side" instead of "conversation"; the robot behaved the same.`,
+    `A pair member was given a walker's lane in 7 of 10 runs in each set, always on the side the robot was already taking. When both members got one (narrow 01 and 09), the robot made a small S-curve or drove slower. This is the remaining perception issue for standing people.`,
+    `Localization was within 0.5° at every start (scan-to-map fit from each bag).`,
+    `Removed, with the reasons in the day log: wide 03, where a third person walked at the robot. Four narrow attempts: two where no goal was sent (one run 06, one run 07), one run 07 judged failed after the robot stopped in front of the pair, and one run 07 held up by an object left near the goal. Each was then recorded again.`,
+  ].map(s => `<li>${s}</li>`).join('');
+})();
+</script>
