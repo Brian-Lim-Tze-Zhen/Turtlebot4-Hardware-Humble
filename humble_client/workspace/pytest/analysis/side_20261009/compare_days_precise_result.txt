@@ -1,0 +1,63 @@
+# compare_days_precise.py, 11 Oct 2026 (robot image, offline); same bags and labels as compare_days_result.txt; 4 decimals; gap = nearest return - 0.189 m
+  5Oct_headon_cloudon          headon_cloudon_run01_20261005_083256         clear 0.2430 m  gap +0.0540 m  time 29.75 s
+  5Oct_headon_cloudon          headon_cloudon_run02_20261005_083950         clear 0.2510 m  gap +0.0620 m  time 35.81 s
+  5Oct_headon_cloudon          headon_cloudon_run03_20261005_084227         clear 0.3260 m  gap +0.1370 m  time 24.15 s
+SET 5Oct_headon_cloudon      n  3 | clear 0.2733 +/- 0.0458 (0.2430-0.3260) | gap 0.0843 | time 29.904 +/- 5.827 | gap>=0.36: 0  >=0.40: 0  >=0.45: 0  >0.45: 0
+  5Oct_headon_cloudon_noRev    headon_cloudonvx0_run01_20261005_122537      clear 0.2130 m  gap +0.0240 m  time 30.90 s
+  5Oct_headon_cloudon_noRev    headon_cloudonvx0_run02_20261005_122917      clear 0.2180 m  gap +0.0290 m  time 26.25 s
+  5Oct_headon_cloudon_noRev    headon_cloudonvx0_run03_20261005_123149      clear 0.3030 m  gap +0.1140 m  time 25.51 s
+SET 5Oct_headon_cloudon_noRev n  3 | clear 0.2447 +/- 0.0506 (0.2130-0.3030) | gap 0.0557 | time 27.554 +/- 2.919 | gap>=0.36: 0  >=0.40: 0  >=0.45: 0  >0.45: 0
+  5Oct_headon_lanerule         headon_lanerule_run01_20261005_102208        clear 0.8240 m  gap +0.6350 m  time 27.25 s
+  5Oct_headon_lanerule         headon_lanerule_run02_20261005_102449        clear 0.7600 m  gap +0.5710 m  time 27.16 s
+  5Oct_headon_lanerule         headon_lanerule_run03_20261005_102648        clear 0.8080 m  gap +0.6190 m  time 27.15 s
+SET 5Oct_headon_lanerule     n  3 | clear 0.7973 +/- 0.0333 (0.7600-0.8240) | gap 0.6083 | time 27.187 +/- 0.058 | gap>=0.36: 3  >=0.40: 3  >=0.45: 3  >0.45: 3
+  8Oct_headon_v4               headon_v4front_run01_20261008_094928         clear 0.3850 m  gap +0.1960 m  time 70.53 s
+  8Oct_headon_v4               headon_v4front_run03_20261008_112019         clear 0.5240 m  gap +0.3350 m  time 42.49 s
+  8Oct_headon_v4               headon_v4noghost_run01_20261008_113213       clear 0.4840 m  gap +0.2950 m  time 34.21 s
+  8Oct_headon_v4               headon_v4noghost_run02_20261008_115641       clear 0.6540 m  gap +0.4650 m  time 27.41 s
+  8Oct_headon_v4               headon_v4noghost_run03_20261008_120759       clear 0.5440 m  gap +0.3550 m  time 26.72 s
+  8Oct_headon_v4               headon_v4noghosttf05_run01_20261008_121720   clear 0.5700 m  gap +0.3810 m  time 27.82 s
+  8Oct_headon_v4               headon_v4noghosttf05_run02_20261008_122118   clear 0.5920 m  gap +0.4030 m  time 28.18 s
+  8Oct_headon_v4               headon_v4noghosttf05_run03_20261008_122708   clear 0.6680 m  gap +0.4790 m  time 27.31 s
+SET 8Oct_headon_v4           n  8 | clear 0.5526 +/- 0.0919 (0.3850-0.6680) | gap 0.3636 | time 35.584 +/- 15.118 | gap>=0.36: 4  >=0.40: 3  >=0.45: 2  >0.45: 2
+  9Oct_headon_rec20ng          headon_rec20noghost_run01_20261009_125322    clear 0.6380 m  gap +0.4490 m  time 26.19 s
+  9Oct_headon_rec20ng          headon_rec20noghost_run02_20261009_120453    clear 0.7120 m  gap +0.5230 m  time 29.25 s
+  9Oct_headon_rec20ng          headon_rec20noghost_run03_20261009_121336    clear 0.5980 m  gap +0.4090 m  time 26.33 s
+  9Oct_headon_rec20ng          headon_rec20noghost_run04_20261009_122047    clear 0.6560 m  gap +0.4670 m  time 25.30 s
+  9Oct_headon_rec20ng          headon_rec20noghost_run05_20261009_122245    clear 0.7840 m  gap +0.5950 m  time 26.96 s
+  9Oct_headon_rec20ng          headon_rec20noghost_run06_20261009_122539    clear 0.7260 m  gap +0.5370 m  time 25.90 s
+  9Oct_headon_rec20ng          headon_rec20noghost_run07_20261009_122715    clear 0.7180 m  gap +0.5290 m  time 26.80 s
+  9Oct_headon_rec20ng          headon_rec20noghost_run08_20261009_122959    clear 0.5010 m  gap +0.3120 m  time 25.40 s
+  9Oct_headon_rec20ng          headon_rec20noghost_run09_20261009_123149    clear 0.3310 m  gap +0.1420 m  time 27.40 s
+  9Oct_headon_rec20ng          headon_rec20noghost_run10_20261009_123533    clear 0.5080 m  gap +0.3190 m  time 26.94 s
+SET 9Oct_headon_rec20ng      n 10 | clear 0.6172 +/- 0.1368 (0.3310-0.7840) | gap 0.4282 | time 26.647 +/- 1.145 | gap>=0.36: 7  >=0.40: 7  >=0.45: 5  >0.45: 5
+  5Oct_pairwide                pairwide_hwdetmap_run01_20261005_132029      clear 0.8220 m  gap +0.6330 m  time 27.95 s
+  5Oct_pairwide                pairwide_hwdetmap_run02_20261005_132803      clear 0.8140 m  gap +0.6250 m  time 24.23 s
+  5Oct_pairwide                pairwide_hwdetmap_run03_20261005_133428      clear 0.8340 m  gap +0.6450 m  time 26.95 s
+SET 5Oct_pairwide            n  3 | clear 0.8233 +/- 0.0101 (0.8140-0.8340) | gap 0.6343 | time 26.378 +/- 1.926 | gap>=0.36: 3  >=0.40: 3  >=0.45: 3  >0.45: 3
+  9Oct_pairwide_rec20ng        pairwide_rec20noghost_run01_20261009_131340  clear 0.8240 m  gap +0.6350 m  time 24.14 s
+  9Oct_pairwide_rec20ng        pairwide_rec20noghost_run02_20261009_133546  clear 0.8120 m  gap +0.6230 m  time 25.55 s
+  9Oct_pairwide_rec20ng        pairwide_rec20noghost_run03_20261009_140800  clear 0.7900 m  gap +0.6010 m  time 26.42 s
+  9Oct_pairwide_rec20ng        pairwide_rec20noghost_run04_20261009_134403  clear 0.8260 m  gap +0.6370 m  time 24.68 s
+  9Oct_pairwide_rec20ng        pairwide_rec20noghost_run05_20261009_134638  clear 0.8720 m  gap +0.6830 m  time 25.46 s
+  9Oct_pairwide_rec20ng        pairwide_rec20noghost_run06_20261009_135114  clear 0.8740 m  gap +0.6850 m  time 25.15 s
+  9Oct_pairwide_rec20ng        pairwide_rec20noghost_run07_20261009_135453  clear 0.8600 m  gap +0.6710 m  time 26.92 s
+  9Oct_pairwide_rec20ng        pairwide_rec20noghost_run08_20261009_135715  clear 0.8540 m  gap +0.6650 m  time 25.77 s
+  9Oct_pairwide_rec20ng        pairwide_rec20noghost_run09_20261009_140019  clear 0.8440 m  gap +0.6550 m  time 24.79 s
+  9Oct_pairwide_rec20ng        pairwide_rec20noghost_run10_20261009_140349  clear 0.7740 m  gap +0.5850 m  time 25.55 s
+SET 9Oct_pairwide_rec20ng    n 10 | clear 0.8330 +/- 0.0340 (0.7740-0.8740) | gap 0.6440 | time 25.444 +/- 0.820 | gap>=0.36: 10  >=0.40: 10  >=0.45: 10  >0.45: 10
+  5Oct_pairnarrow              pairnarrow_hwdetmap_run01_20261005_135714    clear 0.4420 m  gap +0.2530 m  time 30.99 s
+  5Oct_pairnarrow              pairnarrow_hwdetmap_run02_20261005_140057    clear 0.5120 m  gap +0.3230 m  time 28.43 s
+  5Oct_pairnarrow              pairnarrow_hwdetmap_run03_20261005_140853    clear 0.3640 m  gap +0.1750 m  time 35.09 s
+SET 5Oct_pairnarrow          n  3 | clear 0.4393 +/- 0.0740 (0.3640-0.5120) | gap 0.2503 | time 31.504 +/- 3.360 | gap>=0.36: 0  >=0.40: 0  >=0.45: 0  >0.45: 0
+  9Oct_pairnarrow_rec20ng      pairnarrow_rec20noghost_run01_20261009_13271 clear 0.5660 m  gap +0.3770 m  time 28.96 s
+  9Oct_pairnarrow_rec20ng      pairnarrow_rec20noghost_run02_20261009_14163 clear 0.5360 m  gap +0.3470 m  time 29.08 s
+  9Oct_pairnarrow_rec20ng      pairnarrow_rec20noghost_run03_20261009_14213 clear 0.4020 m  gap +0.2130 m  time 28.45 s
+  9Oct_pairnarrow_rec20ng      pairnarrow_rec20noghost_run04_20261009_14241 clear 0.6140 m  gap +0.4250 m  time 28.30 s
+  9Oct_pairnarrow_rec20ng      pairnarrow_rec20noghost_run05_20261009_14263 clear 0.4410 m  gap +0.2520 m  time 25.85 s
+  9Oct_pairnarrow_rec20ng      pairnarrow_rec20noghost_run06_20261009_14403 clear 0.5160 m  gap +0.3270 m  time 28.03 s
+  9Oct_pairnarrow_rec20ng      pairnarrow_rec20noghost_run07_20261009_14522 clear 0.4930 m  gap +0.3040 m  time 32.35 s
+  9Oct_pairnarrow_rec20ng      pairnarrow_rec20noghost_run08_20261009_14481 clear 0.5300 m  gap +0.3410 m  time 28.19 s
+  9Oct_pairnarrow_rec20ng      pairnarrow_rec20noghost_run09_20261009_14573 clear 0.5500 m  gap +0.3610 m  time 33.05 s
+  9Oct_pairnarrow_rec20ng      pairnarrow_rec20noghost_run10_20261009_15010 clear 0.5440 m  gap +0.3550 m  time 28.75 s
+SET 9Oct_pairnarrow_rec20ng  n 10 | clear 0.5192 +/- 0.0612 (0.4020-0.6140) | gap 0.3302 | time 29.100 +/- 2.106 | gap>=0.36: 3  >=0.40: 1  >=0.45: 0  >0.45: 0

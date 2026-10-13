@@ -1,0 +1,32 @@
+# headon_start_turn_12oct.py, computed 13 Oct 2026 in the humble-real image; counted head-on runs of 12 Oct (final robot configuration)
+headon_rec20gs_run01_20261012_094115 | turn-on-the-spot commands in the first 2 s: 0 | lethal cells beside the robot (left, closer than the wall): 30 at the start, 30 in the first costmap (14.0 s before) | laser returns there: 0 | nearest static-map cell on the left: 0.65 m | person-cloud points within 1.2 m: 0
+headon_rec20gs_run02_20261012_094502 | turn-on-the-spot commands in the first 2 s: 0 | lethal cells beside the robot (left, closer than the wall): 36 at the start, 52 in the first costmap (14.3 s before) | laser returns there: 0 | nearest static-map cell on the left: 0.65 m | person-cloud points within 1.2 m: 0
+headon_rec20gs_run03_20261012_095915 | turn-on-the-spot commands in the first 2 s: 0 | lethal cells beside the robot (left, closer than the wall): 24 at the start, 24 in the first costmap (14.2 s before) | laser returns there: 0 | nearest static-map cell on the left: 0.70 m | person-cloud points within 1.2 m: 0
+headon_rec20gs_run04_20261012_100500 | turn-on-the-spot commands in the first 2 s: 0 | lethal cells beside the robot (left, closer than the wall): 29 at the start, 29 in the first costmap (14.5 s before) | laser returns there: 0 | nearest static-map cell on the left: 0.67 m | person-cloud points within 1.2 m: 0
+headon_rec20gs_run05_20261012_100847 | turn-on-the-spot commands in the first 2 s: 0 | lethal cells beside the robot (left, closer than the wall): 9 at the start, 9 in the first costmap (14.4 s before) | laser returns there: 0 | nearest static-map cell on the left: 0.75 m | person-cloud points within 1.2 m: 0
+headon_rec20gs_run06_20261012_101058 | turn-on-the-spot commands in the first 2 s: 9 | lethal cells beside the robot (left, closer than the wall): 80 at the start, 80 in the first costmap (13.8 s before) | laser returns there: 0 | nearest static-map cell on the left: 0.80 m | person-cloud points within 1.2 m: 0
+   local costmap at the start (robot R facing up; columns lateral +1.2 (left) .. -1.2 m; rows forward +1.2 .. -0.6 m; 0.1 m)
+   # lethal/inscribed  + cost 50-98  . low  o laser return  @ laser return on a lethal cell
+   +1.2 .....................+##@
+   +1.1 .....................+##@
+   +1.0 .....................+##@
+   +0.9 ......................+##
+   +0.8 ......................++#
+   +0.7 .....+++++..............+
+   +0.6 ++++++###+...............
+   +0.5 #########+...............
+   +0.4 #########+++.............
+   +0.3 ###@#######+.............
+   +0.2 ###@#######+.............
+   +0.1 ###@#######+.............
+   +0.0 ###@##+####+R............
+   -0.1 ++#@##++###+.............
+   -0.2 +##@##++++++++++.....++++
+   -0.3 +##@@#+....+####+..++####
+   -0.4 +##@###+...+####+..+####@
+   -0.5 +##@###+...+####+.+##@@@@
+   -0.6 +##@@#+....+####+.+#@@###
+headon_rec20gs_run07_20261012_101321 | turn-on-the-spot commands in the first 2 s: 0 | lethal cells beside the robot (left, closer than the wall): 0 at the start, 0 in the first costmap (14.3 s before) | laser returns there: 0 | nearest static-map cell on the left: 0.83 m | person-cloud points within 1.2 m: 0
+headon_rec20gs_run08_20261012_101608 | turn-on-the-spot commands in the first 2 s: 0 | lethal cells beside the robot (left, closer than the wall): 0 at the start, 0 in the first costmap (14.5 s before) | laser returns there: 0 | nearest static-map cell on the left: 0.84 m | person-cloud points within 1.2 m: 0
+headon_rec20gs_run09_20261012_112439 | turn-on-the-spot commands in the first 2 s: 0 | lethal cells beside the robot (left, closer than the wall): 14 at the start, 14 in the first costmap (16.0 s before) | laser returns there: 0 | nearest static-map cell on the left: 0.70 m | person-cloud points within 1.2 m: 0
+headon_rec20gs_run10_20261012_113305 | turn-on-the-spot commands in the first 2 s: 0 | lethal cells beside the robot (left, closer than the wall): 0 at the start, 0 in the first costmap (31.1 s before) | laser returns there: 0 | nearest static-map cell on the left: 0.87 m | person-cloud points within 1.2 m: 0

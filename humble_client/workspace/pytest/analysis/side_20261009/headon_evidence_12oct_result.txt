@@ -1,0 +1,26 @@
+== 9Oct_headon_rec20ng
+headon_rec20noghost_run01_20261009_125322      lane t+2.0 s at 6.76 m keeps RIGHT | fixed t+2.6 s keeps RIGHT offset +0.35 m
+headon_rec20noghost_run02_20261009_120453      lane t+2.0 s at 6.97 m keeps RIGHT | fixed t+2.6 s keeps RIGHT offset +0.12 m
+headon_rec20noghost_run03_20261009_121336      lane t+2.2 s at 5.95 m keeps RIGHT | fixed t+2.8 s keeps RIGHT offset +0.27 m
+headon_rec20noghost_run04_20261009_122047      lane t+1.8 s at 6.49 m keeps RIGHT | fixed t+2.5 s keeps RIGHT offset -0.10 m
+headon_rec20noghost_run05_20261009_122245      lane t+1.5 s at 6.61 m keeps LEFT  | fixed t+2.2 s keeps LEFT  offset -0.23 m
+headon_rec20noghost_run06_20261009_122539      lane t+2.0 s at 5.88 m keeps RIGHT | fixed t+2.6 s keeps RIGHT offset +0.31 m
+headon_rec20noghost_run07_20261009_122715      lane t-0.1 s at 7.54 m keeps RIGHT | fixed t+5.3 s keeps RIGHT offset +0.34 m
+headon_rec20noghost_run08_20261009_122959      lane t+2.1 s at 6.36 m keeps RIGHT | fixed t+2.7 s keeps RIGHT offset +0.05 m
+headon_rec20noghost_run09_20261009_123149      lane t+2.8 s at 4.70 m keeps RIGHT | fixed t+3.5 s keeps RIGHT offset -0.11 m
+headon_rec20noghost_run10_20261009_123533      lane t+2.4 s at 5.36 m keeps RIGHT | fixed t+3.0 s keeps RIGHT offset +1.18 m
+SET 9Oct_headon_rec20ng: lane distance 6.26 +/- 0.82 m (4.70-7.54), sides {'RIGHT': 9, 'LEFT': 1}
+
+== 12Oct_headon_rec20gs
+headon_rec20gs_run01_20261012_094115           lane t+2.4 s at 5.53 m keeps RIGHT | fixed t+3.0 s keeps RIGHT offset +0.17 m
+headon_rec20gs_run02_20261012_094502           lane t+1.8 s at 6.50 m keeps RIGHT | fixed t+2.5 s keeps RIGHT offset +0.27 m
+headon_rec20gs_run03_20261012_095915           lane t+2.0 s at 6.51 m keeps RIGHT | fixed t+2.6 s keeps RIGHT offset -0.08 m
+headon_rec20gs_run04_20261012_100500           lane t+1.8 s at 6.60 m keeps RIGHT | fixed t+2.4 s keeps RIGHT offset +0.21 m
+headon_rec20gs_run05_20261012_100847           lane t+1.7 s at 6.56 m keeps RIGHT | fixed t+2.4 s keeps RIGHT offset +0.21 m
+headon_rec20gs_run06_20261012_101058           lane t+2.7 s at 7.30 m keeps RIGHT | fixed t+3.4 s keeps RIGHT offset +0.08 m
+headon_rec20gs_run07_20261012_101321           lane t+1.8 s at 6.49 m keeps RIGHT | fixed t+2.4 s keeps RIGHT offset +0.18 m
+headon_rec20gs_run08_20261012_101608           lane t+1.9 s at 6.30 m keeps RIGHT | fixed t+2.5 s keeps RIGHT offset +0.14 m
+headon_rec20gs_run09_20261012_112439           lane t+2.0 s at 6.24 m keeps RIGHT | fixed t+2.6 s keeps RIGHT offset -0.03 m
+headon_rec20gs_run10_20261012_113305           lane t+2.4 s at 5.31 m keeps RIGHT | fixed t+3.0 s keeps RIGHT offset +0.05 m
+SET 12Oct_headon_rec20gs: lane distance 6.33 +/- 0.56 m (5.31-7.30), sides {'RIGHT': 10}
+

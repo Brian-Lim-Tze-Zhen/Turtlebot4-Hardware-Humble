@@ -1,0 +1,62 @@
+== 9Oct_wide_rec20ng
+bag                                             apart pair s       members l  robot l passed   nearest  lanes
+pairwide_rec20noghost_run01_20261009_131340      0.93   4.27   -1.63 / -0.43    +0.31 LEFT       0.820  1: t+3.3 track 8 3.18 m keeps LEFT
+pairwide_rec20noghost_run02_20261009_133546      0.87   4.44   -1.64 / -0.29    +0.43 LEFT       0.810  1: t-0.2 track 28 4.66 m keeps LEFT
+pairwide_rec20noghost_run03_20261009_140800      1.49   4.02   -1.80 / -0.24    +0.50 LEFT       0.790  1: t+2.1 track 74 3.00 m keeps LEFT
+pairwide_rec20noghost_run04_20261009_134403      1.31   4.28   -1.77 / -0.51    +0.32 LEFT       0.830  0
+pairwide_rec20noghost_run05_20261009_134638      0.99   4.23   -1.73 / -0.38    +0.42 LEFT       0.870  2: t+3.1 track 42 3.40 m keeps LEFT; t+4.0 track 42 3.02 m keeps LEFT
+pairwide_rec20noghost_run06_20261009_135114      1.06   4.26   -1.64 / -0.39    +0.41 LEFT       0.870  0
+pairwide_rec20noghost_run07_20261009_135453      1.11   4.11   -1.73 / -0.14    +0.55 LEFT       0.860  1: t+2.4 track 51 3.39 m keeps LEFT
+pairwide_rec20noghost_run08_20261009_135715      1.25   3.91   -1.68 / -0.35    +0.43 LEFT       0.850  1: t+2.8 track 59 3.07 m keeps LEFT
+pairwide_rec20noghost_run09_20261009_140019      0.94   4.29   -1.53 / -0.29    +0.46 LEFT       0.840  0
+pairwide_rec20noghost_run10_20261009_140349      1.08   4.41   -1.87 / -0.20    +0.54 LEFT       0.770  1: t+2.1 track 67 3.35 m keeps LEFT
+SET 9Oct_wide_rec20ng: n 10  separation 1.10 +/- 0.20 m (0.87-1.49)  nearest 0.831 +/- 0.034 m  runs with a lane 7/10
+
+== 12Oct_wide_rec20gs
+bag                                             apart pair s       members l  robot l passed   nearest  lanes
+pairwide_rec20gs_run01_20261012_115015           1.90   4.17   -1.65 / -0.39    +0.30 LEFT       0.800  0
+pairwide_rec20gs_run02_20261012_115544           0.82   5.22   -1.48 / -0.26    +0.51 LEFT       0.830  0
+pairwide_rec20gs_run03_20261012_115902           1.07   4.86   -1.56 / -0.25    +0.55 LEFT       0.770  0
+pairwide_rec20gs_run04_20261012_120120           0.94   4.99   -1.51 / -0.30    +0.41 LEFT       0.820  0
+pairwide_rec20gs_run05_20261012_120405           0.89   4.81   -1.40 / -0.27    +0.52 LEFT       0.800  0
+pairwide_rec20gs_run06_20261012_120817           1.14   4.85   -1.46 / -0.19    +0.63 LEFT       0.750  0
+pairwide_rec20gs_run07_20261012_121157           1.47   4.09   -1.67 / -0.21    +0.55 LEFT       0.760  0
+pairwide_rec20gs_run08_20261012_121444           0.89   4.27   -1.49 / -0.21    +0.54 LEFT       0.770  0
+pairwide_rec20gs_run09_20261012_121651           0.93   4.33   -1.41 / -0.17    +0.57 LEFT       0.770  1: t+3.6 track 65 2.98 m keeps LEFT
+pairwide_rec20gs_run10_20261012_121849           0.80   4.11   -1.72 / -0.05    +0.55 LEFT       0.590  0
+SET 12Oct_wide_rec20gs: n 10  separation 1.09 +/- 0.35 m (0.80-1.90)  nearest 0.766 +/- 0.067 m  runs with a lane 1/10
+
+== 9Oct_narrow_rec20ng
+bag                                             apart pair s       members l  robot l passed   nearest  lanes
+pairnarrow_rec20noghost_run01_20261009_132713    1.32   4.67   -1.15 / +1.23    -0.02 BETWEEN    0.570  2: t+2.3 track 26 3.36 m keeps RIGHT; t+3.4 track 27 3.35 m keeps LEFT
+pairnarrow_rec20noghost_run02_20261009_141632    1.36   3.69   -1.08 / +0.62    -0.07 BETWEEN    0.540  1: t-0.2 track 92 3.53 m keeps LEFT
+pairnarrow_rec20noghost_run03_20261009_142131    1.36   4.55   -0.88 / +1.00    +0.14 BETWEEN    0.400  1: t+7.5 track 98 1.65 m keeps RIGHT
+pairnarrow_rec20noghost_run04_20261009_142417    1.85   4.80   -1.36 / +0.81    -0.10 BETWEEN    0.610  1: t+3.1 track 101 2.89 m keeps RIGHT
+pairnarrow_rec20noghost_run05_20261009_142637    1.90   4.72   -1.19 / +0.89    +0.14 BETWEEN    0.440  0
+pairnarrow_rec20noghost_run06_20261009_144039    1.27   4.69   -1.25 / +0.67    -0.12 BETWEEN    0.520  0
+pairnarrow_rec20noghost_run07_20261009_145221    1.23   4.72   -0.69 / +0.58    +0.08 BETWEEN    0.490  0
+pairnarrow_rec20noghost_run08_20261009_144819    1.35   4.74   -1.57 / +1.16    -0.12 BETWEEN    0.530  1: t+2.8 track 1 2.79 m keeps RIGHT
+pairnarrow_rec20noghost_run09_20261009_145731    1.80   4.95   -1.22 / +1.14    -0.04 BETWEEN    0.550  5: t+2.3 track 19 2.89 m keeps RIGHT; t+3.5 track 20 3.40 m keeps LEFT; t+5.9 track 19 3.10 m keeps RIGHT; t+7.3 track 19 2.88 m keeps RIGHT; t+13.0 track 19 1.91 m keeps RIGHT
+pairnarrow_rec20noghost_run10_20261009_150100    1.71   4.85   -1.31 / +1.17    +0.02 BETWEEN    0.540  2: t+5.5 track 26 2.77 m keeps LEFT; t+7.4 track 26 2.50 m keeps LEFT
+SET 9Oct_narrow_rec20ng: n 10  separation 1.52 +/- 0.26 m (1.23-1.90)  nearest 0.519 +/- 0.062 m  runs with a lane 7/10
+
+== 12Oct_narrow_rec20gs
+bag                                             apart pair s       members l  robot l passed   nearest  lanes
+pairnarrow_rec20gs_run01_20261012_123740         1.43   4.63   -0.92 / +0.97    +0.13 BETWEEN    0.490  0
+pairnarrow_rec20gs_run02_20261012_124323         1.42   4.88   -1.14 / +1.14    -0.02 BETWEEN    0.560  0
+pairnarrow_rec20gs_run03_20261012_124938         1.31   4.48   -0.82 / +0.72    -0.04 BETWEEN    0.590  0
+pairnarrow_rec20gs_run04_20261012_134303         1.77   4.83   -1.24 / +0.67    +0.04 BETWEEN    0.570  0
+pairnarrow_rec20gs_run05_20261012_133806         1.38   4.40   -0.93 / +0.96    -0.04 BETWEEN    0.530  0
+pairnarrow_rec20gs_run06_20261012_134613         1.20   5.09   -0.59 / +0.61    +0.04 BETWEEN    0.470  0
+pairnarrow_rec20gs_run07_20261012_141558         1.30   4.65   -1.23 / +0.63    -0.09 BETWEEN    0.580  0
+pairnarrow_rec20gs_run08_20261012_143044         1.71   4.62   -1.27 / +0.85    -0.10 BETWEEN    0.610  0
+pairnarrow_rec20gs_run09_20261012_142844         1.23   4.74   -1.18 / +0.70    -0.01 BETWEEN    0.550  0
+pairnarrow_rec20gs_run10_20261012_143331         1.39   4.57   -0.96 / +0.70    -0.04 BETWEEN    0.600  0
+SET 12Oct_narrow_rec20gs: n 10  separation 1.41 +/- 0.19 m (1.20-1.77)  nearest 0.555 +/- 0.046 m  runs with a lane 0/10
+
+# Wide-pair placement check (12 Oct 2026, from the rows above; means over the 10 runs of each set):
+#   9 Oct rec20ng : inner member l -0.322, robot l at the pair +0.437, robot-to-inner 0.759 m, pair s 4.22 m, nearest 0.831 (0.838 without run 10)
+#   12 Oct rec20gs: inner member l -0.230, robot l at the pair +0.513, robot-to-inner 0.743 m, pair s 4.57 m, nearest 0.766 (0.786 without run 10)
+#   The inner member stood ~0.09 m nearer the line and the robot kept ~0.08 m further left, so the robot-to-member offset differs by
+#   only 0.016 m; the remaining ~0.05 m lower nearest return is not explained by the placement estimate. Run 10 (12 Oct): inner
+#   member mislocated to the outer side after t+2.9 s (see HARDWARE_DAY_20261012.md), nearest 0.588 m.

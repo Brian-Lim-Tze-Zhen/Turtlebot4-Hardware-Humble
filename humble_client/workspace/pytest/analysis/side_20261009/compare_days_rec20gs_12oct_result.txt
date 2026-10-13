@@ -1,0 +1,33 @@
+  12Oct_headon_rec20gs         headon_rec20gs_run01_20261012_094115         clear 0.58 m  right         lat 0.79  head  76  stops 0  26.1 s
+  12Oct_headon_rec20gs         headon_rec20gs_run02_20261012_094502         clear 0.69 m  right         lat 0.81  head  93  stops 0  27.1 s
+  12Oct_headon_rec20gs         headon_rec20gs_run03_20261012_095915         clear 0.89 m  right         lat 0.93  head  87  stops 0  27.8 s
+  12Oct_headon_rec20gs         headon_rec20gs_run04_20261012_100500         clear 0.59 m  right         lat 0.82  head  89  stops 0  27.2 s
+  12Oct_headon_rec20gs         headon_rec20gs_run05_20261012_100847         clear 0.87 m  right         lat 0.86  head  81  stops 0  26.1 s
+  12Oct_headon_rec20gs         headon_rec20gs_run06_20261012_101058         clear 0.67 m  right         lat 0.64  head  81  stops 1  27.9 s
+  12Oct_headon_rec20gs         headon_rec20gs_run07_20261012_101321         clear 0.80 m  right         lat 0.81  head  83  stops 0  26.4 s
+  12Oct_headon_rec20gs         headon_rec20gs_run08_20261012_101608         clear 0.50 m  right         lat 0.40  head  77  stops 0  24.7 s
+  12Oct_headon_rec20gs         headon_rec20gs_run09_20261012_112439         clear 0.65 m  right         lat 0.88  head  86  stops 0  26.9 s
+  12Oct_headon_rec20gs         headon_rec20gs_run10_20261012_113305         clear 0.45 m  right         lat 0.37  head  74  stops 0  24.6 s
+SET 12Oct_headon_rec20gs     n 10 | clear 0.67 +/- 0.15 m | sides {'right': 10} | lat 0.73 +/- 0.20 m | head 83 deg | stops 1 | time 26.48 +/- 1.15 s
+  12Oct_pairwide_rec20gs       pairwide_rec20gs_run01_20261012_115015       clear 0.80 m  left of pair  lat 0.47  head  20  stops 0  24.8 s
+  12Oct_pairwide_rec20gs       pairwide_rec20gs_run02_20261012_115544       clear 0.83 m  left of pair  lat 0.59  head  32  stops 0  26.1 s
+  12Oct_pairwide_rec20gs       pairwide_rec20gs_run03_20261012_115902       clear 0.77 m  left of pair  lat 0.64  head  28  stops 0  25.6 s
+  12Oct_pairwide_rec20gs       pairwide_rec20gs_run04_20261012_120120       clear 0.82 m  left of pair  lat 0.52  head  29  stops 0  25.4 s
+  12Oct_pairwide_rec20gs       pairwide_rec20gs_run05_20261012_120405       clear 0.80 m  left of pair  lat 0.62  head  24  stops 0  25.9 s
+  12Oct_pairwide_rec20gs       pairwide_rec20gs_run06_20261012_120817       clear 0.75 m  left of pair  lat 0.72  head  27  stops 0  27.2 s
+  12Oct_pairwide_rec20gs       pairwide_rec20gs_run07_20261012_121157       clear 0.76 m  left of pair  lat 0.77  head  26  stops 0  25.2 s
+  12Oct_pairwide_rec20gs       pairwide_rec20gs_run08_20261012_121444       clear 0.77 m  left of pair  lat 0.68  head  21  stops 0  23.6 s
+  12Oct_pairwide_rec20gs       pairwide_rec20gs_run09_20261012_121651       clear 0.77 m  between       lat 0.75  head  34  stops 0  26.4 s
+  12Oct_pairwide_rec20gs       pairwide_rec20gs_run10_20261012_121849       clear 0.59 m  left of pair  lat 0.70  head  23  stops 0  26.0 s
+SET 12Oct_pairwide_rec20gs   n 10 | clear 0.77 +/- 0.07 m | sides {'left of pair': 9, 'between': 1} | lat 0.65 +/- 0.10 m | head 26 deg | stops 0 | time 25.63 +/- 0.97 s
+  12Oct_pairnarrow_rec20gs     pairnarrow_rec20gs_run01_20261012_123740     clear 0.49 m  between       lat 0.20  head  21  stops 0  29.4 s
+  12Oct_pairnarrow_rec20gs     pairnarrow_rec20gs_run02_20261012_124323     clear 0.56 m  between       lat 0.13  head  32  stops 0  27.5 s
+  12Oct_pairnarrow_rec20gs     pairnarrow_rec20gs_run03_20261012_124938     clear 0.59 m  between       lat 0.45  head  30  stops 0  29.5 s
+  12Oct_pairnarrow_rec20gs     pairnarrow_rec20gs_run04_20261012_134303     clear 0.57 m  between       lat 0.15  head  20  stops 0  28.6 s
+  12Oct_pairnarrow_rec20gs     pairnarrow_rec20gs_run05_20261012_133806     clear 0.53 m  between       lat 0.13  head  20  stops 0  29.8 s
+  12Oct_pairnarrow_rec20gs     pairnarrow_rec20gs_run06_20261012_134613     clear 0.47 m  between       lat 0.16  head  24  stops 0  29.4 s
+  12Oct_pairnarrow_rec20gs     pairnarrow_rec20gs_run07_20261012_141558     clear 0.58 m  between       lat 0.12  head  17  stops 0  28.4 s
+  12Oct_pairnarrow_rec20gs     pairnarrow_rec20gs_run08_20261012_143044     clear 0.61 m  between       lat 0.19  head  48  stops 0  29.5 s
+  12Oct_pairnarrow_rec20gs     pairnarrow_rec20gs_run09_20261012_142844     clear 0.55 m  between       lat 0.09  head  11  stops 0  28.5 s
+  12Oct_pairnarrow_rec20gs     pairnarrow_rec20gs_run10_20261012_143331     clear 0.60 m  between       lat 0.09  head  12  stops 0  27.2 s
+SET 12Oct_pairnarrow_rec20gs n 10 | clear 0.56 +/- 0.05 m | sides {'between': 10} | lat 0.17 +/- 0.10 m | head 24 deg | stops 0 | time 28.79 +/- 0.91 s

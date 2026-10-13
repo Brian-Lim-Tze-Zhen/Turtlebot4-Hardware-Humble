@@ -1,0 +1,33 @@
+  12Oct_headon_rec20gs         headon_rec20gs_run01_20261012_094115         clear 0.5840 m  gap +0.3950 m  time 26.14 s
+  12Oct_headon_rec20gs         headon_rec20gs_run02_20261012_094502         clear 0.6880 m  gap +0.4990 m  time 27.14 s
+  12Oct_headon_rec20gs         headon_rec20gs_run03_20261012_095915         clear 0.8940 m  gap +0.7050 m  time 27.80 s
+  12Oct_headon_rec20gs         headon_rec20gs_run04_20261012_100500         clear 0.5880 m  gap +0.3990 m  time 27.20 s
+  12Oct_headon_rec20gs         headon_rec20gs_run05_20261012_100847         clear 0.8680 m  gap +0.6790 m  time 26.10 s
+  12Oct_headon_rec20gs         headon_rec20gs_run06_20261012_101058         clear 0.6700 m  gap +0.4810 m  time 27.91 s
+  12Oct_headon_rec20gs         headon_rec20gs_run07_20261012_101321         clear 0.8020 m  gap +0.6130 m  time 26.36 s
+  12Oct_headon_rec20gs         headon_rec20gs_run08_20261012_101608         clear 0.4980 m  gap +0.3090 m  time 24.69 s
+  12Oct_headon_rec20gs         headon_rec20gs_run09_20261012_112439         clear 0.6460 m  gap +0.4570 m  time 26.87 s
+  12Oct_headon_rec20gs         headon_rec20gs_run10_20261012_113305         clear 0.4470 m  gap +0.2580 m  time 24.60 s
+SET 12Oct_headon_rec20gs     n 10 | clear 0.6685 +/- 0.1495 (0.4470-0.8940) | gap 0.4795 | time 26.481 +/- 1.149 | gap>=0.36: 8  >=0.40: 6  >=0.45: 6  >0.45: 6
+  12Oct_pairwide_rec20gs       pairwide_rec20gs_run01_20261012_115015       clear 0.8040 m  gap +0.6150 m  time 24.84 s
+  12Oct_pairwide_rec20gs       pairwide_rec20gs_run02_20261012_115544       clear 0.8280 m  gap +0.6390 m  time 26.11 s
+  12Oct_pairwide_rec20gs       pairwide_rec20gs_run03_20261012_115902       clear 0.7720 m  gap +0.5830 m  time 25.55 s
+  12Oct_pairwide_rec20gs       pairwide_rec20gs_run04_20261012_120120       clear 0.8200 m  gap +0.6310 m  time 25.45 s
+  12Oct_pairwide_rec20gs       pairwide_rec20gs_run05_20261012_120405       clear 0.7980 m  gap +0.6090 m  time 25.85 s
+  12Oct_pairwide_rec20gs       pairwide_rec20gs_run06_20261012_120817       clear 0.7520 m  gap +0.5630 m  time 27.23 s
+  12Oct_pairwide_rec20gs       pairwide_rec20gs_run07_20261012_121157       clear 0.7600 m  gap +0.5710 m  time 25.23 s
+  12Oct_pairwide_rec20gs       pairwide_rec20gs_run08_20261012_121444       clear 0.7680 m  gap +0.5790 m  time 23.61 s
+  12Oct_pairwide_rec20gs       pairwide_rec20gs_run09_20261012_121651       clear 0.7660 m  gap +0.5770 m  time 26.40 s
+  12Oct_pairwide_rec20gs       pairwide_rec20gs_run10_20261012_121849       clear 0.5880 m  gap +0.3990 m  time 26.05 s
+SET 12Oct_pairwide_rec20gs   n 10 | clear 0.7656 +/- 0.0676 (0.5880-0.8280) | gap 0.5766 | time 25.632 +/- 0.972 | gap>=0.36: 10  >=0.40: 9  >=0.45: 9  >0.45: 9
+  12Oct_pairnarrow_rec20gs     pairnarrow_rec20gs_run01_20261012_123740     clear 0.4900 m  gap +0.3010 m  time 29.44 s
+  12Oct_pairnarrow_rec20gs     pairnarrow_rec20gs_run02_20261012_124323     clear 0.5600 m  gap +0.3710 m  time 27.49 s
+  12Oct_pairnarrow_rec20gs     pairnarrow_rec20gs_run03_20261012_124938     clear 0.5920 m  gap +0.4030 m  time 29.50 s
+  12Oct_pairnarrow_rec20gs     pairnarrow_rec20gs_run04_20261012_134303     clear 0.5680 m  gap +0.3790 m  time 28.64 s
+  12Oct_pairnarrow_rec20gs     pairnarrow_rec20gs_run05_20261012_133806     clear 0.5300 m  gap +0.3410 m  time 29.81 s
+  12Oct_pairnarrow_rec20gs     pairnarrow_rec20gs_run06_20261012_134613     clear 0.4730 m  gap +0.2840 m  time 29.40 s
+  12Oct_pairnarrow_rec20gs     pairnarrow_rec20gs_run07_20261012_141558     clear 0.5840 m  gap +0.3950 m  time 28.35 s
+  12Oct_pairnarrow_rec20gs     pairnarrow_rec20gs_run08_20261012_143044     clear 0.6120 m  gap +0.4230 m  time 29.51 s
+  12Oct_pairnarrow_rec20gs     pairnarrow_rec20gs_run09_20261012_142844     clear 0.5520 m  gap +0.3630 m  time 28.54 s
+  12Oct_pairnarrow_rec20gs     pairnarrow_rec20gs_run10_20261012_143331     clear 0.5960 m  gap +0.4070 m  time 27.18 s
+SET 12Oct_pairnarrow_rec20gs n 10 | clear 0.5557 +/- 0.0458 (0.4730-0.6120) | gap 0.3667 | time 28.788 +/- 0.907 | gap>=0.36: 7  >=0.40: 3  >=0.45: 0  >0.45: 0

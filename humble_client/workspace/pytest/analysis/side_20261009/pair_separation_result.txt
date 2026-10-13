@@ -1,0 +1,21 @@
+pairnarrow_rec20noghost_run01_20261009_132713    msgs  131  separation 1.32 m  max surface between +0.22 m
+pairnarrow_rec20noghost_run02_20261009_141632    msgs  155  separation 1.36 m  max surface between +0.24 m
+pairnarrow_rec20noghost_run03_20261009_142131    msgs  129  separation 1.36 m  max surface between +0.24 m
+pairnarrow_rec20noghost_run04_20261009_142417    msgs  126  separation 1.85 m  max surface between +0.48 m
+pairnarrow_rec20noghost_run05_20261009_142637    msgs  123  separation 1.90 m  max surface between +0.51 m
+pairnarrow_rec20noghost_run06_20261009_144039    msgs  131  separation 1.27 m  max surface between +0.20 m
+pairnarrow_rec20noghost_run07_20261009_145221    msgs  145  separation 1.23 m  max surface between +0.18 m
+pairnarrow_rec20noghost_run08_20261009_144819    msgs   91  separation 1.35 m  max surface between +0.24 m
+pairnarrow_rec20noghost_run09_20261009_145731    msgs  135  separation 1.80 m  max surface between +0.46 m
+pairnarrow_rec20noghost_run10_20261009_150100    msgs  145  separation 1.71 m  max surface between +0.42 m
+pairwide_rec20noghost_run01_20261009_131340      msgs   85  separation 0.93 m  max surface between +0.02 m
+pairwide_rec20noghost_run02_20261009_133546      msgs   89  separation 0.87 m  max surface between -0.00 m
+pairwide_rec20noghost_run03_20261009_140800      msgs   83  separation 1.49 m  max surface between +0.31 m
+pairwide_rec20noghost_run04_20261009_134403      msgs   81  separation 1.31 m  max surface between +0.22 m
+pairwide_rec20noghost_run05_20261009_134638      msgs  166  separation 0.99 m  max surface between +0.05 m
+pairwide_rec20noghost_run06_20261009_135114      msgs   75  separation 1.06 m  max surface between +0.09 m
+pairwide_rec20noghost_run07_20261009_135453      msgs   83  separation 1.11 m  max surface between +0.12 m
+pairwide_rec20noghost_run08_20261009_135715      msgs   97  separation 1.25 m  max surface between +0.19 m
+pairwide_rec20noghost_run09_20261009_140019      msgs  115  separation 0.94 m  max surface between +0.03 m
+pairwide_rec20noghost_run10_20261009_140349      msgs   78  separation 1.08 m  max surface between +0.10 m
+ALL n 20  separation 1.31 +/- 0.31 m (range 0.87 - 1.90)

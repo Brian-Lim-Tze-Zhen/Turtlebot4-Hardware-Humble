@@ -1,0 +1,62 @@
+  5Oct_headon_cloudon          headon_cloudon_run01_20261005_083256         clear 0.25 m  left          lat 0.19  head  27  stops 1  29.8 s
+  5Oct_headon_cloudon          headon_cloudon_run02_20261005_083950         clear 0.26 m  right         lat 0.24  head  69  stops 1  35.8 s
+  5Oct_headon_cloudon          headon_cloudon_run03_20261005_084227         clear 0.33 m  left          lat 0.34  head  18  stops 0  24.2 s
+SET 5Oct_headon_cloudon      n  3 | clear 0.28 +/- 0.05 m | sides {'left': 2, 'right': 1} | lat 0.26 +/- 0.08 m | head 38 deg | stops 2 | time 29.90 +/- 5.83 s
+  5Oct_headon_cloudon_noRev    headon_cloudonvx0_run01_20261005_122537      clear 0.23 m  right         lat 0.20  head  38  stops 2  30.9 s
+  5Oct_headon_cloudon_noRev    headon_cloudonvx0_run02_20261005_122917      clear 0.24 m  right         lat 0.49  head  68  stops 0  26.2 s
+  5Oct_headon_cloudon_noRev    headon_cloudonvx0_run03_20261005_123149      clear 0.32 m  left          lat 0.33  head  33  stops 0  25.5 s
+SET 5Oct_headon_cloudon_noRev n  3 | clear 0.26 +/- 0.05 m | sides {'right': 2, 'left': 1} | lat 0.34 +/- 0.14 m | head 46 deg | stops 2 | time 27.55 +/- 2.92 s
+  5Oct_headon_lanerule         headon_lanerule_run01_20261005_102208        clear 0.86 m  right         lat 0.92  head  71  stops 0  27.3 s
+  5Oct_headon_lanerule         headon_lanerule_run02_20261005_102449        clear 0.76 m  left          lat 0.91  head  82  stops 0  27.2 s
+  5Oct_headon_lanerule         headon_lanerule_run03_20261005_102648        clear 0.81 m  right         lat 0.95  head  68  stops 0  27.1 s
+SET 5Oct_headon_lanerule     n  3 | clear 0.81 +/- 0.05 m | sides {'right': 2, 'left': 1} | lat 0.93 +/- 0.02 m | head 74 deg | stops 0 | time 27.19 +/- 0.06 s
+  8Oct_headon_v4               headon_v4front_run01_20261008_094928         clear 0.40 m  left          lat 0.42  head 180  stops 4  70.5 s
+  8Oct_headon_v4               headon_v4front_run03_20261008_112019         clear 0.56 m  left          lat 0.77  head 179  stops 2  42.5 s
+  8Oct_headon_v4               headon_v4noghost_run01_20261008_113213       clear 0.49 m  right         lat 0.50  head 178  stops 0  34.2 s
+  8Oct_headon_v4               headon_v4noghost_run02_20261008_115641       clear 0.69 m  left          lat 0.83  head  92  stops 0  27.4 s
+  8Oct_headon_v4               headon_v4noghost_run03_20261008_120759       clear 0.57 m  right         lat 0.75  head  84  stops 0  26.7 s
+  8Oct_headon_v4               headon_v4noghosttf05_run01_20261008_121720   clear 0.59 m  right         lat 0.89  head  98  stops 0  27.8 s
+  8Oct_headon_v4               headon_v4noghosttf05_run02_20261008_122118   clear 0.61 m  right         lat 0.83  head  98  stops 1  28.2 s
+  8Oct_headon_v4               headon_v4noghosttf05_run03_20261008_122708   clear 0.67 m  left          lat 0.46  head  70  stops 1  27.3 s
+SET 8Oct_headon_v4           n  8 | clear 0.57 +/- 0.09 m | sides {'left': 4, 'right': 4} | lat 0.68 +/- 0.19 m | head 122 deg | stops 8 | time 35.58 +/- 15.12 s
+  9Oct_headon_rec20ng          headon_rec20noghost_run01_20261009_125322    clear 0.65 m  right         lat 0.50  head  85  stops 0  26.2 s
+  9Oct_headon_rec20ng          headon_rec20noghost_run02_20261009_120453    clear 0.73 m  right         lat 0.84  head  97  stops 0  29.3 s
+  9Oct_headon_rec20ng          headon_rec20noghost_run03_20261009_121336    clear 0.63 m  right         lat 0.80  head  70  stops 0  26.3 s
+  9Oct_headon_rec20ng          headon_rec20noghost_run04_20261009_122047    clear 0.66 m  right         lat 0.55  head  68  stops 0  25.3 s
+  9Oct_headon_rec20ng          headon_rec20noghost_run05_20261009_122245    clear 0.80 m  left          lat 0.92  head  87  stops 0  27.0 s
+  9Oct_headon_rec20ng          headon_rec20noghost_run06_20261009_122539    clear 0.75 m  right         lat 0.81  head  70  stops 0  25.9 s
+  9Oct_headon_rec20ng          headon_rec20noghost_run07_20261009_122715    clear 0.72 m  right         lat 0.64  head  74  stops 0  26.8 s
+  9Oct_headon_rec20ng          headon_rec20noghost_run08_20261009_122959    clear 0.50 m  right         lat 0.45  head  85  stops 0  25.4 s
+  9Oct_headon_rec20ng          headon_rec20noghost_run09_20261009_123149    clear 0.36 m  left          lat 0.76  head  85  stops 0  27.4 s
+  9Oct_headon_rec20ng          headon_rec20noghost_run10_20261009_123533    clear 0.53 m  right         lat 0.57  head  80  stops 0  26.9 s
+SET 9Oct_headon_rec20ng      n 10 | clear 0.63 +/- 0.13 m | sides {'right': 8, 'left': 2} | lat 0.68 +/- 0.16 m | head 80 deg | stops 0 | time 26.65 +/- 1.15 s
+  5Oct_pairwide                pairwide_hwdetmap_run01_20261005_132029      clear 0.82 m  left of pair  lat 0.66  head  30  stops 0  28.0 s
+  5Oct_pairwide                pairwide_hwdetmap_run02_20261005_132803      clear 0.81 m  left of pair  lat 0.53  head  21  stops 0  24.2 s
+  5Oct_pairwide                pairwide_hwdetmap_run03_20261005_133428      clear 0.80 m  left of pair  lat 0.52  head  44  stops 0  27.0 s
+SET 5Oct_pairwide            n  3 | clear 0.81 +/- 0.01 m | sides {'left of pair': 3} | lat 0.57 +/- 0.07 m | head 32 deg | stops 0 | time 26.38 +/- 1.93 s
+  9Oct_pairwide_rec20ng        pairwide_rec20noghost_run01_20261009_131340  clear 0.83 m  left of pair  lat 0.46  head  33  stops 0  24.1 s
+  9Oct_pairwide_rec20ng        pairwide_rec20noghost_run02_20261009_133546  clear 0.81 m  left of pair  lat 0.59  head  58  stops 0  25.6 s
+  9Oct_pairwide_rec20ng        pairwide_rec20noghost_run03_20261009_140800  clear 0.79 m  left of pair  lat 0.70  head  59  stops 0  26.4 s
+  9Oct_pairwide_rec20ng        pairwide_rec20noghost_run04_20261009_134403  clear 0.82 m  left of pair  lat 0.51  head  23  stops 0  24.7 s
+  9Oct_pairwide_rec20ng        pairwide_rec20noghost_run05_20261009_134638  clear 0.87 m  left of pair  lat 0.64  head  44  stops 0  25.5 s
+  9Oct_pairwide_rec20ng        pairwide_rec20noghost_run06_20261009_135114  clear 0.87 m  left of pair  lat 0.58  head  22  stops 0  25.1 s
+  9Oct_pairwide_rec20ng        pairwide_rec20noghost_run07_20261009_135453  clear 0.86 m  left of pair  lat 0.76  head  53  stops 0  26.9 s
+  9Oct_pairwide_rec20ng        pairwide_rec20noghost_run08_20261009_135715  clear 0.85 m  left of pair  lat 0.68  head  43  stops 0  25.8 s
+  9Oct_pairwide_rec20ng        pairwide_rec20noghost_run09_20261009_140019  clear 0.84 m  left of pair  lat 0.60  head  22  stops 0  24.8 s
+  9Oct_pairwide_rec20ng        pairwide_rec20noghost_run10_20261009_140349  clear 0.77 m  left of pair  lat 0.68  head  56  stops 0  25.5 s
+SET 9Oct_pairwide_rec20ng    n 10 | clear 0.83 +/- 0.03 m | sides {'left of pair': 10} | lat 0.62 +/- 0.09 m | head 41 deg | stops 0 | time 25.44 +/- 0.82 s
+  5Oct_pairnarrow              pairnarrow_hwdetmap_run01_20261005_135714    clear 0.45 m  between       lat 0.20  head  25  stops 0  31.0 s
+  5Oct_pairnarrow              pairnarrow_hwdetmap_run02_20261005_140057    clear 0.51 m  between       lat 0.19  head  32  stops 0  28.4 s
+  5Oct_pairnarrow              pairnarrow_hwdetmap_run03_20261005_140853    clear 0.36 m  between       lat 0.63  head  91  stops 0  35.1 s
+SET 5Oct_pairnarrow          n  3 | clear 0.44 +/- 0.07 m | sides {'between': 3} | lat 0.34 +/- 0.25 m | head 49 deg | stops 0 | time 31.50 +/- 3.36 s
+  9Oct_pairnarrow_rec20ng      pairnarrow_rec20noghost_run01_20261009_13271 clear 0.58 m  between       lat 0.27  head  65  stops 0  29.0 s
+  9Oct_pairnarrow_rec20ng      pairnarrow_rec20noghost_run02_20261009_14163 clear 0.54 m  between       lat 0.19  head  42  stops 0  29.1 s
+  9Oct_pairnarrow_rec20ng      pairnarrow_rec20noghost_run03_20261009_14213 clear 0.41 m  between       lat 0.33  head  62  stops 0  28.5 s
+  9Oct_pairnarrow_rec20ng      pairnarrow_rec20noghost_run04_20261009_14241 clear 0.62 m  between       lat 0.34  head  56  stops 0  28.3 s
+  9Oct_pairnarrow_rec20ng      pairnarrow_rec20noghost_run05_20261009_14263 clear 0.44 m  between       lat 0.20  head  12  stops 0  25.8 s
+  9Oct_pairnarrow_rec20ng      pairnarrow_rec20noghost_run06_20261009_14403 clear 0.52 m  between       lat 0.17  head  14  stops 0  28.0 s
+  9Oct_pairnarrow_rec20ng      pairnarrow_rec20noghost_run07_20261009_14522 clear 0.50 m  between       lat 0.19  head  39  stops 0  32.4 s
+  9Oct_pairnarrow_rec20ng      pairnarrow_rec20noghost_run08_20261009_14481 clear 0.53 m  between       lat 0.28  head  53  stops 0  28.2 s
+  9Oct_pairnarrow_rec20ng      pairnarrow_rec20noghost_run09_20261009_14573 clear 0.55 m  between       lat 0.43  head  86  stops 0  33.0 s
+  9Oct_pairnarrow_rec20ng      pairnarrow_rec20noghost_run10_20261009_15010 clear 0.55 m  between       lat 0.21  head  35  stops 0  28.8 s
+SET 9Oct_pairnarrow_rec20ng  n 10 | clear 0.52 +/- 0.06 m | sides {'between': 10} | lat 0.26 +/- 0.08 m | head 46 deg | stops 0 | time 29.10 +/- 2.11 s
