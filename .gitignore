@@ -34,3 +34,6 @@ humble_client/files/
 humble_client/workspace/debug_crops_labels/*.png
 humble_client/workspace/debug_crops_labels/review_labels.html
 humble_client/workspace/test_data/
+
+# videos of the robot runs are published only as face-blurred GIFs in docs/media
+*.mp4

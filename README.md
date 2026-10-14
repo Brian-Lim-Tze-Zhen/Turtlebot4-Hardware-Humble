@@ -16,6 +16,14 @@ RPLiDAR /scan ──────────────────────
 
 ## Results on the robot
 
+![Head-on walker on the real robot](docs/media/headon_robot.gif)
+
+*Head-on walker, final robot configuration, 12 October 2026 (filmed extra run `headon_rec20gsvideo_run01`, not one of the ten counted runs). The robot keeps to its right and passes without stopping.*
+
+![Standing pair on the real robot](docs/media/pair_robot.gif)
+
+*Standing pair, same day: around the pair in the wide hallway (counted run 1) and between the members in the narrow section (counted run 3). Both played at 1.5x speed; faces blurred frame by frame.*
+
 Final robot configuration, 12 October 2026, ten counted runs per case in the hallway of the university (thesis Section 7.6.2). On the robot there is no ground truth: the distance is the nearest LiDAR return that is not on the map, and the surface clearance is that distance minus the robot radius of 0.189 m. Mean ± SD in metres.
 
 | Case | Nearest return | Surface clearance | Robot's path | Stops | Time (s) |
