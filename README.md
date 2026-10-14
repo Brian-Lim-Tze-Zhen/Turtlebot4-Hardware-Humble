@@ -7,12 +7,10 @@ The pipeline runs on a host PC in a Docker container and drives a physical Turtl
 **Stack:** ROS 2 **Humble** · CycloneDDS (direct, no Discovery Server / zenoh) · AMCL + Nav2 MPPI · YOLO (Ultralytics/OpenVINO) + MobileCLIP-S1 · RPLiDAR · OAK-D
 
 ## Pipeline
-```
-OAK-D ─► YOLO ─► camera_ray_person_node ─► camera_ray_identity_node ─┐
-RPLiDAR /scan ──────────────────────────────────────────────────────┘
-      ─► Kalman filter predictor ─► predicted person cloud ─► Nav2 costmap ─► MPPI (+ SocialLaneNoGhostCritic)
-      ─► social group detector ─► social zone layer
-```
+
+![Perception pipeline on the robot](docs/media/pipeline.png)
+
+*Camera-led perception on the robot (thesis Figure 3.5). Blue: perception nodes with the topics between them; grey: their inputs; green: the consumers in the navigation stack, the SocialCritic of the MPPI controller and the Nav2 costmaps.*
 
 ## Results on the robot
 
