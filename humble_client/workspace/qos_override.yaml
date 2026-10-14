@@ -1,4 +1,0 @@
-/predicted_person_cloud:
-  reliability: reliable
-  history: keep_last
-  depth: 10
