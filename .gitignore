@@ -29,3 +29,8 @@ humble_client/files/
 # Notebooks
 .ipynb_checkpoints/
 *.ipynb
+
+# images of people (participants, test photos): kept locally, never published
+humble_client/workspace/debug_crops_labels/*.png
+humble_client/workspace/debug_crops_labels/review_labels.html
+humble_client/workspace/test_data/
