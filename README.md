@@ -34,16 +34,21 @@ Every counted and discarded run, with its reason, is in the [run record of 12 Oc
 
 ## Analysis
 
+**What the lane rules change.** A person walks straight at the robot in a narrow corridor. Without the lane rules, the robot does not get out of the way in time, and they touch. With them, it moves to one side early and passes at about the target distance of 0.8 m.
+
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/media/results_dark.png">
-  <img alt="Left: closest distance between centres in ten head-on trials in simulation for the baseline, the lane rules and the final configuration. Right: nearest LiDAR return not on the map for the final configuration in simulation and on the robot, head-on walker, wide pair and narrow pair." src="docs/media/results_light.png">
+  <source media="(prefers-color-scheme: dark)" srcset="docs/media/headon_dark.png">
+  <img alt="Bar chart: closest distance between robot and walker in simulation, mean of 10 trials. No lane rules 0.08 m, the robot touches the walker; lane rules 0.84 m; final configuration 0.76 m." src="docs/media/headon_light.png">
 </picture>
 
-*Dots: single runs; bars: means. Left: the head-on walker in simulation, closest distance between centres from Gazebo's ground truth. Right: the final configuration on the robot and in simulation, measured the same way on both, as the nearest LiDAR return that is not on the map. Robot data from the [comparison of the robot days](humble_client/workspace/pytest/analysis/side_20261009/); simulation data and the chart script in the [simulation repository](https://github.com/Brian-Lim-Tze-Zhen/Turtlebot4-Social-Navigation-Jazzy-Simulation-#analysis).*
+**Does the real robot behave like the simulation?** The robot has no exact positions of people, so here both are measured the same way: the distance from the LiDAR to the nearest person. For the standing pair, robot and simulation agree. The robot passed the walker wider, and its runs varied more (± 0.15 m on the robot, ± 0.07 m in simulation).
 
-- **The standing pair matches between robot and simulation.** Wide pair: 0.766 m on the robot, 0.765 m in simulation. Narrow pair: 0.56 m on the robot, 0.60 m in simulation.
-- **The head-on walker varies more on the robot.** 0.67 ± 0.15 m on the robot, against 0.54 ± 0.07 m in simulation.
-- **Group skip stops lanes for standing pair members.** Without it (9 October 2026), a lane was started for a member of the standing pair in seven of ten runs in each place, because a standing member's estimate jumps at the hand-over between camera and LiDAR. With group skip, a lane started in one of twenty runs, for a short extra track in front of the pair. The distances were similar on both days.
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/media/sim_vs_robot_dark.png">
+  <img alt="Dot chart: closest distance in the final configuration, simulation against robot, mean of 10 runs. Walker 0.54 m in simulation, 0.67 m on the robot; wide pair 0.76 m on both; narrow pair 0.60 m in simulation, 0.56 m on the robot." src="docs/media/sim_vs_robot_light.png">
+</picture>
+
+*Data: the [simulation reports](https://github.com/Brian-Lim-Tze-Zhen/Turtlebot4-Social-Navigation-Jazzy-Simulation-/tree/main/ros2_ws/analysis) and the [robot runs of 12 October 2026](humble_client/Task/HARDWARE_DAY_20261012.md); [chart script](https://github.com/Brian-Lim-Tze-Zhen/Turtlebot4-Social-Navigation-Jazzy-Simulation-/blob/main/docs/media/make_results_chart.py).*
 
 ## Quick start
 
