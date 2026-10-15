@@ -8,33 +8,9 @@ The pipeline runs on a host PC in a Docker container and drives a physical Turtl
 
 ## Pipeline
 
-```mermaid
-flowchart TD
-  cam[camera image]:::input --> yolo[Person detector<br/>YOLOv8n-pose and ByteTrack]
-  yolo -- "/person_positions_map" --> ray[Ray localisation<br/>range along the camera bearing]
-  in1[LiDAR scan, static map, odometry]:::input --> ray
-  ray -- "/camera_ray_clusters" --> id[Identity node<br/>position continuity, stationary hold]
-  in2[LiDAR scan, static map]:::input --> id
-  id -- "/person_positions_fused" --> kf[Kalman predictor<br/>velocity and predicted position]
-  in3[odometry]:::input --> kf
-  kf -- "/predicted_person_positions" --> cloud[Person cloud node<br/>obstacle points per person]
-  kf -- "/predicted_person_positions" --> grp[Group detector<br/>pairs and queues]
-  id -- "/person_positions_fused" --> grp
-  in4[camera image, LiDAR scan, static map]:::input --> grp
-  grp -- "/social_groups" --> zone[Social-zone node<br/>graded zone around a group]
-  grp -- "/social_groups" --> cloud
-  kf -- "/predicted_person_positions" --> critic[SocialCritic<br/>in the MPPI controller]:::nav
-  grp -- "/social_groups" --> critic
-  zone -- "/social_zone_map" --> gc[Global costmap<br/>KeepoutFilter]:::nav
-  critic -- "/social_critic/lane_block" --> gc
-  cloud -- "/predicted_person_cloud" --> gc
-  cloud -- "/predicted_person_cloud" --> lc[Local costmap]:::nav
-  classDef default fill:#e8eef7,stroke:#2b4c7e,color:#1a2a40
-  classDef input fill:#f2f2f2,stroke:#999,color:#333
-  classDef nav fill:#e8f3e8,stroke:#3a7a3a,color:#1f3d1f
-```
+![The final configuration from the camera to the wheels](docs/media/final_configuration.png)
 
-*Final robot configuration (12 October 2026). Blue: perception and group nodes, with the topics between them; grey: their inputs; green: the navigation stack. The SocialCritic reads only the predicted positions, which carry velocity, and the groups, so that members of a standing group get no lane. The groups also reach the zone node, whose mask the global costmap's KeepoutFilter applies, and the person cloud node, which leaves group members to the zone. The SocialCritic's lane block steers the global plan to one side. On the robot the camera image is compressed and Nav2 runs under `/turtlebot4`. The simulation runs the same wiring; matching files are listed in [CONFIGURATIONS.md](https://github.com/Brian-Lim-Tze-Zhen/Turtlebot4-Social-Navigation-Jazzy-Simulation-/blob/main/docs/CONFIGURATIONS.md) of the simulation repository. Thesis Figure 3.5 (`docs/media/pipeline.png`) shows the perception chain only, and with `/person_positions_fused` as an input of the SocialCritic, which the final configuration no longer has.*
+*The final configuration from the camera to the wheels (thesis Figure 5.2, Section 5.3). Blue: existing components (sensors, detector, tracker, Nav2 and the base); orange: nodes developed in the thesis; green: the SocialCritic with the lane rules. The labelled arrows into the costmaps carry what these nodes write into them. On the robot the camera image is compressed and Nav2 runs under `/turtlebot4`. The ROS topics between the nodes, and the robot and simulation files side by side, are in [CONFIGURATIONS.md](https://github.com/Brian-Lim-Tze-Zhen/Turtlebot4-Social-Navigation-Jazzy-Simulation-/blob/main/docs/CONFIGURATIONS.md) of the simulation repository.*
 
 ## Results on the robot
 
