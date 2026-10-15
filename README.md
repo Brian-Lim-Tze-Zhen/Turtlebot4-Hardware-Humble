@@ -4,13 +4,37 @@ Robot side of the master's thesis **"Lightweight Socially-Aware Navigation via H
 
 The pipeline runs on a host PC in a Docker container and drives a physical TurtleBot 4 over Wi-Fi.
 
-**Stack:** ROS 2 **Humble** · CycloneDDS (direct, no Discovery Server / zenoh) · AMCL + Nav2 MPPI · YOLO (Ultralytics/OpenVINO) + MobileCLIP-S1 · RPLiDAR · OAK-D
+**Stack:** ROS 2 **Humble** · CycloneDDS (direct, no Discovery Server / zenoh) · AMCL + Nav2 MPPI · YOLO (Ultralytics/OpenVINO) · RPLiDAR · OAK-D. MobileCLIP-S1 is installed but not used ([HOW_TO_RUN.md](HOW_TO_RUN.md), section 5).
 
 ## Pipeline
 
-![Perception pipeline on the robot](docs/media/pipeline.png)
+```mermaid
+flowchart TD
+  cam[camera image]:::input --> yolo[Person detector<br/>YOLOv8n-pose and ByteTrack]
+  yolo -- "/person_positions_map" --> ray[Ray localisation<br/>range along the camera bearing]
+  in1[LiDAR scan, static map, odometry]:::input --> ray
+  ray -- "/camera_ray_clusters" --> id[Identity node<br/>position continuity, stationary hold]
+  in2[LiDAR scan, static map]:::input --> id
+  id -- "/person_positions_fused" --> kf[Kalman predictor<br/>velocity and predicted position]
+  in3[odometry]:::input --> kf
+  kf -- "/predicted_person_positions" --> cloud[Person cloud node<br/>obstacle points per person]
+  kf -- "/predicted_person_positions" --> grp[Group detector<br/>pairs and queues]
+  id -- "/person_positions_fused" --> grp
+  in4[camera image, LiDAR scan, static map]:::input --> grp
+  grp -- "/social_groups" --> zone[Social-zone node<br/>graded zone around a group]
+  grp -- "/social_groups" --> cloud
+  kf -- "/predicted_person_positions" --> critic[SocialCritic<br/>in the MPPI controller]:::nav
+  grp -- "/social_groups" --> critic
+  zone -- "/social_zone_map" --> gc[Global costmap<br/>KeepoutFilter]:::nav
+  critic -- "/social_critic/lane_block" --> gc
+  cloud -- "/predicted_person_cloud" --> gc
+  cloud -- "/predicted_person_cloud" --> lc[Local costmap]:::nav
+  classDef default fill:#e8eef7,stroke:#2b4c7e,color:#1a2a40
+  classDef input fill:#f2f2f2,stroke:#999,color:#333
+  classDef nav fill:#e8f3e8,stroke:#3a7a3a,color:#1f3d1f
+```
 
-*Camera-led perception on the robot (thesis Figure 3.5). Blue: perception nodes with the topics between them; grey: their inputs; green: the consumers in the navigation stack, the SocialCritic of the MPPI controller and the Nav2 costmaps.*
+*Final robot configuration (12 October 2026). Blue: perception and group nodes, with the topics between them; grey: their inputs; green: the navigation stack. The SocialCritic reads only the predicted positions, which carry velocity, and the groups, so that members of a standing group get no lane. The groups also reach the zone node, whose mask the global costmap's KeepoutFilter applies, and the person cloud node, which leaves group members to the zone. The SocialCritic's lane block steers the global plan to one side. On the robot the camera image is compressed and Nav2 runs under `/turtlebot4`. The simulation runs the same wiring; matching files are listed in [CONFIGURATIONS.md](https://github.com/Brian-Lim-Tze-Zhen/Turtlebot4-Social-Navigation-Jazzy-Simulation-/blob/main/docs/CONFIGURATIONS.md) of the simulation repository. Thesis Figure 3.5 (`docs/media/pipeline.png`) shows the perception chain only, and with `/person_positions_fused` as an input of the SocialCritic, which the final configuration no longer has.*
 
 ## Results on the robot
 
@@ -45,12 +69,14 @@ cd /root/thesis_social_navigation_ws && colcon build --symlink-install && source
 ros2 launch launch/robot_day_all.launch.py          # the final configuration, everything except the recorder
 ```
 
-Before building, change the Wi-Fi interface and subnet in the `Dockerfile` and the group IDs in `docker-compose.yaml` to match your machine ([HOW_TO_RUN.md](HOW_TO_RUN.md), section 1). Recorded runs are started from the laptop with `workspace/scripts/run_scenario_hw_v4.sh` (section 3).
+Before building, change the Wi-Fi interface and subnet in the `Dockerfile` and the group IDs in `docker-compose.yaml` to match your machine ([HOW_TO_RUN.md](HOW_TO_RUN.md), section 1). If the robot's router has no internet access, sync the robot's clock first (section 2, step 7). Recorded runs are started from the laptop, not the container, with `workspace/scripts/run_scenario_hw_v4.sh`; a whole robot day step by step is in section 3.1.
 
 ## Documentation
 
 | File | What it holds |
 |---|---|
-| [HOW_TO_RUN.md](HOW_TO_RUN.md) | requirements, set-up, the final configuration and its run commands, the earlier configurations compared in the thesis, folder structure, known problems |
+| [HOW_TO_RUN.md](HOW_TO_RUN.md) | requirements, set-up and time sync, the final configuration and its run commands, a robot day step by step, using another building, the earlier configurations compared in the thesis, folder structure, known problems |
+| [CONFIGURATIONS.md](https://github.com/Brian-Lim-Tze-Zhen/Turtlebot4-Social-Navigation-Jazzy-Simulation-/blob/main/docs/CONFIGURATIONS.md) (simulation repository) | what the parts of the configuration names mean, and the robot and simulation files side by side |
+| [humble_client/workspace/scripts/README.md](humble_client/workspace/scripts/README.md) | which scripts the final configuration uses, and which are earlier versions |
 | [humble_client/Task/](humble_client/Task/) | run records of the robot days (5, 8, 9 and 12 October 2026): every counted and discarded run with its reason |
 | [humble_client/Turtlebot4_Documentation.md](humble_client/Turtlebot4_Documentation.md) | hardware notes and issue log |

@@ -59,6 +59,10 @@ ENV PYTHONPATH=/root/venv/lib/python3.10/site-packages:$PYTHONPATH
 # -----------------------------------------------------
 # 3b. MobileCLIP-S1 (via open_clip), pre-downloaded at
 #     build time — same rationale as sim container.
+#     NOT USED: installed only because
+#     scripts/social_group_detector_node_lidarhold.py imports
+#     open_clip; its VLM fallback never runs (HOW_TO_RUN.md,
+#     section 5).
 # -----------------------------------------------------
 RUN /root/venv/bin/pip install --no-cache-dir open_clip_torch && \
     /root/venv/bin/python3 -c "\
