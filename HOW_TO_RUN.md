@@ -50,9 +50,10 @@ xhost +local:root
 cd ~/Desktop/Turtlebot4/humble_client && docker compose build
 ```
 
-**5. Start container**
+**5. Start container** (in the background, as `thesis_social_nav_real`, the name the run scripts use), then open a shell in it
 ```bash
-cd ~/Desktop/Turtlebot4/humble_client && ./run_humble_client.sh
+cd ~/Desktop/Turtlebot4/humble_client && docker compose up -d
+docker exec -it thesis_social_nav_real bash
 ```
 
 **6. Build workspace** (inside container)
@@ -131,7 +132,7 @@ The run record of that day, with every counted and discarded run and its reason,
 The order used on the robot days. The record of each day is in `humble_client/Task/HARDWARE_DAY_<date>.md`.
 
 1. **Robot:** switch it on and wait until it is on the Wi-Fi.
-2. **Laptop:** `xhost +local:root`, then `cd ~/Desktop/Turtlebot4/humble_client && ./run_humble_client.sh`.
+2. **Laptop:** `xhost +local:root`, then `cd ~/Desktop/Turtlebot4/humble_client && docker compose up -d` and `docker exec -it thesis_social_nav_real bash`.
 3. **Container:** check the link: `ros2 topic list | grep turtlebot4` and `ros2 topic hz /turtlebot4/scan` (section 2).
 4. **Robot:** time sync, only if the router has no internet access (section 2, step 7).
 5. **Container:** start the stack: `ros2 launch launch/robot_day_all.launch.py` (section 3). RViz opens on the laptop.
@@ -176,7 +177,7 @@ The comparison across these days is computed by `workspace/pytest/analysis/side_
 ```
 humble_client/
 ├── Dockerfile / docker-compose.yaml   container set-up
-├── run_humble_client.sh               starts the container
+├── run_humble_client.sh               a separate throwaway container (osrf/ros:humble-desktop, domain 2); not used by the runs
 ├── Turtlebot4_Documentation.md        hardware notes and issue log (cited in the thesis)
 ├── Task/                              run records of the robot days (5, 8, 9 and 12 October 2026) and the notes of 9 September
 └── workspace/                         mounted as /root/thesis_social_navigation_ws

@@ -47,18 +47,50 @@ Every counted and discarded run, with its reason, is in the [run record of 12 Oc
 
 ## Quick start
 
+You need a laptop with Ubuntu, Docker and Docker Compose and Intel graphics, on the same Wi-Fi as a TurtleBot 4 running ROS 2 Humble. The [requirements](HOW_TO_RUN.md#1-requirements) list the details.
+
+**1. Get the code and the voxel layer.** This downloads the repository, with the robot workspace in `humble_client/workspace`, and the source of the nonpersistent voxel layer into that workspace. The Humble image does not install the voxel layer as a package, so it is built from source with the workspace.
+
 ```bash
 git clone https://github.com/Brian-Lim-Tze-Zhen/Turtlebot4-Hardware-Humble.git ~/Desktop/Turtlebot4
 git clone https://github.com/SteveMacenski/nonpersistent_voxel_layer.git ~/Desktop/Turtlebot4/humble_client/workspace/src/nonpersistent_voxel_layer
-xhost +local:root
-cd ~/Desktop/Turtlebot4/humble_client && docker compose build && ./run_humble_client.sh
-
-# inside the container
-cd /root/thesis_social_navigation_ws && colcon build --symlink-install && source install/setup.bash
-ros2 launch launch/robot_day_all.launch.py          # the final configuration, everything except the recorder
 ```
 
-Before building, change the Wi-Fi interface and subnet in the `Dockerfile` and the group IDs in `docker-compose.yaml` to match your machine (see [requirements](HOW_TO_RUN.md#1-requirements)). If the robot's router has no internet access, [sync the robot's clock](HOW_TO_RUN.md#2-set-up-from-scratch) first. Recorded runs are started from the laptop, not the container; the whole procedure is described in [a robot day, step by step](HOW_TO_RUN.md#31-a-robot-day-step-by-step).
+**2. Set the values of your machine.** Three things are written for the author's laptop; change them before building (see the [requirements](HOW_TO_RUN.md#1-requirements)):
+
+- the Wi-Fi interface `wlp0s20f3` in the `Dockerfile` (Cyclone DDS settings), from `ip link`;
+- the robot's subnet `192.168.50.0/24` in the `Dockerfile` (time server);
+- the group IDs `44` and `992` in `docker-compose.yaml`, from `getent group video render`.
+
+**3. Build and start the container.** The build installs ROS 2 Humble, Nav2, the TurtleBot 4 packages, Cyclone DDS, a time server for the robot, and the Python environment for YOLO. It is needed once. `up -d` starts the container `thesis_social_nav_real` in the background, on the host network so that it reaches the robot, with the workspace mounted. `xhost` lets RViz open on your screen.
+
+```bash
+cd ~/Desktop/Turtlebot4/humble_client
+docker compose build
+docker compose up -d
+xhost +local:root
+```
+
+**4. Open a shell in the container and build the workspace.** `colcon build` compiles the SocialCritic plugins and the voxel layer; sourcing `install/setup.bash` makes them visible in this shell. Then check that the robot's topics arrive.
+
+```bash
+docker exec -it thesis_social_nav_real bash
+cd /root/thesis_social_navigation_ws
+source /opt/ros/humble/setup.bash
+colcon build --symlink-install
+source install/setup.bash
+ros2 topic list | grep turtlebot4          # /turtlebot4/scan, /turtlebot4/tf, ...
+```
+
+If the robot's router has no internet access, [sync the robot's clock](HOW_TO_RUN.md#2-set-up-from-scratch) now.
+
+**5. Start the final configuration with one command.** This starts Nav2 with localisation on the hallway map, the social-zone stack and the group detector, the perception pipeline, and the hold-and-beep and goal-retry nodes, and opens RViz. Everything except the recorder.
+
+```bash
+ros2 launch launch/robot_day_all.launch.py
+```
+
+Recorded runs are started from the laptop, not the container, one command per run; the whole procedure, from switching the robot on to checking a bag, is described in [a robot day, step by step](HOW_TO_RUN.md#31-a-robot-day-step-by-step).
 
 ## Documentation
 
